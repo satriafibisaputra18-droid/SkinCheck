@@ -1,0 +1,67 @@
+{
+  "model_name": "SkinCheck-MultiTask-Net-v2.1",
+  "version": "2.1.0",
+  "architecture": "MobileNetV3-Large MultiTask (Fitzpatrick Tones I-VI, 2,500 Samples)",
+  "epochs_trained": 9,
+  "best_val_loss": 2.147884,
+  "input_size": [
+    224,
+    224,
+    3
+  ],
+  "input_mean": [
+    0.485,
+    0.456,
+    0.406
+  ],
+  "input_std": [
+    0.229,
+    0.224,
+    0.225
+  ],
+  "output_order": [
+    "acne_score",
+    "redness_score",
+    "hyperpigmentation_score",
+    "texture_score"
+  ],
+  "indicators": [
+    {
+      "name": "acne",
+      "label": "Jerawat",
+      "scale": [
+        0,
+        100
+      ],
+      "direction": "lower_is_better"
+    },
+    {
+      "name": "redness",
+      "label": "Kemerahan",
+      "scale": [
+        0,
+        100
+      ],
+      "direction": "lower_is_better"
+    },
+    {
+      "name": "hyperpigmentation",
+      "label": "Hyperpigmentasi",
+      "scale": [
+        0,
+        100
+      ],
+      "direction": "lower_is_better"
+    },
+    {
+      "name": "texture",
+      "label": "Kehalusan Kulit",
+      "scale": [
+        0,
+        100
+      ],
+      "direction": "higher_is_better"
+    }
+  ],
+  "non_medical_notice": "Estimated cosmetic visual indicators only. NOT for medical diagnosis."
+}
