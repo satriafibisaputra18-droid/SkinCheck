@@ -180,3 +180,4 @@ SkinCheck dilengkapi berkas notebook pelatihan machine learning mandiri:
 <div align="center">
   <sub>Dikembangkan dengan sepenuh hati untuk kemajuan teknologi kesehatan & kecantikan modern.</sub>
 </div>
+

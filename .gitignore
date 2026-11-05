@@ -7,6 +7,7 @@ vendor/
 .env
 .env.*
 chatbot-server/.env
+app/config/config.local.php
 !.env.example
 !chatbot-server/.env.example
 
@@ -42,3 +43,4 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
