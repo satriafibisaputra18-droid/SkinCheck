@@ -51,9 +51,23 @@ class App {
         if (isset($_GET['url'])) {
             $url = rtrim($_GET['url'], '/');
             $url = filter_var($url, FILTER_SANITIZE_URL);
-            $url = explode('/', $url);
-            return $url;
+            return explode('/', $url);
         }
+
+        // Fallback for Vercel / Serverless routing via REQUEST_URI
+        $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+        $path = parse_url($requestUri, PHP_URL_PATH) ?? '/';
+        $path = trim($path, '/');
+        
+        // Remove 'public' or 'index.php' if prefixed
+        $path = preg_replace('#^(public/index\.php|public|index\.php)/?#i', '', $path);
+        $path = trim($path, '/');
+
+        if (!empty($path)) {
+            $path = filter_var($path, FILTER_SANITIZE_URL);
+            return explode('/', $path);
+        }
+
         return [];
     }
 }

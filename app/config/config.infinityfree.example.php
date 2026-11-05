@@ -16,3 +16,4 @@ define('DB_NAME', 'if0_38xxxxxx_skincheck'); // Contoh: if0_38123456_skincheck
 
 // URL Domain Website Anda di InfinityFree (Opsional, sistem dapat mendeteksi otomatis)
 // define('URLROOT', 'https://skincheck.infinityfreeapp.com');
+

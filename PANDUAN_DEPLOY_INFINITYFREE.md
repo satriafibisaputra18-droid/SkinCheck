@@ -97,3 +97,4 @@ Buka domain Anda di browser (contoh: `https://skincheck.infinityfreeapp.com`):
 - **Login Admin**: `admin@skincheck.com` | Password: `admin123`
 - **Login Customer**: `customer@example.com` | Password: `password123`
 - Anda juga dapat langsung mendaftar sebagai akun baru melalui halaman Register!
+
