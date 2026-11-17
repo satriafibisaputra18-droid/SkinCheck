@@ -1,4 +1,15 @@
-<?php require APPROOT . '/views/templates/admin_header.php'; ?>
+<?php 
+require APPROOT . '/views/templates/admin_header.php'; 
+
+$activeAiProvider = Setting::getVal('ai_provider', 'gemini');
+$nvidiaModel = Setting::getVal('nvidia_model', 'nvidia/nemotron-3.5-bolt-e4b');
+$geminiModel = Setting::getVal('gemini_primary_model', 'gemini-flash-lite-latest');
+$isNvidia = ($activeAiProvider === 'nvidia');
+$activeEngineLabel = $isNvidia 
+    ? (strpos(strtolower($nvidiaModel), 'nemotron') !== false ? 'NVIDIA Nemotron' : 'NVIDIA NIM')
+    : 'Gemini AI Studio';
+$activePrimaryModel = $isNvidia ? $nvidiaModel : $geminiModel;
+?>
 
 <!-- Executive Toolbar -->
 <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
@@ -9,11 +20,11 @@
         <span class="text-muted small">/ Executive AI Assistant & Analytics Console</span>
     </div>
     <div class="d-flex align-items-center gap-2 flex-wrap">
-        <span class="badge border px-3 py-2 rounded-pill small" style="background: rgba(191, 161, 95, 0.15); color: #8f7435; border-color: rgba(191, 161, 95, 0.4) !important;">
-            <i class="fa-solid fa-coins me-1.5" style="color: #bfa15f;"></i><strong id="scHeaderTotalTokens"><?php echo number_format($data['tokenMetrics']->total_tokens ?? 0); ?></strong> Tokens Digunakan
+        <span class="badge border px-3 py-2 rounded-pill small sc-badge-gold">
+            <i class="fa-solid fa-coins me-2 text-primary"></i><strong id="scHeaderTotalTokens"><?php echo number_format($data['tokenMetrics']->total_tokens ?? 0); ?></strong> Tokens Digunakan
         </span>
         <span class="badge bg-success-subtle text-success border border-success border-opacity-25 px-3 py-2 rounded-pill small">
-            <i class="fa-solid fa-circle text-success me-1" style="font-size:0.55rem;"></i>Gemini Flash & Node.js Live
+            <i class="fa-solid fa-circle text-success me-1" style="font-size:0.55rem;"></i><span id="scExecutiveEngineBadge"><?php echo htmlspecialchars($activeEngineLabel); ?> &amp; Live Bridge</span>
         </span>
         <span class="badge bg-primary-subtle text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill small">
             <i class="fa-solid fa-database text-primary me-1"></i>Database RBAC: Admin Full
@@ -27,46 +38,46 @@
 <!-- Executive Metric Quick-Bar -->
 <div class="row g-3 mb-4">
     <div class="col-sm-6 col-xl-3">
-        <div class="card border-0 shadow-sm p-3 rounded-4 bg-white d-flex flex-row align-items-center justify-content-between sc-admin-stat-card" data-prompt="Berapa total customer terdaftar di database dan bagaimana profil aktivitas mereka?">
+        <div class="card border-0 shadow-sm p-3 rounded-4 bg-white d-flex flex-row align-items-center gap-3 sc-admin-stat-card" data-prompt="Berapa total customer terdaftar di database dan bagaimana profil aktivitas mereka?">
+            <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:42px;height:42px;">
+                <i class="fa-solid fa-users fs-5"></i>
+            </div>
             <div>
                 <span class="text-muted small d-block">Total Customers</span>
                 <h4 class="fw-bold mb-0 text-primary"><?php echo $metrics->total_customers; ?></h4>
             </div>
-            <div class="bg-primary bg-opacity-10 text-primary p-2.5 rounded-3">
-                <i class="fa-solid fa-users fs-5"></i>
-            </div>
         </div>
     </div>
     <div class="col-sm-6 col-xl-3">
-        <div class="card border-0 shadow-sm p-3 rounded-4 bg-white d-flex flex-row align-items-center justify-content-between sc-admin-stat-card" data-prompt="Bagaimana statistik keseluruhan scan wajah dan status perlindungan sunscreen customer?">
+        <div class="card border-0 shadow-sm p-3 rounded-4 bg-white d-flex flex-row align-items-center gap-3 sc-admin-stat-card" data-prompt="Bagaimana statistik keseluruhan scan wajah dan status perlindungan sunscreen customer?">
+            <div class="bg-success bg-opacity-10 text-success rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:42px;height:42px;">
+                <i class="fa-solid fa-camera-retro fs-5"></i>
+            </div>
             <div>
                 <span class="text-muted small d-block">Analysis Scans</span>
                 <h4 class="fw-bold mb-0 text-success"><?php echo $metrics->total_scans; ?></h4>
             </div>
-            <div class="bg-success bg-opacity-10 text-success p-2.5 rounded-3">
-                <i class="fa-solid fa-camera-retro fs-5"></i>
-            </div>
         </div>
     </div>
     <div class="col-sm-6 col-xl-3">
-        <div class="card border-0 shadow-sm p-3 rounded-4 bg-white d-flex flex-row align-items-center justify-content-between sc-admin-stat-card" data-prompt="Produk apa saja yang ada di katalog skincare SkinCheck saat ini?">
+        <div class="card border-0 shadow-sm p-3 rounded-4 bg-white d-flex flex-row align-items-center gap-3 sc-admin-stat-card" data-prompt="Produk apa saja yang ada di katalog skincare SkinCheck saat ini?">
+            <div class="bg-warning bg-opacity-10 text-warning rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:42px;height:42px;">
+                <i class="fa-solid fa-prescription-bottle-medical fs-5"></i>
+            </div>
             <div>
                 <span class="text-muted small d-block">Skincare Catalog</span>
                 <h4 class="fw-bold mb-0 text-warning"><?php echo $metrics->total_products; ?></h4>
             </div>
-            <div class="bg-warning bg-opacity-10 text-warning p-2.5 rounded-3">
-                <i class="fa-solid fa-prescription-bottle-medical fs-5"></i>
-            </div>
         </div>
     </div>
     <div class="col-sm-6 col-xl-3">
-        <div class="card border-0 shadow-sm p-3 rounded-4 bg-white d-flex flex-row align-items-center justify-content-between sc-admin-stat-card" data-prompt="Bagaimana evaluasi rata-rata skor kesehatan kulit customer (78.5/100) dan rekomendasi perbaikannya?">
+        <div class="card border-0 shadow-sm p-3 rounded-4 bg-white d-flex flex-row align-items-center gap-3 sc-admin-stat-card" data-prompt="Bagaimana evaluasi rata-rata skor kesehatan kulit customer (78.5/100) dan rekomendasi perbaikannya?">
+            <div class="bg-info bg-opacity-10 text-info rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:42px;height:42px;">
+                <i class="fa-solid fa-square-poll-vertical fs-5"></i>
+            </div>
             <div>
                 <span class="text-muted small d-block">Average Health Score</span>
                 <h4 class="fw-bold mb-0 text-info"><?php echo $metrics->avg_score; ?>/100</h4>
-            </div>
-            <div class="bg-info bg-opacity-10 text-info p-2.5 rounded-3">
-                <i class="fa-solid fa-square-poll-vertical fs-5"></i>
             </div>
         </div>
     </div>
@@ -76,20 +87,20 @@
 
     <!-- Main Chat Workspace (8 cols) -->
     <div class="col-lg-8">
-        <div class="card border-0 shadow-sm rounded-4 d-flex flex-column" style="height: 700px; max-height: calc(100vh - 220px); background: #ffffff;">
+        <div class="card border-0 shadow-sm rounded-4 d-flex flex-column" style="height: 700px; max-height: calc(100vh - 220px);">
             
             <!-- Card Header -->
-            <div class="p-3 px-4 border-bottom d-flex justify-content-between align-items-center bg-white rounded-top-4">
-                <div class="d-flex align-items-center gap-3">
-                    <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg, #1a4a40 0%, #2f7a6b 100%);display:flex;align-items:center;justify-content:center;box-shadow: 0 4px 12px rgba(26,74,64,0.25);">
+            <div class="card-header p-3 px-4 border-bottom d-flex justify-content-between align-items-center bg-white rounded-top-4">
+                <div class="d-flex align-items-center gap-2">
+                    <div style="width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow: 0 4px 12px rgba(15,118,110,0.22);">
                         <i class="fa-solid fa-robot text-white fs-5"></i>
                     </div>
                     <div>
                         <div class="d-flex align-items-center gap-2">
                             <h5 class="mb-0 fw-bold text-dark" style="font-size:1.05rem;">SkinCheck AI Executive Console</h5>
-                            <span class="badge bg-warning-subtle text-warning border border-warning border-opacity-25 rounded-pill px-2 py-0.5" style="font-size:0.65rem;">ADMIN CLEARANCE</span>
+                            <span class="badge sc-badge-gold rounded-pill px-2 py-1" style="font-size:0.65rem;">ADMIN CLEARANCE</span>
                         </div>
-                        <small class="text-muted">Kecerdasan Buatan Terintegrasi Database & Gemini AI Studio</small>
+                        <small class="text-muted">Kecerdasan Buatan Terintegrasi Database &amp; <span id="scExecutiveEngineSub"><?php echo htmlspecialchars($activeEngineLabel); ?></span></small>
                     </div>
                 </div>
                 <div class="d-none d-sm-flex align-items-center gap-2 text-muted small">
@@ -99,12 +110,12 @@
             </div>
 
             <!-- Chat Messages Log -->
-            <div class="flex-grow-1 overflow-auto p-3 p-md-4 d-flex flex-column gap-3" id="scAdminChatMessages" style="background:#f8faf9;">
+            <div class="flex-grow-1 overflow-auto p-3 p-md-4 d-flex flex-column gap-3" id="scAdminChatMessages" style="background:#f6f9f8;">
                 
                 <!-- Welcome Card -->
-                <div class="d-flex gap-3 mb-2 sc-admin-welcome">
-                    <div style="width:38px;height:38px;border-radius:10px;background:#1a4a40;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                        <i class="fa-solid fa-chart-line text-warning" style="font-size:0.95rem;"></i>
+                <div class="d-flex gap-2 mb-2 sc-admin-welcome">
+                    <div style="width:38px;height:38px;border-radius:10px;background:#e6f4f1;border:1px solid #cce6df;color:#0f766e;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="fa-solid fa-chart-line" style="font-size:0.95rem;"></i>
                     </div>
                     <div style="max-width:88%;">
                         <div class="p-4 rounded-4 bg-white border shadow-sm" style="font-size:0.9rem;line-height:1.6;">
@@ -114,29 +125,29 @@
                                 </h6>
                                 <span class="badge bg-success-subtle text-success small">Hak Akses Penuh</span>
                             </div>
-                            <p class="mb-2 text-dark">
-                                Selamat datang di <strong>Executive AI Console</strong>. Sebagai Administrator, Anda memiliki otorisasi penuh untuk melakukan audit statistik platform, memeriksa ringkasan data pengguna, menganalisis pola hasil scan wajah, serta meminta rekomendasi formulasi klinis berdasarkan database SkinCheck.
-                            </p>
-                            <p class="mb-3 text-muted small">
-                                💡 Klik salah satu topik cepat di bawah ini atau ketikkan pertanyaan audit spesifik Anda:
+                            <p class="mb-3 text-dark">
+                                Halo Admin! Anda bisa menanyakan statistik platform, ringkasan scan pengguna, dan katalog produk.
                             </p>
 
                             <!-- Executive Prompt Chips -->
                             <div class="d-flex flex-wrap gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill sc-admin-prompt-pill" data-text="Siapa saja daftar nama customer yang terdaftar di SkinCheck saat ini?">
+                                    Daftar Nama Customer
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill sc-admin-prompt-pill" data-text="Tampilkan ringkasan riwayat log Scan Audits pemindaian wajah customer terbaru!">
+                                    Scan Audits
+                                </button>
                                 <button type="button" class="btn btn-sm btn-outline-primary rounded-pill sc-admin-prompt-pill" data-text="Bagaimana ringkasan statistik dan metrik platform SkinCheck saat ini?">
-                                    📊 Ringkasan Metrik Platform
+                                    Ringkasan Metrik
                                 </button>
                                 <button type="button" class="btn btn-sm btn-outline-primary rounded-pill sc-admin-prompt-pill" data-text="Berapa total customer, admin, dan scan yang sudah selesai di database?">
-                                    👥 Jumlah User & Scan
+                                    Jumlah User &amp; Scan
                                 </button>
                                 <button type="button" class="btn btn-sm btn-outline-primary rounded-pill sc-admin-prompt-pill" data-text="Produk skincare apa saja yang aktif di katalog database saat ini?">
-                                    🛍️ Katalog Produk Aktif
+                                    Katalog Produk
                                 </button>
                                 <button type="button" class="btn btn-sm btn-outline-primary rounded-pill sc-admin-prompt-pill" data-text="Apa saja faktor utama yang paling mempengaruhi penurunan skor kesehatan kulit customer?">
-                                    📈 Analisis Tren Kesehatan Kulit
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill sc-admin-prompt-pill" data-text="Berikan rekomendasi perbaikan formula dan pemilihan produk untuk meningkatkan efektivitas proteksi sunscreen customer.">
-                                    🧴 Rekomendasi Klinis Formula
+                                    Tren Skor Kulit
                                 </button>
                             </div>
                         </div>
@@ -154,12 +165,12 @@
             <!-- Chat Input Footer -->
             <div class="p-3 px-4 border-top bg-white rounded-bottom-4">
                 <form id="scAdminChatForm" class="d-flex gap-2 align-items-center">
-                    <input type="text" id="scAdminChatInput" class="form-control rounded-pill px-3 py-2.5" placeholder="Tanyakan data pengguna, total scan, tren kulit, atau analisis klinis..." autocomplete="off">
+                    <input type="text" id="scAdminChatInput" class="form-control rounded-pill px-3 py-2" placeholder="Tanyakan data pengguna, total scan, tren kulit, atau analisis klinis..." autocomplete="off">
                     <button type="submit" id="scAdminChatSubmit" class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width:44px;height:44px;flex-shrink:0;">
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </form>
-                <div class="d-flex justify-content-between align-items-center mt-2 px-2" style="font-size:0.75rem; color:#789088;">
+                <div class="d-flex justify-content-between align-items-center mt-2 px-2 text-muted" style="font-size:0.75rem;">
                     <span><i class="fa-solid fa-lock me-1 text-success"></i> Sesi terenkripsi & diautentikasi dengan ID Admin: <strong>#<?php echo (int)$_SESSION['user_id']; ?></strong></span>
                     <span>Tekan <strong>Enter</strong> untuk mengirim</span>
                 </div>
@@ -176,15 +187,15 @@
         <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white overflow-hidden">
             <div class="card-header bg-white border-0 pt-3 pb-2 d-flex justify-content-between align-items-center">
                 <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-coins me-2" style="color: #bfa15f;"></i>Konsumsi Token AI
+                    <i class="fa-solid fa-coins me-2 text-primary"></i>Konsumsi Token AI
                 </h6>
-                <span class="badge rounded-pill px-2.5 py-1" style="background: rgba(34, 197, 94, 0.12); color: #16a34a; font-size: 0.65rem; border: 1px solid rgba(34, 197, 94, 0.25);">
+                <span class="badge rounded-pill px-2 py-1" style="background: rgba(4, 120, 87, 0.1); color: #047857; font-size: 0.65rem; border: 1px solid rgba(4, 120, 87, 0.25);">
                     <i class="fa-solid fa-circle text-success me-1" style="font-size:0.45rem;"></i>Active Monitor
                 </span>
             </div>
             <div class="card-body pt-1 pb-3">
                 <!-- Big Total Counter -->
-                <div class="p-3 rounded-3 mb-3" style="background: linear-gradient(135deg, rgba(20, 60, 48, 0.06) 0%, rgba(191, 161, 95, 0.1) 100%); border: 1px solid rgba(191, 161, 95, 0.25);">
+                <div class="p-3 rounded-3 mb-3" style="background: linear-gradient(135deg, #f2faf8 0%, #e6f4f1 100%); border: 1px solid #cce6df;">
                     <span class="text-muted small d-block mb-1" style="font-size: 0.78rem;">Total Token Digunakan</span>
                     <div class="d-flex align-items-baseline gap-2">
                         <h3 class="fw-bold mb-0 text-dark" id="scSidebarTotalTokens" style="letter-spacing: -0.5px;">
@@ -192,7 +203,7 @@
                         </h3>
                         <span class="text-muted small fw-semibold">Tokens</span>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top" style="border-color: rgba(0,0,0,0.06) !important; font-size: 0.75rem;">
+                    <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top" style="border-color: rgba(15, 118, 110, 0.12) !important; font-size: 0.75rem;">
                         <span class="text-muted">Hari ini:</span>
                         <span class="fw-bold text-success">+<?php echo number_format($tm->tokens_today); ?> tokens</span>
                     </div>
@@ -209,38 +220,38 @@
                         $pctComp = 100 - $pctPrompt;
                     ?>
                     <div class="progress" style="height: 7px; border-radius: 10px; background: #e2e8f0;">
-                        <div class="progress-bar" role="progressbar" style="width: <?php echo $pctPrompt; ?>%; background: #1a4a40;" title="Input Prompt: <?php echo $pctPrompt; ?>%"></div>
-                        <div class="progress-bar" role="progressbar" style="width: <?php echo $pctComp; ?>%; background: #dfc68b;" title="Response Output: <?php echo $pctComp; ?>%"></div>
+                        <div class="progress-bar" role="progressbar" style="width: <?php echo $pctPrompt; ?>%; background: #0f766e;" title="Input Prompt: <?php echo $pctPrompt; ?>%"></div>
+                        <div class="progress-bar" role="progressbar" style="width: <?php echo $pctComp; ?>%; background: #14b8a6;" title="Response Output: <?php echo $pctComp; ?>%"></div>
                     </div>
                     <div class="d-flex justify-content-between mt-1 text-muted" style="font-size: 0.68rem;">
-                        <span><i class="fa-solid fa-circle me-1" style="color: #1a4a40; font-size: 0.5rem;"></i>Input Prompt (<?php echo $pctPrompt; ?>%)</span>
-                        <span><i class="fa-solid fa-circle me-1" style="color: #dfc68b; font-size: 0.5rem;"></i>Output (<?php echo $pctComp; ?>%)</span>
+                        <span><i class="fa-solid fa-circle me-1" style="color: #0f766e; font-size: 0.5rem;"></i>Input Prompt (<?php echo $pctPrompt; ?>%)</span>
+                        <span><i class="fa-solid fa-circle me-1" style="color: #14b8a6; font-size: 0.5rem;"></i>Output (<?php echo $pctComp; ?>%)</span>
                     </div>
                 </div>
 
                 <!-- Metrics List -->
                 <ul class="list-unstyled mb-0" style="font-size: 0.8rem;">
-                    <li class="d-flex justify-content-between py-1.5 border-bottom" style="border-color: #f1f5f9 !important;">
+                    <li class="d-flex justify-content-between py-2 border-bottom" style="border-color: #f1f5f9 !important;">
                         <span class="text-muted">Total Panggilan AI</span>
                         <strong class="text-dark" id="scSidebarReqCount"><?php echo number_format($tm->total_requests); ?> req</strong>
                     </li>
-                    <li class="d-flex justify-content-between py-1.5 border-bottom" style="border-color: #f1f5f9 !important;">
+                    <li class="d-flex justify-content-between py-2 border-bottom" style="border-color: #f1f5f9 !important;">
                         <span class="text-muted">Rata-rata per Chat</span>
                         <strong class="text-dark"><?php echo number_format($tm->avg_tokens_per_req); ?> tok/req</strong>
                     </li>
-                    <li class="d-flex justify-content-between py-1.5 border-bottom" style="border-color: #f1f5f9 !important;">
+                    <li class="d-flex justify-content-between py-2 border-bottom" style="border-color: #f1f5f9 !important;">
                         <span class="text-muted">Mesin Aktif</span>
-                        <code class="text-success small fw-semibold"><?php echo htmlspecialchars($tm->latest_model); ?></code>
+                        <code class="text-success small fw-semibold"><?php echo htmlspecialchars($activePrimaryModel); ?></code>
                     </li>
-                    <li class="d-flex justify-content-between py-1.5">
+                    <li class="d-flex justify-content-between py-2">
                         <span class="text-muted">Status Kuota</span>
-                        <span class="badge bg-success-subtle text-success border border-success border-opacity-25 rounded-pill px-2 py-0.5" style="font-size: 0.7rem;">Normal • Free Tier</span>
+                        <span class="badge bg-success-subtle text-success border border-success border-opacity-25 rounded-pill px-2 py-1" style="font-size: 0.7rem;">Normal • Free Tier</span>
                     </li>
                 </ul>
 
                 <?php if (!empty($tm->model_breakdown)): ?>
-                    <div class="mt-2.5 pt-2 border-top" style="border-color: #f1f5f9 !important;">
-                        <span class="text-muted d-block mb-1.5" style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Sebaran Model:</span>
+                    <div class="mt-2 pt-2 border-top" style="border-color: #f1f5f9 !important;">
+                        <span class="text-muted d-block mb-2" style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Sebaran Model:</span>
                         <?php foreach ($tm->model_breakdown as $mb): ?>
                             <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.75rem;">
                                 <span class="text-truncate text-secondary" style="max-width: 140px;"><?php echo htmlspecialchars($mb->model); ?></span>
@@ -252,40 +263,11 @@
             </div>
         </div>
 
-        <!-- Privilege Badge Card -->
-        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
-            <div class="card-header bg-white border-0 pt-3 pb-1">
-                <h6 class="fw-bold mb-0 text-primary">
-                    <i class="fa-solid fa-user-shield me-2 text-warning"></i>Hak Akses AI Administrator
-                </h6>
-            </div>
-            <div class="card-body pt-2">
-                <ul class="list-unstyled mb-0" style="font-size: 0.84rem;">
-                    <li class="d-flex gap-2.5 mb-2.5 text-secondary">
-                        <i class="fa-solid fa-check text-success mt-1"></i>
-                        <span>Akses analitik metrik agregat database (Total User, Scan, Produk).</span>
-                    </li>
-                    <li class="d-flex gap-2.5 mb-2.5 text-secondary">
-                        <i class="fa-solid fa-check text-success mt-1"></i>
-                        <span>Audit kesehatan rata-rata kulit & tingkat proteksi sunscreen.</span>
-                    </li>
-                    <li class="d-flex gap-2.5 mb-2.5 text-secondary">
-                        <i class="fa-solid fa-check text-success mt-1"></i>
-                        <span>Rekomendasi pengembangan katalog produk berbasis dermatologi.</span>
-                    </li>
-                    <li class="d-flex gap-2.5 text-secondary">
-                        <i class="fa-solid fa-shield-halved text-primary mt-1"></i>
-                        <span><strong>RBAC Guardrail</strong>: User publik tidak dapat mengakses metrik internal ini.</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
         <!-- Quick Audit Actions -->
         <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
             <div class="card-header bg-white border-0 pt-3 pb-1">
                 <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-bolt me-2 text-warning"></i>Pintasan Audit Cepat
+                    <i class="fa-solid fa-bolt me-2 text-primary"></i>Pintasan Audit
                 </h6>
             </div>
             <div class="card-body pt-2 d-grid gap-2">
@@ -296,20 +278,22 @@
                     <i class="fa-solid fa-layer-group me-2 text-info"></i>Audit Kategori Produk
                 </button>
                 <button type="button" class="btn btn-outline-secondary btn-sm text-start py-2 px-3 rounded-3 sc-admin-prompt-pill" data-text="Kriteria apa saja yang menentukan seorang customer mendapat skor kulit di atas 85?">
-                    <i class="fa-solid fa-star me-2 text-success"></i>Kriteria Skor Kulit Optimal
+                    <i class="fa-solid fa-star me-2 text-success"></i>Kriteria Skor Optimal
                 </button>
             </div>
         </div>
 
-        <!-- System Architecture & Security Notice -->
-        <div class="alert alert-success border-0 rounded-4 shadow-sm" style="font-size:0.8rem; background: linear-gradient(135deg, #eef9f5 0%, #e2f4ed 100%);">
-            <div class="d-flex gap-2 mb-1 fw-bold text-success">
-                <i class="fa-solid fa-circle-check mt-0.5"></i>
-                <span>Status Sistem: Terverifikasi</span>
+        <!-- Access & System Status -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="fw-bold small text-dark"><i class="fa-solid fa-shield-halved me-2 text-primary"></i>RBAC Admin Aktif</span>
+                    <span class="badge bg-success-subtle text-success rounded-pill" style="font-size:0.68rem;">Verified</span>
+                </div>
+                <p class="mb-0 text-muted" style="font-size:0.78rem; line-height:1.45;">
+                    Akses penuh metrik database via <span id="scExecutiveBridgeLabel"><?php echo htmlspecialchars($activeEngineLabel); ?></span> Bridge. User publik tetap dibatasi.
+                </p>
             </div>
-            <p class="mb-0 text-muted" style="line-height:1.5;">
-                Chatbot ditenagai arsitektur hybrid Express.js Node.js (Port 5000) dan fallback PHP MVC Bridge terhubung langsung ke Google Gemini AI Studio API.
-            </p>
         </div>
 
     </div>
@@ -416,6 +400,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (resData && resData.success && resData.reply) {
+                // Dynamically update active engine label if provider or model returned
+                updateAdminActiveEngine(resData.provider, resData.modelUsed);
+
                 appendAdminBotMsg(resData.reply, {
                     model: resData.modelUsed,
                     tokens: resData.tokens,
@@ -439,18 +426,51 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function updateAdminActiveEngine(provider, modelUsed) {
+        let engineText = 'Google Gemini';
+        const p = String(provider || '').toLowerCase();
+        const m = String(modelUsed || '').toLowerCase();
+
+        if (p === 'nvidia' || m.includes('nvidia') || m.includes('nemotron') || m.includes('laguna') || m.includes('ising')) {
+            if (m.includes('nemotron')) {
+                engineText = 'NVIDIA Nemotron';
+            } else if (m.includes('laguna')) {
+                engineText = 'NVIDIA Laguna';
+            } else {
+                engineText = 'NVIDIA NIM';
+            }
+        } else if (p === 'gemini' || m.includes('gemini')) {
+            if (m.includes('flash-lite')) {
+                engineText = 'Gemini Flash Lite';
+            } else if (m.includes('3.5') || m.includes('3.8') || m.includes('flash')) {
+                engineText = 'Gemini Flash';
+            } else {
+                engineText = 'Google Gemini';
+            }
+        }
+
+        const b1 = document.getElementById('scExecutiveEngineBadge');
+        if (b1) b1.innerHTML = engineText + ' &amp; Live Bridge';
+
+        const b2 = document.getElementById('scExecutiveEngineSub');
+        if (b2) b2.textContent = engineText;
+
+        const b3 = document.getElementById('scExecutiveBridgeLabel');
+        if (b3) b3.textContent = engineText;
+    }
+
     function appendAdminUserMsg(text) {
         const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const div = document.createElement('div');
-        div.className = 'd-flex gap-3 justify-content-end mb-2 sc-admin-msg';
+        div.className = 'd-flex gap-2 justify-content-end mb-2 sc-admin-msg';
         div.innerHTML = `
             <div style="max-width:85%;" class="text-end">
-                <div class="p-3 rounded-4 text-white text-start shadow-sm" style="background: linear-gradient(135deg, #1a4a40 0%, #2f7a6b 100%); font-size:0.9rem; line-height:1.55;">
+                <div class="p-3 rounded-4 text-white text-start shadow-sm" style="background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%); font-size:0.9rem; line-height:1.55;">
                     ${escapeHtml(text)}
                 </div>
                 <span class="text-muted small mt-1 d-block" style="font-size:0.7rem;">${time} • Administrator</span>
             </div>
-            <div style="width:36px;height:36px;border-radius:10px;background:#bfa15f;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <div style="width:36px;height:36px;border-radius:10px;background:#0f766e;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                 <i class="fa-solid fa-user-shield" style="font-size:0.9rem;"></i>
             </div>
         `;
@@ -461,19 +481,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function appendAdminBotMsg(markdownText, meta = null) {
         const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const div = document.createElement('div');
-        div.className = 'd-flex gap-3 mb-2 sc-admin-msg';
+        div.className = 'd-flex gap-2 mb-2 sc-admin-msg';
 
         let badgeInfo = `${time} • SkinCheck AI Executive`;
         if (meta && meta.tokens && meta.tokens.total) {
-            badgeInfo += ` • <span class="badge bg-light text-dark border px-2 py-0.5"><i class="fa-solid fa-coins text-warning me-1"></i>${meta.tokens.total.toLocaleString()} tokens</span>`;
+            badgeInfo += ` • <span class="badge bg-light text-dark border px-2 py-1"><i class="fa-solid fa-coins text-primary me-1"></i>${meta.tokens.total.toLocaleString()} tokens</span>`;
             if (meta.model) {
                 badgeInfo += ` • <span class="text-secondary">${meta.model}</span>`;
             }
         }
 
         div.innerHTML = `
-            <div style="width:36px;height:36px;border-radius:10px;background:#1a4a40;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <i class="fa-solid fa-wand-magic-sparkles text-warning" style="font-size:0.9rem;"></i>
+            <div style="width:36px;height:36px;border-radius:10px;background:#e6f4f1;border:1px solid #cce6df;color:#0f766e;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <i class="fa-solid fa-wand-magic-sparkles" style="font-size:0.9rem;"></i>
             </div>
             <div style="max-width:85%;">
                 <div class="p-3 rounded-4 bg-white border shadow-sm" style="font-size:0.9rem; line-height:1.6;">
@@ -550,7 +570,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Inline code
-        escaped = escaped.replace(/`([^`]+)`/g, '<code class="bg-light px-1 py-0.5 rounded text-danger small">$1</code>');
+        escaped = escaped.replace(/`([^`]+)`/g, '<code class="bg-light px-1 py-1 rounded text-danger small">$1</code>');
 
         // Bold (**text** or __text__)
         escaped = escaped.replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>');

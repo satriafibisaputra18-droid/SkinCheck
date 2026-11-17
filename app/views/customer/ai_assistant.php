@@ -6,7 +6,7 @@
         <a href="<?php echo URLROOT; ?>/customer/dashboard" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
             <i class="fa-solid fa-arrow-left me-1"></i>Dashboard
         </a>
-        <span class="small" style="color: #c9ded5;">/ Konsultasi & Edukasi Kulit</span>
+        <span class="small text-muted">/ Konsultasi &amp; Edukasi Kulit</span>
     </div>
     <div class="d-flex align-items-center gap-2">
         <span class="badge sc-badge-secure px-3 py-2 rounded-pill small">
@@ -24,60 +24,59 @@
     <div class="col-lg-8">
         <div class="sc-card d-flex flex-column" style="height: 680px; max-height: calc(100vh - 200px);">
             <div class="sc-card-header d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center gap-3">
-                    <div style="width:40px;height:40px;border-radius:12px;background:rgba(191,161,95,0.15);color:#dfc68b;border:1px solid rgba(191,161,95,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <div class="d-flex align-items-center gap-2">
+                    <div style="width:38px;height:38px;border-radius:10px;background:var(--primary-tint);color:var(--primary-color);border:1px solid rgba(15,118,110,0.22);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                         <i class="fa-solid fa-comment-medical fs-5"></i>
                     </div>
                     <div>
-                        <h5 class="mb-0 text-white" style="font-size:0.98rem; font-weight:700;">Konsultan Kesehatan Kulit SkinCheck</h5>
-                        <small style="color:#94a3b8; font-size:0.75rem;">Panduan Dermatologi Klinis &amp; Kurasi Komposisi Skincare</small>
+                        <h5 class="mb-0 text-dark" style="font-size:0.98rem; font-weight:700;">Konsultan Kesehatan Kulit SkinCheck</h5>
+                        <small class="text-muted" style="font-size:0.75rem;">Panduan Dermatologi Klinis &amp; Kurasi Komposisi Skincare</small>
                     </div>
                 </div>
-                <div class="small d-none d-sm-flex align-items-center gap-1" style="color:#dfc68b;">
-                    <i class="fa-regular fa-clock me-1"></i><span>Respon Terstruktur</span>
+                <div class="small d-none d-sm-flex align-items-center gap-1 text-primary fw-semibold">
+                    <i class="fa-regular fa-clock"></i><span>Respon Terstruktur</span>
                 </div>
             </div>
 
             <!-- Chat message container -->
             <div class="sc-card-body flex-grow-1 overflow-auto p-3 p-md-4 d-flex flex-column gap-3"
-                id="scPageChatMessages" style="background: rgba(0, 0, 0, 0.28);">
+                id="scPageChatMessages" style="background: #f8fbfa;">
                 <!-- Welcome greeting -->
-                <div class="d-flex gap-3 mb-2">
-                    <div style="width:36px;height:36px;border-radius:50%;background:rgba(56,217,169,0.15);color:#38d9a9;border:1px solid rgba(56,217,169,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <div class="d-flex gap-2 mb-2">
+                    <div style="width:36px;height:36px;border-radius:50%;background:var(--primary-tint);color:var(--primary-color);border:1px solid rgba(15,118,110,0.22);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                         <i class="fa-solid fa-stethoscope" style="font-size:0.85rem;"></i>
                     </div>
                     <div style="max-width:85%;">
                         <div class="sc-chat-bubble-bot">
-                            <p class="fw-bold mb-1" style="color: #dfc68b;">
-                                Selamat datang, <?php echo htmlspecialchars(explode(' ', $_SESSION['user_name'])[0]); ?>.
+                            <p class="fw-bold mb-1 text-primary">
+                                Halo, <?php echo htmlspecialchars(explode(' ', $_SESSION['user_name'])[0]); ?>!
                             </p>
-                            <p class="mb-2" style="color: #c9ded5; line-height: 1.6;">
-                                Selamat datang di ruang konsultasi kesehatan kulit SkinCheck. Anda dapat mendiskusikan interpretasi skor hasil pemindaian wajah, panduan pemilihan tabir surya yang sesuai dengan aktivitas harian, analisis kompatibilitas bahan aktif, serta urutan pemakaian skincare yang aman untuk memperkuat sawar kulit (skin barrier) Anda.
+                            <p class="mb-2 text-body" style="line-height: 1.55;">
+                                Tanyakan seputar hasil scan wajah, pemilihan sunscreen, atau kecocokan bahan aktif skincare Anda.
                             </p>
-                            <div class="d-flex flex-wrap gap-2 mt-3">
+                            <div class="d-flex flex-wrap gap-2 mt-2">
                                 <button type="button"
                                     class="btn btn-sm rounded-pill sc-page-prompt-btn"
                                     data-text="Bagaimana cara memilih sunscreen terbaik untuk jenis kulit saya?">
-                                    Rekomendasi Sunscreen Sesuai Kulit
+                                    Pilih Sunscreen
                                 </button>
                                 <button type="button"
                                     class="btn btn-sm rounded-pill sc-page-prompt-btn"
                                     data-text="Apa perbedaan Physical/Mineral Sunscreen dan Chemical Sunscreen?">
-                                    Physical vs Chemical Sunscreen
+                                    Physical vs Chemical
                                 </button>
                                 <button type="button"
                                     class="btn btn-sm rounded-pill sc-page-prompt-btn"
                                     data-text="Bagaimana urutan skincare routine pagi dan malam yang benar untuk kulit berjerawat?">
-                                    Rutinitas untuk Kulit Berjerawat
+                                    Rutinitas Jerawat
                                 </button>
                                 <button type="button"
                                     class="btn btn-sm rounded-pill sc-page-prompt-btn"
                                     data-text="Bagaimana cara membaca skor hidrasi dan kemerahan di SkinCheck?">
-                                    Interpretasi Indikator Scan Wajah
+                                    Arti Skor Scan
                                 </button>
                             </div>
                         </div>
-                        <span class="small mt-1 d-block" style="color: #64748b; font-size:0.7rem;">SkinCheck Clinical Guidance System</span>
                     </div>
                 </div>
 
@@ -85,13 +84,13 @@
                 <div id="scPageTyping"
                     class="d-none align-items-center gap-2 p-2 px-3 sc-chat-typing-box rounded-pill shadow-sm"
                     style="width:fit-content;">
-                    <div class="spinner-grow spinner-grow-sm text-warning" role="status"></div>
-                    <span class="small" style="color: #dfc68b;">Sedang menyusun rekomendasi klinis...</span>
+                    <div class="spinner-grow spinner-grow-sm text-primary" role="status"></div>
+                    <span class="small text-primary fw-semibold">Sedang menyusun rekomendasi klinis...</span>
                 </div>
             </div>
 
             <!-- Chat Input Footer -->
-            <div class="p-3 border-top" style="background: rgba(255, 255, 255, 0.02); border-color: rgba(255, 255, 255, 0.08) !important;">
+            <div class="p-3 border-top bg-white">
                 <form id="scPageChatForm" class="d-flex gap-2 align-items-center">
                     <input type="text" id="scPageChatInput" class="form-control sc-dark-input rounded-pill px-4 py-2"
                         placeholder="Tanyakan seputar pemilihan produk, barier kulit, atau bahan aktif..." autocomplete="off">
@@ -101,9 +100,9 @@
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </form>
-                <div class="d-flex justify-content-between align-items-center mt-2 px-2"
-                    style="font-size:0.75rem; color:#94a3b8;">
-                    <span><i class="fa-solid fa-shield-halved me-1" style="color:#38d9a9;"></i> Komunikasi terenkripsi &amp; data pribadi aman</span>
+                <div class="d-flex justify-content-between align-items-center mt-2 px-2 text-muted"
+                    style="font-size:0.75rem;">
+                    <span><i class="fa-solid fa-shield-halved me-1 text-success"></i> Komunikasi terenkripsi &amp; data pribadi aman</span>
                     <span>Tekan <strong>Enter</strong> untuk mengirim</span>
                 </div>
             </div>
@@ -112,55 +111,28 @@
 
     <!-- Info Sidebar -->
     <div class="col-lg-4">
-        <div class="sc-card mb-4">
+        <div class="sc-card">
             <div class="sc-card-header">
-                <h5 class="mb-0 fw-bold"><i class="fa-solid fa-list-check me-2" style="color: #dfc68b;"></i>Cakupan Konsultasi</h5>
+                <h5 class="mb-0 fw-bold"><i class="fa-solid fa-circle-info me-2 text-primary"></i>Panduan Singkat</h5>
             </div>
             <div class="sc-card-body">
-                <ul class="list-unstyled mb-0">
-                    <?php
-                    $features = [
-                        ['fa-chart-line', 'Interpretasi 4 indikator kesehatan kulit wajah & status barier.'],
-                        ['fa-sun', 'Panduan proteksi radiasi UV, cakupan tabir surya & re-aplikasi.'],
-                        ['fa-flask', 'Analisis bahan aktif (Ceramide, Niacinamide, Salicylic, Retinol).'],
-                        ['fa-box-open', 'Rekomendasi produk kurasi resmi dari katalog SkinCheck.'],
-                        ['fa-book-medical', 'Edukasi patofisiologi kulit secara saintifik dan mudah dimengerti.'],
-                    ];
-                    foreach ($features as $f): ?>
-                        <li class="d-flex gap-3 mb-3">
-                            <div class="flex-shrink-0 text-center" style="width:24px;">
-                                <i class="fa-solid <?php echo $f[0]; ?>" style="color: #dfc68b; font-size:0.9rem;margin-top:2px;"></i>
-                            </div>
-                            <span class="small" style="color: #c9ded5; line-height:1.55;"><?php echo $f[1]; ?></span>
-                        </li>
-                    <?php endforeach; ?>
+                <ul class="list-unstyled mb-3">
+                    <li class="d-flex align-items-start gap-2 mb-2 small text-body">
+                        <i class="fa-solid fa-check text-primary mt-1"></i>
+                        <span>Sebutkan tipe kulit &amp; keluhan utama Anda</span>
+                    </li>
+                    <li class="d-flex align-items-start gap-2 mb-2 small text-body">
+                        <i class="fa-solid fa-check text-primary mt-1"></i>
+                        <span>Tanyakan kecocokan bahan aktif &amp; sunscreen</span>
+                    </li>
+                    <li class="d-flex align-items-start gap-2 mb-0 small text-body">
+                        <i class="fa-solid fa-check text-primary mt-1"></i>
+                        <span>Bisa membahas interpretasi hasil scan terakhir</span>
+                    </li>
                 </ul>
-            </div>
-        </div>
-
-        <!-- Quick Tips Card -->
-        <div class="sc-card mb-4" style="background: rgba(255, 255, 255, 0.025); border: 1px solid rgba(191, 161, 95, 0.2);">
-            <div class="sc-card-header bg-transparent border-0 pb-1">
-                <h6 class="fw-bold mb-0" style="color: #dfc68b;">
-                    <i class="fa-solid fa-circle-question me-2" style="color: #dfc68b;"></i>Tips Konsultasi Efektif
-                </h6>
-            </div>
-            <div class="sc-card-body pt-2" style="font-size: 0.82rem; color: #c9ded5; line-height:1.65;">
-                <p class="mb-2">
-                    Sebutkan <strong class="text-white">tipe kulit Anda</strong> (kering, berminyak, kombinasi, atau sensitif) serta <strong class="text-white">keluhan utama</strong> (seperti bruntusan pada dahi, kemerahan di cuping hidung, atau bekas jerawat menggelap) agar evaluasi berjalan lebih terarah.
-                </p>
-                <p class="mb-0">
-                    Anda juga dapat menanyakan kecocokan produk tertentu yang ada di katalog SkinCheck dengan riwayat skor pemindaian Anda.
-                </p>
-            </div>
-        </div>
-
-        <!-- Disclaimer -->
-        <div class="sc-advisory-banner" style="font-size:0.78rem; line-height:1.55;">
-            <div class="d-flex gap-2 align-items-start">
-                <i class="fa-solid fa-triangle-exclamation mt-1" style="color: #dfc68b; flex-shrink: 0;"></i>
-                <div>
-                    <strong class="sc-advisory-title">Catatan Medis:</strong> Layanan konsultasi ini menyediakan informasi dan edukasi kesehatan kulit mandiri. Untuk kondisi peradangan berat (kistik), luka terbuka, atau gejala infeksi dermatologis, disarankan berkonsultasi langsung dengan Dokter Spesialis Kulit &amp; Kelamin (Sp.D.V.E).
+                <div class="pt-3 border-top text-muted small" style="font-size:0.76rem; line-height:1.5;">
+                    <i class="fa-solid fa-triangle-exclamation text-primary me-1"></i>
+                    Informasi bersifat edukatif, bukan pengganti diagnosis dokter kulit (Sp.D.V.E).
                 </div>
             </div>
         </div>
@@ -284,9 +256,9 @@
                 <div class="sc-chat-bubble-user text-start">
                     ${escapeHtml(text)}
                 </div>
-                <span class="small mt-1 d-block" style="color: #94a3b8; font-size:0.7rem;">${time} • Anda</span>
+                <span class="small mt-1 d-block text-muted" style="font-size:0.7rem;">${time} • Anda</span>
             </div>
-            <div style="width:36px;height:36px;border-radius:50%;background:rgba(191,161,95,0.2);color:#dfc68b;border:1px solid rgba(191,161,95,0.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--primary-color);color:#ffffff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                 <i class="fa-solid fa-user" style="font-size:0.85rem;"></i>
             </div>
         `;
@@ -299,14 +271,14 @@
             const div = document.createElement('div');
             div.className = 'd-flex gap-3 mb-2 sc-page-msg';
             div.innerHTML = `
-            <div style="width:36px;height:36px;border-radius:50%;background:rgba(56,217,169,0.15);color:#38d9a9;border:1px solid rgba(56,217,169,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--primary-tint);color:var(--primary-color);border:1px solid rgba(15,118,110,0.22);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                 <i class="fa-solid fa-wand-magic-sparkles" style="font-size:0.85rem;"></i>
             </div>
             <div style="max-width:85%;">
                 <div class="sc-chat-bubble-bot">
                     ${formatMd(markdownText)}
                 </div>
-                <span class="small mt-1 d-block" style="color: #94a3b8; font-size:0.7rem;">${time} • SkinCheck AI</span>
+                <span class="small mt-1 d-block text-muted" style="font-size:0.7rem;">${time} • SkinCheck AI</span>
             </div>
         `;
             msgContainer.appendChild(div);
@@ -346,14 +318,14 @@
 
             // Fenced code blocks
             escaped = escaped.replace(/```([a-z0-9_-]*)\n([\s\S]*?)```/gim, function (match, lang, code) {
-                return '<pre class="p-2 rounded small overflow-auto my-2" style="background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.1);color:#38d9a9;"><code>' + code.trim() + '</code></pre>';
+                return '<pre class="p-2 rounded small overflow-auto my-2" style="background:#eef5f3;border:1px solid #dce8e4;color:#0f2924;"><code>' + code.trim() + '</code></pre>';
             });
 
             // Inline code
-            escaped = escaped.replace(/`([^`]+)`/g, '<code class="px-1 py-0.5 rounded small" style="background:rgba(255,255,255,0.08);color:#dfc68b;">$1</code>');
+            escaped = escaped.replace(/`([^`]+)`/g, '<code class="px-1 py-1 rounded small" style="background:#e6f4f1;color:#0f766e;">$1</code>');
 
             // Bold (**text** or __text__)
-            escaped = escaped.replace(/(\*\*|__)(.*?)\1/g, '<strong style="color:#ffffff;">$2</strong>');
+            escaped = escaped.replace(/(\*\*|__)(.*?)\1/g, '<strong class="text-dark">$2</strong>');
 
             // Italic (*text* or _text_)
             escaped = escaped.replace(/(\*|_)(.*?)\1/g, '<em>$2</em>');
@@ -374,7 +346,7 @@
                     if (inUl) { out.push('</ul>'); inUl = false; }
                     if (inOl) { out.push('</ol>'); inOl = false; }
                     if (inTable) { out.push('</tbody></table></div>'); inTable = false; }
-                    out.push('<hr class="my-2" style="border-color:rgba(255,255,255,0.1);">');
+                    out.push('<hr class="my-2" style="border-color:#dce8e4;">');
                     continue;
                 }
 
@@ -387,17 +359,17 @@
                     const level = headerMatch[2].length;
                     const content = headerMatch[3].trim();
                     if (level === 1) {
-                        out.push('<h5 class="fw-bold mt-3 mb-2" style="color:#dfc68b;">' + content + '</h5>');
+                        out.push('<h5 class="fw-bold mt-3 mb-2 text-primary">' + content + '</h5>');
                     } else if (level === 2) {
-                        out.push('<h6 class="fw-bold mt-2 mb-1" style="color:#dfc68b;font-size:1.05rem;">' + content + '</h6>');
+                        out.push('<h6 class="fw-bold mt-2 mb-1 text-primary" style="font-size:1.05rem;">' + content + '</h6>');
                     } else if (level === 3) {
-                        out.push('<h6 class="fw-bold mt-2 mb-1" style="color:#dfc68b;font-size:0.98rem;">' + content + '</h6>');
+                        out.push('<h6 class="fw-bold mt-2 mb-1 text-primary" style="font-size:0.98rem;">' + content + '</h6>');
                     } else if (level === 4) {
-                        out.push('<h6 class="fw-bold mt-2 mb-1 text-white" style="font-size:0.92rem;">' + content + '</h6>');
+                        out.push('<h6 class="fw-bold mt-2 mb-1 text-dark" style="font-size:0.92rem;">' + content + '</h6>');
                     } else if (level === 5) {
-                        out.push('<div class="fw-bold text-white mt-2 mb-1 small">' + content + '</div>');
+                        out.push('<div class="fw-bold text-dark mt-2 mb-1 small">' + content + '</div>');
                     } else {
-                        out.push('<div class="fw-semibold mt-1 mb-1 small" style="color:#c9ded5;">' + content + '</div>');
+                        out.push('<div class="fw-semibold mt-1 mb-1 small text-muted">' + content + '</div>');
                     }
                     continue;
                 }
@@ -408,7 +380,7 @@
                     if (inUl) { out.push('</ul>'); inUl = false; }
                     if (inOl) { out.push('</ol>'); inOl = false; }
                     if (inTable) { out.push('</tbody></table></div>'); inTable = false; }
-                    out.push('<blockquote class="border-start border-3 ps-2 my-2 fst-italic small" style="border-color:#dfc68b !important; color:#c9ded5;">' + quoteMatch[1] + '</blockquote>');
+                    out.push('<blockquote class="border-start border-3 ps-2 my-2 fst-italic small text-muted" style="border-color:var(--primary-color) !important;">' + quoteMatch[1] + '</blockquote>');
                     continue;
                 }
 
@@ -423,11 +395,11 @@
 
                     const cells = trimmed.slice(1, -1).split('|').map(function (c) { return c.trim(); });
                     if (!inTable) {
-                        out.push('<div class="table-responsive my-2"><table class="table table-sm table-bordered small mb-0" style="border-color:rgba(255,255,255,0.1);color:#e2ede8;">');
-                        out.push('<thead><tr>' + cells.map(function (c) { return '<th style="background:rgba(255,255,255,0.06);color:#dfc68b;font-weight:700;">' + c + '</th>'; }).join('') + '</tr></thead><tbody>');
+                        out.push('<div class="table-responsive my-2"><table class="table table-sm table-bordered small mb-0" style="border-color:#dce8e4;">');
+                        out.push('<thead><tr>' + cells.map(function (c) { return '<th style="background:#e6f4f1;color:#0f766e;font-weight:700;">' + c + '</th>'; }).join('') + '</tr></thead><tbody>');
                         inTable = true;
                     } else {
-                        out.push('<tr>' + cells.map(function (c) { return '<td style="border-color:rgba(255,255,255,0.06);">' + c + '</td>'; }).join('') + '</tr>');
+                        out.push('<tr>' + cells.map(function (c) { return '<td style="border-color:#dce8e4;">' + c + '</td>'; }).join('') + '</tr>');
                     }
                     continue;
                 } else if (inTable) {

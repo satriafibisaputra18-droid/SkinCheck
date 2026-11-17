@@ -15,16 +15,31 @@
     <!-- Custom Style Sheet with Cache Buster -->
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/style.css?v=<?php echo time(); ?>">
 </head>
-<body class="sc-dark-theme">
+<body class="sc-light-theme">
+
+    <!-- Global SVG Filter for Liquid Glass Refraction Effect -->
+    <svg class="d-none" aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <filter id="sc-liquid-glass" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.04 0.04" numOctaves="1" seed="2" result="turbulence"/>
+                <feGaussianBlur in="turbulence" stdDeviation="2.5" result="blurredNoise"/>
+                <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="22" xChannelSelector="R" yChannelSelector="B" result="displaced"/>
+                <feGaussianBlur in="displaced" stdDeviation="1.5" result="finalBlur"/>
+                <feComposite in="finalBlur" in2="finalBlur" operator="over"/>
+            </filter>
+        </defs>
+    </svg>
 
     <!-- Responsive Public Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top sc-public-navbar py-3">
         <div class="container d-flex align-items-center justify-content-between">
-            <!-- Left Balance Spacer on desktop to ensure glass capsule stays dead-center -->
-            <div class="d-none d-lg-block" style="width: 140px;"></div>
+            <a href="<?php echo URLROOT; ?>/" class="navbar-brand d-flex align-items-center gap-2 fs-5">
+                <i class="fa-solid fa-microscope text-primary"></i>
+                <span>Skin<span style="color:var(--primary-color);">Check</span></span>
+            </a>
             
             <button class="navbar-toggler border-0 shadow-none p-1" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fa-solid fa-bars text-white fs-5"></i>
+                <i class="fa-solid fa-bars text-dark fs-5"></i>
             </button>
             
             <div class="collapse navbar-collapse justify-content-center" id="mainNavbar">
@@ -54,7 +69,7 @@
             <div class="d-flex align-items-center justify-content-end gap-2" style="min-width: 140px;">
                     <?php if (isset($_SESSION['user_id'])) : ?>
                         <div class="dropdown">
-                            <button class="btn btn-outline-primary rounded-pill dropdown-toggle d-flex align-items-center gap-2 py-1.5 px-3 small" type="button" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-outline-primary rounded-pill dropdown-toggle d-flex align-items-center gap-2 py-1 px-3 small" type="button" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <div class="sc-avatar overflow-hidden position-relative" style="width:26px;height:26px;font-size:0.75rem;">
                                     <?php if (!empty($_SESSION['user_avatar']) && file_exists(APPROOT . '/../public/' . $_SESSION['user_avatar'])) : ?>
                                         <img src="<?php echo URLROOT; ?>/public/<?php echo htmlspecialchars($_SESSION['user_avatar']); ?>?v=<?php echo time(); ?>" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
@@ -96,10 +111,9 @@
                             </ul>
                         </div>
                     <?php else : ?>
-                        <a href="<?php echo URLROOT; ?>/auth/login" class="btn btn-sm sc-glass-btn-login rounded-pill px-3 py-1.5 fw-semibold">Masuk</a>
-                        <a href="<?php echo URLROOT; ?>/auth/register" class="btn btn-sm btn-primary rounded-pill px-3.5 py-1.5 fw-semibold shadow-xs">Daftar Akun</a>
+                        <a href="<?php echo URLROOT; ?>/auth/login" class="btn btn-sm sc-glass-btn-login rounded-pill px-3 py-1 fw-semibold"><span>Masuk</span></a>
+                        <a href="<?php echo URLROOT; ?>/auth/register" class="btn btn-sm btn-primary rounded-pill px-3 py-1 fw-semibold shadow-xs"><span>Daftar Akun</span></a>
                     <?php endif; ?>
-                </div>
             </div>
         </div>
     </nav>

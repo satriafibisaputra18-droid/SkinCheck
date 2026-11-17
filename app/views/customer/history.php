@@ -1,7 +1,7 @@
 <?php
 function scoreClass($s) { if($s===null)return''; return $s>=75?'good':($s>=50?'fair':'poor'); }
 function sunBadgeClass($st) { $m=['Protected'=>'protected','Partially Protected'=>'partial','Unprotected'=>'unprotected']; return $m[$st]??'unprotected'; }
-function sunIcon($st) { if($st==='Protected')return'<i class="fa-solid fa-shield-check"></i>'; if($st==='Partially Protected')return'<i class="fa-solid fa-shield-halved"></i>'; return'<i class="fa-solid fa-shield-slash"></i>'; }
+function sunIcon($st) { if($st==='Protected')return'<i class="fa-solid fa-circle-check"></i>'; if($st==='Partially Protected')return'<i class="fa-solid fa-shield-halved"></i>'; return'<i class="fa-solid fa-circle-exclamation"></i>'; }
 
 require APPROOT . '/views/templates/customer_header.php';
 ?>
@@ -12,7 +12,7 @@ require APPROOT . '/views/templates/customer_header.php';
         <a href="<?php echo URLROOT; ?>/customer/dashboard" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
             <i class="fa-solid fa-arrow-left me-1"></i>Dashboard
         </a>
-        <span class="small" style="color: #c9ded5;">/ Riwayat Pemindaian Kulit</span>
+        <span class="small text-muted">/ Riwayat Pemindaian Kulit</span>
     </div>
     <a href="<?php echo URLROOT; ?>/scan/faceScan" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm">
         <i class="fa-solid fa-camera me-1"></i>Pemindaian Wajah Baru
@@ -59,10 +59,10 @@ require APPROOT . '/views/templates/customer_header.php';
 <div class="sc-card">
     <div class="sc-card-header d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center gap-2">
-            <i class="fa-solid fa-clock-rotate-left" style="color: #dfc68b;"></i>
-            <h5 class="mb-0 fw-bold">Seluruh Rekaman Diagnostik Wajah</h5>
+            <i class="fa-solid fa-clock-rotate-left text-primary"></i>
+            <h5 class="mb-0 fw-bold">Riwayat Pemindaian</h5>
         </div>
-        <span class="small" style="color: #94a3b8;">Diurutkan dari pemeriksaan terbaru</span>
+        <span class="small text-muted">Terbaru di atas</span>
     </div>
     <?php if (!empty($scans)) : ?>
         <div class="table-responsive">

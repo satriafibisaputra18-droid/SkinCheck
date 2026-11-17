@@ -16,11 +16,11 @@
         <div class="sc-card">
             <div class="sc-card-header d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center gap-2">
-                    <h5 class="mb-0"><i class="fa-solid fa-camera me-2 text-warning"></i>Camera</h5>
+                    <h5 class="mb-0"><i class="fa-solid fa-camera me-2 text-primary"></i>Face Scan</h5>
                     <span id="sc-quality-badge" class="badge d-none"></span>
                 </div>
-                <span class="badge sc-badge-secure rounded-pill px-2.5 py-1" style="font-size:.74rem;">
-                    <i class="fa-solid fa-shield-check me-1"></i>Secure · Browser Only
+                <span class="badge sc-badge-secure rounded-pill px-2 py-1" style="font-size:.74rem;">
+                    <i class="fa-solid fa-lock me-1"></i>Privat
                 </span>
             </div>
 
@@ -30,7 +30,7 @@
                 <div id="sc-perm-error" class="d-none mb-3">
                     <div class="alert alert-danger border-0 mb-0">
                         <div class="d-flex gap-3 align-items-start">
-                            <i class="fa-solid fa-camera-slash fs-4 mt-1 flex-shrink-0"></i>
+                            <i class="fa-solid fa-video-slash fs-4 mt-1 flex-shrink-0"></i>
                             <div>
                                 <p class="fw-bold mb-1 sc-perm-title">Camera Error</p>
                                 <p class="mb-2 small sc-perm-msg">Unknown error.</p>
@@ -77,7 +77,7 @@
                         <svg class="sc-face-guide" viewBox="0 0 100 100" preserveAspectRatio="none">
                             <ellipse cx="50" cy="50" rx="30" ry="40"
                                      fill="none"
-                                     stroke="rgba(191,161,95,0.75)"
+                                     stroke="rgba(20,184,166,0.85)"
                                      stroke-width="0.8"
                                      stroke-dasharray="4 2"/>
                         </svg>
@@ -151,111 +151,41 @@
         </div><!-- /.sc-card -->
     </div>
 
-    <!-- ═══ Right: Guide & Checklist ══════════════════════════════════ -->
+    <!-- ═══ Right: Compact Guide ══════════════════════════════════ -->
     <div class="col-lg-5">
 
-        <!-- Step Guide -->
-        <div class="sc-card mb-4">
+        <div class="sc-card">
             <div class="sc-card-header">
-                <h5><i class="fa-solid fa-list-check me-2" style="color:var(--primary-color);"></i>Cara Penggunaan</h5>
+                <h5 class="mb-0 text-dark"><i class="fa-solid fa-list-check me-2 text-primary"></i>Tips Scan Akurat</h5>
             </div>
             <div class="sc-card-body">
-                <ol class="list-unstyled mb-0">
+                <ol class="list-unstyled mb-3">
                     <?php
                     $steps = [
-                        ['fa-video',           'Aktifkan Kamera',    'Klik tombol "Aktifkan Kamera" dan izinkan akses kamera browser.'],
-                        ['fa-face-smile',      'Posisi Wajah',       'Pastikan wajah berada di dalam panduan oval. Jaga jarak 30–50 cm dari kamera.'],
-                        ['fa-lightbulb',       'Pencahayaan',        'Pastikan ruangan terang. Hindari cahaya latar yang terlalu kuat (backlight).'],
-                        ['fa-camera',          'Ambil Foto',         'Klik "Ambil Foto" dan tahan posisi selama 1–2 detik.'],
-                        ['fa-magnifying-glass','Preview & Validasi', 'Tinjau hasil tangkapan. Gambar akan divalidasi kualitas dan pencahayaannya.'],
-                        ['fa-paper-plane',     'Kirim',              'Klik "Kirim Scan" jika hasilnya baik. Atau klik "Ulangi" untuk mengambil ulang.'],
+                        ['Aktifkan Kamera', 'Izinkan akses kamera pada browser Anda.'],
+                        ['Cahaya Depan Merata', 'Hindari ruangan gelap atau cahaya dari belakang (backlight).'],
+                        ['Posisi Wajah Ideal', 'Pasang wajah di dalam frame oval dengan jarak 30–50 cm.'],
+                        ['Ambil & Kirim Foto', 'Tahan 1–2 detik saat memotret lalu klik Kirim Scan.'],
                     ];
                     foreach ($steps as $i => $step):
                     ?>
-                        <li class="d-flex gap-3 mb-3 <?php echo $i === count($steps) - 1 ? '' : ''; ?>">
+                        <li class="d-flex align-items-start gap-2 <?php echo $i === count($steps) - 1 ? 'mb-0' : 'mb-2'; ?>">
                             <div class="sc-step-num"><?php echo $i + 1; ?></div>
                             <div>
-                                <p class="fw-semibold mb-0 small"><?php echo $step[1]; ?></p>
-                                <p class="text-muted mb-0" style="font-size:.77rem;"><?php echo $step[2]; ?></p>
+                                <p class="fw-semibold mb-0 small text-dark"><?php echo $step[0]; ?></p>
+                                <p class="text-muted mb-0" style="font-size:.78rem;"><?php echo $step[1]; ?></p>
                             </div>
                         </li>
                     <?php endforeach; ?>
                 </ol>
-            </div>
-        </div>
 
-        <!-- Lighting Guide -->
-        <div class="sc-card mb-4">
-            <div class="sc-card-header d-flex align-items-center justify-content-between">
-                <h5 class="mb-0 text-white"><i class="fa-solid fa-lightbulb me-2" style="color:var(--secondary-color);"></i>Panduan Pencahayaan</h5>
-                <span class="badge" style="background: rgba(191,161,95,0.15); color: #dfc68b; font-size: 0.72rem; border: 1px solid rgba(191,161,95,0.3);">Standar Klinis</span>
-            </div>
-            <div class="sc-card-body">
-                <p class="small mb-3" style="color: #94a3b8; font-size: 0.8rem;">
-                    Pencahayaan yang merata menentukan tingkat akurasi deteksi pori, kemerahan, dan tekstur kulit.
-                </p>
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <div class="sc-lighting-tip good">
-                            <div class="sc-lighting-header">
-                                <i class="fa-solid fa-circle-check"></i>
-                                <span>Direkomendasikan</span>
-                            </div>
-                            <ul class="sc-lighting-list">
-                                <li class="sc-lighting-item">
-                                    <i class="fa-solid fa-sun"></i>
-                                    <span>Cahaya alami merata dari depan</span>
-                                </li>
-                                <li class="sc-lighting-item">
-                                    <i class="fa-solid fa-lightbulb"></i>
-                                    <span>Lampu ruangan menyebar halus</span>
-                                </li>
-                                <li class="sc-lighting-item">
-                                    <i class="fa-solid fa-arrows-to-eye"></i>
-                                    <span>Posisi wajah tegak lurus kamera</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="sc-lighting-tip bad">
-                            <div class="sc-lighting-header">
-                                <i class="fa-solid fa-circle-xmark"></i>
-                                <span>Hindari</span>
-                            </div>
-                            <ul class="sc-lighting-list">
-                                <li class="sc-lighting-item">
-                                    <i class="fa-solid fa-moon"></i>
-                                    <span>Ruangan temaram atau gelap</span>
-                                </li>
-                                <li class="sc-lighting-item">
-                                    <i class="fa-solid fa-circle-half-stroke"></i>
-                                    <span>Cahaya dari belakang (backlight)</span>
-                                </li>
-                                <li class="sc-lighting-item">
-                                    <i class="fa-solid fa-palette"></i>
-                                    <span>Cahaya berwarna pekat / neon</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- AI Analysis Info Card -->
-        <div class="sc-card" style="border: 1px solid rgba(191, 161, 95, 0.25); background: linear-gradient(135deg, rgba(191, 161, 95, 0.05) 0%, rgba(20, 45, 36, 0.35) 100%);">
-            <div class="sc-card-body py-3 px-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(191, 161, 95, 0.15); border: 1px solid rgba(191, 161, 95, 0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                        <i class="fa-solid fa-brain" style="color: #dfc68b; font-size: 1.15rem;"></i>
-                    </div>
-                    <div>
-                        <p class="fw-semibold mb-1" style="color: #dfc68b; font-size: 0.88rem;">Komputasi Visi Klinis Terintegrasi</p>
-                        <p class="mb-0" style="color: #c9ded5; font-size: 0.78rem; line-height: 1.4;">
-                            Setiap scan diproses otomatis dengan deteksi metrik kulit terkini. Data tersimpan aman pada profil Anda.
-                        </p>
-                    </div>
+                <div class="d-flex flex-wrap gap-2 pt-3 border-top small">
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1 fw-medium">
+                        <i class="fa-solid fa-check me-1"></i>Cahaya depan rata
+                    </span>
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2 py-1 fw-medium">
+                        <i class="fa-solid fa-xmark me-1"></i>Backlight / gelap
+                    </span>
                 </div>
             </div>
         </div>
@@ -311,7 +241,7 @@ img.sc-cam-video { transform: none; } /* preview not mirrored */
 .sc-bracket {
     position: absolute;
     width: 22px; height: 22px;
-    border-color: rgba(191,161,95,.9);
+    border-color: rgba(20,184,166,.92);
     border-style: solid;
 }
 .sc-bracket-tl { top: 10%; left: 10%; border-width: 3px 0 0 3px; border-radius: 4px 0 0 0; }
@@ -322,22 +252,25 @@ img.sc-cam-video { transform: none; } /* preview not mirrored */
 /* Instruction text on HUD */
 .sc-cam-instruction {
     position: absolute;
-    bottom: 12px; left: 50%; transform: translateX(-50%);
-    background: rgba(0,0,0,.55);
+    bottom: 14px; left: 50%; transform: translateX(-50%);
+    background: rgba(12, 28, 25, 0.56);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     color: #fff;
     font-size: .75rem;
     font-weight: 600;
-    padding: .3rem .85rem;
+    padding: .36rem .95rem;
     border-radius: 99px;
     white-space: nowrap;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(14px) saturate(170%);
+    -webkit-backdrop-filter: blur(14px) saturate(170%);
 }
 
 /* Scan laser */
 .sc-cam-laser {
     position: absolute; left: 0; width: 100%; height: 3px;
-    background: linear-gradient(transparent, rgba(191,161,95,.9) 50%, transparent);
-    box-shadow: 0 0 8px rgba(191,161,95,.8);
+    background: linear-gradient(transparent, rgba(20,184,166,.95) 50%, transparent);
+    box-shadow: 0 0 10px rgba(20,184,166,.85);
     animation: sc-laser 2.5s ease-in-out infinite;
     display: none; /* shown via JS during capture */
 }
@@ -377,26 +310,28 @@ img.sc-cam-video { transform: none; } /* preview not mirrored */
     pointer-events: auto;
 }
 .sc-toast-inner {
-    background: #0d1e17;
-    border: 1.5px solid rgba(223, 198, 139, 0.6);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45), 0 0 25px rgba(16, 185, 129, 0.25);
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(22px) saturate(185%);
+    -webkit-backdrop-filter: blur(22px) saturate(185%);
+    border: 1px solid rgba(255, 255, 255, 0.94);
+    box-shadow: 0 18px 42px rgba(15, 41, 36, 0.14), inset 0 1.5px 0 #ffffff;
     border-radius: 999px;
     padding: 0.65rem 1rem 0.65rem 0.85rem;
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    color: #ffffff;
+    color: var(--dark-neutral);
 }
 .sc-toast-bell-wrap {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: rgba(223, 198, 139, 0.15);
-    border: 1px solid rgba(223, 198, 139, 0.4);
+    background: #e6f4f1;
+    border: 1px solid #cce6df;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #dfc68b;
+    color: var(--primary-color);
     font-size: 1.1rem;
     flex-shrink: 0;
 }
@@ -416,12 +351,12 @@ img.sc-cam-video { transform: none; } /* preview not mirrored */
 .sc-toast-title {
     font-size: 0.88rem;
     font-weight: 700;
-    color: #dfc68b;
+    color: var(--primary-color);
     line-height: 1.2;
 }
 .sc-toast-sub {
     font-size: 0.75rem;
-    color: #cbd5e1;
+    color: var(--text-muted);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -429,7 +364,7 @@ img.sc-cam-video { transform: none; } /* preview not mirrored */
 .sc-toast-btn {
     font-size: 0.78rem;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(15, 118, 110, 0.15);
 }
 
 /* ── Real Scan Complete Popup Modal ────────────────────── */
@@ -471,11 +406,13 @@ img.sc-cam-video { transform: none; } /* preview not mirrored */
     z-index: 10;
 }
 #scScanCompleteModal .modal-content {
-    border-radius: 26px !important;
-    border: 1.5px solid rgba(223, 198, 139, 0.5) !important;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 50px rgba(16, 185, 129, 0.22) !important;
-    background: #0c1a15 !important;
-    color: #e2ede8 !important;
+    border-radius: 28px !important;
+    border: 1px solid rgba(255, 255, 255, 0.92) !important;
+    box-shadow: 0 28px 70px rgba(15, 41, 36, 0.22), inset 0 1.5px 0 rgba(255, 255, 255, 0.96) !important;
+    background: rgba(255, 255, 255, 0.86) !important;
+    backdrop-filter: blur(28px) saturate(190%);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    color: var(--body-text) !important;
     overflow: hidden;
     position: relative;
 }
@@ -483,42 +420,41 @@ img.sc-cam-video { transform: none; } /* preview not mirrored */
     content: '';
     position: absolute;
     top: 0;
-    left: 10%;
-    right: 10%;
-    height: 1.5px;
-    background: linear-gradient(90deg, transparent, rgba(223, 198, 139, 0.85), transparent);
+    left: 16%;
+    right: 16%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.98), transparent);
     pointer-events: none;
 }
 .sc-modal-icon-badge {
     width: 68px;
     height: 68px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(12, 26, 21, 0.9) 100%) !important;
-    border: 2px solid rgba(223, 198, 139, 0.55) !important;
-    color: #dfc68b !important;
+    background: #e6f4f1 !important;
+    border: 2px solid #cce6df !important;
+    color: var(--primary-color) !important;
     font-size: 1.85rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 30px rgba(16, 185, 129, 0.35);
+    box-shadow: 0 8px 20px rgba(15, 118, 110, 0.12);
 }
 .sc-modal-score-wrap {
-    background: rgba(255, 255, 255, 0.035) !important;
-    border: 1px solid rgba(223, 198, 139, 0.25) !important;
+    background: #f6f9f8 !important;
+    border: 1px solid var(--border-subtle) !important;
     border-radius: 18px !important;
     padding: 1.15rem 1rem !important;
 }
 .sc-modal-score-num {
     font-size: 3.2rem;
     font-weight: 800;
-    color: #dfc68b;
+    color: var(--primary-color);
     line-height: 1;
-    font-family: 'Outfit', sans-serif;
-    text-shadow: 0 0 25px rgba(223, 198, 139, 0.3);
+    font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
 }
 .sc-metric-mini-item {
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: #f8fbfa !important;
+    border: 1px solid var(--border-subtle) !important;
     border-radius: 12px !important;
     padding: 0.65rem 0.75rem !important;
     text-align: center;
@@ -535,7 +471,7 @@ img.sc-cam-video { transform: none; } /* preview not mirrored */
             <div class="sc-toast-title">Analisis Wajah Selesai!</div>
             <div class="sc-toast-sub">Skor Kulit: <strong id="sc-toast-score">--</strong>/100 · Ketuk untuk melihat laporan</div>
         </div>
-        <button type="button" class="btn btn-sm btn-light rounded-pill px-3 py-1 fw-bold text-dark sc-toast-btn">
+        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 py-1 fw-bold sc-toast-btn">
             Buka <i class="fa-solid fa-arrow-right ms-1"></i>
         </button>
     </div>
@@ -549,21 +485,21 @@ img.sc-cam-video { transform: none; } /* preview not mirrored */
                 <!-- Success Icon -->
                 <div class="mb-3">
                     <div class="sc-modal-icon-badge">
-                        <i class="fa-solid fa-bell text-warning"></i>
+                        <i class="fa-solid fa-bell"></i>
                     </div>
                 </div>
 
-                <h3 class="fw-bold mb-1 text-white" id="scScanCompleteModalLabel" style="font-family:'Outfit',sans-serif;">Analisis Wajah Selesai</h3>
-                <p class="small mb-3" style="color: #94a3b8;">Evaluasi kondisi kulit wajah Anda berhasil diproses oleh sistem AI.</p>
+                <h3 class="fw-bold mb-1 text-dark" id="scScanCompleteModalLabel">Analisis Wajah Selesai</h3>
+                <p class="small mb-3 text-muted">Evaluasi kondisi kulit wajah Anda berhasil diproses oleh sistem AI.</p>
 
 
 
                 <!-- Score Highlight Box -->
                 <div class="sc-modal-score-wrap mb-3 text-center">
-                    <span class="text-uppercase fw-bold" style="font-size: 0.72rem; letter-spacing: 0.08em; color: #a3b8b0;">Skor Kesehatan Kulit</span>
+                    <span class="text-uppercase fw-bold text-muted" style="font-size: 0.72rem; letter-spacing: 0.08em;">Skor Kesehatan Kulit</span>
                     <div class="d-flex align-items-baseline justify-content-center gap-1 my-1">
                         <span id="sc-modal-score-val" class="sc-modal-score-num">--</span>
-                        <span class="fw-semibold" style="font-size: 1.2rem; color: #dfc68b;">/100</span>
+                        <span class="fw-semibold text-primary" style="font-size: 1.2rem;">/100</span>
                     </div>
                     <span id="sc-modal-score-badge" class="badge bg-success-subtle text-success px-3 py-1 rounded-pill fw-semibold" style="font-size: 0.76rem;">Kondisi Terverifikasi</span>
                 </div>
@@ -572,41 +508,41 @@ img.sc-cam-video { transform: none; } /* preview not mirrored */
                 <div class="row g-2 mb-4 text-start">
                     <div class="col-6">
                         <div class="sc-metric-mini-item">
-                            <span class="d-block" style="font-size: 0.72rem; color: #94a3b8;">Jerawat</span>
-                            <span class="fw-bold text-white" id="sc-modal-acne">--</span>
+                            <span class="d-block text-muted" style="font-size: 0.72rem;">Jerawat</span>
+                            <span class="fw-bold text-dark" id="sc-modal-acne">--</span>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="sc-metric-mini-item">
-                            <span class="d-block" style="font-size: 0.72rem; color: #94a3b8;">Kemerahan</span>
-                            <span class="fw-bold text-white" id="sc-modal-redness">--</span>
+                            <span class="d-block text-muted" style="font-size: 0.72rem;">Kemerahan</span>
+                            <span class="fw-bold text-dark" id="sc-modal-redness">--</span>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="sc-metric-mini-item">
-                            <span class="d-block" style="font-size: 0.72rem; color: #94a3b8;">Tekstur</span>
-                            <span class="fw-bold text-white" id="sc-modal-texture">--</span>
+                            <span class="d-block text-muted" style="font-size: 0.72rem;">Tekstur</span>
+                            <span class="fw-bold text-dark" id="sc-modal-texture">--</span>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="sc-metric-mini-item">
-                            <span class="d-block" style="font-size: 0.72rem; color: #94a3b8;">Pigmentasi</span>
-                            <span class="fw-bold text-white" id="sc-modal-pigment">--</span>
+                            <span class="d-block text-muted" style="font-size: 0.72rem;">Pigmentasi</span>
+                            <span class="fw-bold text-dark" id="sc-modal-pigment">--</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- CTA Button -->
-                <a href="#" id="sc-modal-btn-view" class="sc-btn-gold w-100 py-2.5 fw-bold rounded-pill shadow mb-2 text-decoration-none" style="display:inline-flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #dfc68b 0%, #c4a968 100%); color: #05120f; font-size: 0.98rem;" onclick="window.__faceScanApp && window.__faceScanApp.goToReport(); return false;">
-                    <i class="fa-solid fa-file-waveform me-2"></i> Buka Laporan Lengkap
+                <a href="#" id="sc-modal-btn-view" class="sc-btn-gold w-100 py-2 fw-bold rounded-pill shadow-sm mb-2 text-decoration-none" style="display:inline-flex; align-items:center; justify-content:center; font-size: 0.98rem;" onclick="window.__faceScanApp && window.__faceScanApp.goToReport(); return false;">
+                    <i class="fa-solid fa-file-lines me-2"></i> Buka Laporan Lengkap
                 </a>
 
-                <div class="small mt-2" style="font-size: 0.76rem; color: #94a3b8;" id="sc-modal-countdown-wrap">
-                    <i class="fa-solid fa-arrows-rotate fa-spin me-1 text-warning"></i> Mengalihkan otomatis dalam <span id="sc-modal-countdown" class="fw-bold text-white">15</span> detik...
+                <div class="small mt-2 text-muted" style="font-size: 0.76rem;" id="sc-modal-countdown-wrap">
+                    <i class="fa-solid fa-arrows-rotate fa-spin me-1 text-primary"></i> Mengalihkan otomatis dalam <span id="sc-modal-countdown" class="fw-bold text-dark">15</span> detik...
                 </div>
 
                 <div>
-                    <button type="button" class="btn btn-link text-white-50 btn-sm text-decoration-none mt-2" onclick="window.__faceScanApp && window.__faceScanApp.closeModal()">
+                    <button type="button" class="btn btn-link text-muted btn-sm text-decoration-none mt-2" onclick="window.__faceScanApp && window.__faceScanApp.closeModal()">
                         Tutup & Tetap di Sini
                     </button>
                 </div>

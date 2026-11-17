@@ -11,9 +11,9 @@ function sunBadgeClass($st) {
 }
 
 function sunIcon($st) {
-    if ($st === 'Protected') return '<i class="fa-solid fa-shield-check"></i>';
+    if ($st === 'Protected') return '<i class="fa-solid fa-circle-check"></i>';
     if ($st === 'Partially Protected') return '<i class="fa-solid fa-shield-halved"></i>';
-    return '<i class="fa-solid fa-shield-slash"></i>';
+    return '<i class="fa-solid fa-circle-exclamation"></i>';
 }
 
 $status = $scan->status ?? 'completed';
@@ -52,8 +52,8 @@ require APPROOT . '/views/templates/customer_header.php';
 <!-- ── Failed State Warning Banner ──────────────────────── -->
 <?php if ($isFailed) : ?>
     <div class="alert alert-danger border-0 mb-4 p-4 shadow-sm" style="border-radius: var(--border-radius);">
-        <div class="d-flex gap-3 align-items-start">
-            <div class="rounded-circle bg-danger text-white p-3 d-flex align-items-center justify-content-center" style="width:48px;height:48px;flex-shrink:0;">
+        <div class="d-flex gap-2 align-items-start">
+            <div class="rounded-circle bg-danger text-white p-2 d-flex align-items-center justify-content-center" style="width:42px;height:42px;flex-shrink:0;">
                 <i class="fa-solid fa-triangle-exclamation fs-5"></i>
             </div>
             <div class="flex-grow-1">
@@ -96,13 +96,13 @@ require APPROOT . '/views/templates/customer_header.php';
                         <div class="position-absolute bottom-0 start-0 end-0 p-2 bg-dark bg-opacity-50 text-white small text-start d-flex justify-content-between">
                             <span><i class="fa-solid fa-calendar me-1"></i><?php echo date('d M Y, H:i', strtotime($scan->created_at)); ?></span>
                             <?php if ($confidencePct !== null) : ?>
-                                <span class="badge bg-success"><i class="fa-solid fa-shield-check me-1"></i>Keyakinan: <?php echo $confidencePct; ?>%</span>
+                                <span class="badge bg-success"><i class="fa-solid fa-circle-check me-1"></i>Keyakinan: <?php echo $confidencePct; ?>%</span>
                             <?php endif; ?>
                         </div>
                     </div>
                 <?php else : ?>
                     <div class="sc-empty-state py-4">
-                        <i class="fa-solid fa-image-slash"></i>
+                        <i class="fa-solid fa-image"></i>
                         <p class="small">File foto tidak tersedia</p>
                     </div>
                 <?php endif; ?>
@@ -113,23 +113,18 @@ require APPROOT . '/views/templates/customer_header.php';
         <div class="sc-card mb-4">
             <div class="sc-card-body text-center">
                 <?php $sc = scoreClass($scan->overall_score); ?>
-                <div class="mb-2" style="font-size:0.75rem;color:#7a8a84;font-weight:700;text-transform:uppercase;letter-spacing:.06em;">
-                    Skor Indikator Keseluruhan
+                <div class="mb-3 text-muted fw-bold text-uppercase" style="font-size:0.74rem;letter-spacing:.06em;">
+                    Skor Keseluruhan
                 </div>
-                
-                <div class="sc-detail-score <?php echo $sc; ?>"
-                     style="color:var(--<?php echo $sc === 'good' ? 'color-score-good' : ($sc === 'fair' ? 'color-score-fair' : 'color-score-poor'); ?>);">
-                    <?php echo ($status === 'completed' && $scan->overall_score) ? $scan->overall_score : '--'; ?>
-                </div>
-                <div class="text-muted mb-3" style="font-size:0.78rem;">skala estimasi 0 - 100</div>
 
-                <div class="sc-score-circle <?php echo $sc; ?> mx-auto mb-3" style="width:70px;height:70px;font-size:1.3rem;">
+                <div class="sc-score-circle <?php echo $sc; ?> mx-auto mb-2" style="width:82px;height:82px;font-size:1.55rem;">
                     <?php echo ($status === 'completed' && $scan->overall_score) ? $scan->overall_score : '--'; ?>
                 </div>
+                <div class="text-muted mb-3" style="font-size:0.76rem;">Skala 0 – 100</div>
 
                 <?php if ($confidencePct !== null) : ?>
                     <div class="sc-badge-confidence py-2 px-3 mb-3">
-                        <i class="fa-solid fa-microchip me-1" style="color: #60a5fa;"></i>Tingkat Keyakinan: <strong><?php echo $confidencePct; ?>%</strong>
+                        <i class="fa-solid fa-microchip me-1 text-primary"></i>Keyakinan: <strong><?php echo $confidencePct; ?>%</strong>
                     </div>
                 <?php endif; ?>
 
@@ -190,17 +185,17 @@ require APPROOT . '/views/templates/customer_header.php';
         <!-- Visual Indicators Breakdown Card -->
         <div class="sc-card mb-4">
             <div class="sc-card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fa-solid fa-chart-simple me-2" style="color:var(--primary-color);"></i>Indikator Kondisi Kulit (Visual)</h5>
-                <span class="badge bg-secondary-subtle text-secondary small">Estimasi AI</span>
+                <h5 class="mb-0"><i class="fa-solid fa-chart-simple me-2 text-primary"></i>Indikator Kondisi Kulit</h5>
+                <span class="badge bg-secondary-subtle text-secondary small">Skor 0–100</span>
             </div>
             <div class="sc-card-body">
 
                 <!-- 1. Acne Indicator -->
-                <div class="sc-metric-bar mb-4">
+                <div class="sc-metric-bar mb-3">
                     <div class="sc-metric-bar-header d-flex justify-content-between align-items-center">
                         <span class="sc-metric-bar-label fw-semibold">
                             <i class="fa-solid fa-circle me-1" style="color:var(--color-acne);font-size:0.55rem;vertical-align:middle;"></i>
-                            Indikasi Jerawat & Noda (Acne Indication)
+                            Jerawat &amp; Noda
                         </span>
                         <span class="sc-metric-bar-value fw-bold" style="color:var(--color-acne); font-size:1rem;">
                             <?php echo $scan->acne_score ?? 0; ?><small class="text-muted">/100</small>
@@ -209,19 +204,14 @@ require APPROOT . '/views/templates/customer_header.php';
                     <div class="progress my-1" style="height:10px; border-radius: 99px;">
                         <div class="progress-bar" style="width:<?php echo $scan->acne_score ?? 0; ?>%; background:var(--color-acne);"></div>
                     </div>
-                    <div class="d-flex justify-content-between text-muted" style="font-size:0.75rem;">
-                        <span>0: Minimal / Bersih</span>
-                        <span>Estimasi visual bintik/titik kemerahan aktif</span>
-                        <span>100: Padat</span>
-                    </div>
                 </div>
 
                 <!-- 2. Redness Indicator -->
-                <div class="sc-metric-bar mb-4">
+                <div class="sc-metric-bar mb-3">
                     <div class="sc-metric-bar-header d-flex justify-content-between align-items-center">
                         <span class="sc-metric-bar-label fw-semibold">
                             <i class="fa-solid fa-circle me-1" style="color:var(--color-redness);font-size:0.55rem;vertical-align:middle;"></i>
-                            Indikasi Rona Kemerahan (Redness Indication)
+                            Kemerahan
                         </span>
                         <span class="sc-metric-bar-value fw-bold" style="color:var(--color-redness); font-size:1rem;">
                             <?php echo $scan->redness_score ?? 0; ?><small class="text-muted">/100</small>
@@ -230,19 +220,14 @@ require APPROOT . '/views/templates/customer_header.php';
                     <div class="progress my-1" style="height:10px; border-radius: 99px;">
                         <div class="progress-bar" style="width:<?php echo $scan->redness_score ?? 0; ?>%; background:var(--color-redness);"></div>
                     </div>
-                    <div class="d-flex justify-content-between text-muted" style="font-size:0.75rem;">
-                        <span>0: Rona Seimbang</span>
-                        <span>Estimasi saturasi kemerahan pada permukaan</span>
-                        <span>100: Kemerahan Tinggi</span>
-                    </div>
                 </div>
 
                 <!-- 3. Texture Score -->
-                <div class="sc-metric-bar mb-4">
+                <div class="sc-metric-bar mb-3">
                     <div class="sc-metric-bar-header d-flex justify-content-between align-items-center">
                         <span class="sc-metric-bar-label fw-semibold">
                             <i class="fa-solid fa-circle me-1" style="color:var(--color-texture);font-size:0.55rem;vertical-align:middle;"></i>
-                            Skor Kehalusan Tekstur Kulit (Texture Smoothness Score)
+                            Tekstur Kulit
                         </span>
                         <span class="sc-metric-bar-value fw-bold" style="color:var(--color-texture); font-size:1rem;">
                             <?php echo $scan->texture_score ?? 0; ?><small class="text-muted">/100</small>
@@ -251,19 +236,14 @@ require APPROOT . '/views/templates/customer_header.php';
                     <div class="progress my-1" style="height:10px; border-radius: 99px;">
                         <div class="progress-bar" style="width:<?php echo $scan->texture_score ?? 0; ?>%; background:var(--color-texture);"></div>
                     </div>
-                    <div class="d-flex justify-content-between text-muted" style="font-size:0.75rem;">
-                        <span>0: Tekstur Kasar/Tidak Rata</span>
-                        <span>Tingkat kehalusan visual permukaan kulit</span>
-                        <span>100: Halus & Merata</span>
-                    </div>
                 </div>
 
                 <!-- 4. Hyperpigmentation Indicator -->
-                <div class="sc-metric-bar mb-2">
+                <div class="sc-metric-bar mb-0">
                     <div class="sc-metric-bar-header d-flex justify-content-between align-items-center">
                         <span class="sc-metric-bar-label fw-semibold">
                             <i class="fa-solid fa-circle me-1" style="color:var(--color-hyperpig);font-size:0.55rem;vertical-align:middle;"></i>
-                            Indikasi Hiperpigmentasi & Bintik Gelap (Hyperpigmentation)
+                            Hiperpigmentasi
                         </span>
                         <span class="sc-metric-bar-value fw-bold" style="color:var(--color-hyperpig); font-size:1rem;">
                             <?php echo $scan->hyperpigmentation_score ?? 0; ?><small class="text-muted">/100</small>
@@ -271,11 +251,6 @@ require APPROOT . '/views/templates/customer_header.php';
                     </div>
                     <div class="progress my-1" style="height:10px; border-radius: 99px;">
                         <div class="progress-bar" style="width:<?php echo $scan->hyperpigmentation_score ?? 0; ?>%; background:var(--color-hyperpig);"></div>
-                    </div>
-                    <div class="d-flex justify-content-between text-muted" style="font-size:0.75rem;">
-                        <span>0: Warna Rata</span>
-                        <span>Estimasi variasi bintik gelap & pigmentasi</span>
-                        <span>100: Kontras Gelap Tinggi</span>
                     </div>
                 </div>
 
@@ -286,7 +261,7 @@ require APPROOT . '/views/templates/customer_header.php';
         <?php if (!empty($scan->visual_indications) || !empty($scan->notes_text)) : ?>
             <div class="sc-card mb-4">
                 <div class="sc-card-header">
-                    <h5><i class="fa-solid fa-eye me-2" style="color:var(--secondary-color);"></i>Observasi Indikasi Visual</h5>
+                    <h5><i class="fa-solid fa-eye me-2 text-primary"></i>Catatan Analisis</h5>
                 </div>
                 <div class="sc-card-body">
                     <?php if (!empty($scan->visual_indications)) : ?>
@@ -309,18 +284,10 @@ require APPROOT . '/views/templates/customer_header.php';
             </div>
         <?php endif; ?>
 
-        <!-- ═══ Mandatory Medical Disclaimer Banner ═════════════════ -->
-        <div class="sc-advisory-banner mb-4">
-            <div class="d-flex gap-3 align-items-start">
-                <i class="fa-solid fa-shield-heart fs-4 mt-1" style="color: #dfc68b; flex-shrink: 0;"></i>
-                <div>
-                    <h6 class="fw-bold mb-1 sc-advisory-title">Pemberitahuan & Disclaimer Medis</h6>
-                    <div class="sc-advisory-quote">
-                        "SkinCheck memberikan informasi dan indikasi visual berbasis AI. Hasil ini bukan diagnosis medis dan bukan pengganti konsultasi dengan tenaga kesehatan profesional."
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Brief Medical Note -->
+        <p class="text-muted small mb-4 px-1" style="font-size:0.78rem;">
+            <i class="fa-solid fa-shield-halved me-1 text-primary"></i>Catatan: Hasil merupakan estimasi visual AI dan bukan pengganti diagnosis dokter kulit.
+        </p>
 
         <!-- Action Links -->
         <div class="d-flex gap-2">

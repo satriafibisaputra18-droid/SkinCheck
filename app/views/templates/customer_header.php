@@ -19,6 +19,19 @@
 </head>
 <body class="sc-dashboard-body">
 
+<!-- Global SVG Filter for Liquid Glass Refraction Effect -->
+<svg class="d-none" aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <filter id="sc-liquid-glass" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04 0.04" numOctaves="1" seed="2" result="turbulence"/>
+            <feGaussianBlur in="turbulence" stdDeviation="2.5" result="blurredNoise"/>
+            <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="22" xChannelSelector="R" yChannelSelector="B" result="displaced"/>
+            <feGaussianBlur in="displaced" stdDeviation="1.5" result="finalBlur"/>
+            <feComposite in="finalBlur" in2="finalBlur" operator="over"/>
+        </filter>
+    </defs>
+</svg>
+
 <?php
 // Route helper for active link state
 $currentUrl = $_GET['url'] ?? '';
@@ -42,7 +55,8 @@ $isDash     = $urlAction === 'dashboard' || empty($urlAction);
                 <i class="fa-solid fa-bars"></i>
             </button>
             <a href="<?php echo URLROOT; ?>/customer/dashboard" class="sc-consumer-brand">
-                <span>Skin<span style="color:#dfc68b;">Check</span></span>
+                <i class="fa-solid fa-microscope" style="color:var(--primary-color); font-size:1.15rem;"></i>
+                <span>Skin<span style="color:var(--primary-color);">Check</span></span>
             </a>
         </div>
 
@@ -82,15 +96,15 @@ $isDash     = $urlAction === 'dashboard' || empty($urlAction);
                         <?php endif; ?>
                     </div>
                     <div class="d-none d-lg-block text-start pe-1" style="line-height:1.2;">
-                        <div class="fw-semibold text-white small"><?php echo htmlspecialchars(explode(' ', $_SESSION['user_name'] ?? 'User')[0]); ?></div>
+                        <div class="fw-semibold text-dark small"><?php echo htmlspecialchars(explode(' ', $_SESSION['user_name'] ?? 'User')[0]); ?></div>
                         <span class="sc-role-badge">Customer</span>
                     </div>
-                    <i class="fa-solid fa-chevron-down small text-white-50 ms-1 d-none d-sm-inline"></i>
+                    <i class="fa-solid fa-chevron-down small text-muted ms-1 d-none d-sm-inline"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-2 rounded-3" aria-labelledby="topbarUserMenu" style="min-width: 210px;">
-                    <li class="px-3 py-2 border-bottom" style="border-color: rgba(255,255,255,0.08) !important;">
-                        <div class="fw-semibold small text-white"><?php echo htmlspecialchars($_SESSION['user_name'] ?? ''); ?></div>
-                        <div class="text-white-50 text-truncate" style="font-size:0.75rem;"><?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?></div>
+                    <li class="px-3 py-2 border-bottom">
+                        <div class="fw-semibold small text-dark"><?php echo htmlspecialchars($_SESSION['user_name'] ?? ''); ?></div>
+                        <div class="text-muted text-truncate" style="font-size:0.75rem;"><?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?></div>
                     </li>
                     <li class="pt-1">
                         <a class="dropdown-item py-2 small" href="<?php echo URLROOT; ?>/customer/profile">
@@ -117,15 +131,16 @@ $isDash     = $urlAction === 'dashboard' || empty($urlAction);
 
 <!-- ── Responsive Offcanvas Mobile Drawer ────────────────── -->
 <div class="offcanvas offcanvas-start border-0 sc-mobile-offcanvas" tabindex="-1" id="scMobileMenu" aria-labelledby="scMobileMenuLabel" style="max-width: 290px;">
-    <div class="offcanvas-header border-bottom" style="border-color: rgba(255,255,255,0.08) !important;">
+    <div class="offcanvas-header border-bottom">
         <div class="sc-consumer-brand" id="scMobileMenuLabel">
-            <span>Skin<span style="color:#dfc68b;">Check</span></span>
+            <i class="fa-solid fa-microscope" style="color:var(--primary-color); font-size:1.1rem;"></i>
+            <span>Skin<span style="color:var(--primary-color);">Check</span></span>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Tutup"></button>
     </div>
     <div class="offcanvas-body p-3 d-flex flex-column justify-content-between">
         <nav class="d-flex flex-column gap-1">
-            <div class="text-uppercase text-white-50 fw-bold px-3 py-1" style="font-size:0.68rem; letter-spacing:0.06em;">Navigasi Layanan</div>
+            <div class="text-uppercase text-muted fw-bold px-3 py-1" style="font-size:0.68rem; letter-spacing:0.06em;">Navigasi Layanan</div>
             <a href="<?php echo URLROOT; ?>/customer/dashboard" class="sc-consumer-link <?php echo $isDash ? 'active' : ''; ?>">
                 <i class="fa-solid fa-chart-pie"></i>
                 <span>Dashboard</span>
@@ -147,14 +162,14 @@ $isDash     = $urlAction === 'dashboard' || empty($urlAction);
                 <span>Konsultasi</span>
             </a>
             
-            <div class="text-uppercase text-white-50 fw-bold px-3 py-1 mt-3" style="font-size:0.68rem; letter-spacing:0.06em;">Pengaturan Akun</div>
+            <div class="text-uppercase text-muted fw-bold px-3 py-1 mt-3" style="font-size:0.68rem; letter-spacing:0.06em;">Pengaturan Akun</div>
             <a href="<?php echo URLROOT; ?>/customer/profile" class="sc-consumer-link <?php echo $isProfile ? 'active' : ''; ?>">
                 <i class="fa-regular fa-user"></i>
                 <span>Profil Saya</span>
             </a>
         </nav>
         
-        <div class="pt-3 border-top" style="border-color: rgba(255,255,255,0.08) !important;">
+        <div class="pt-3 border-top">
             <a href="<?php echo URLROOT; ?>/auth/logout" class="sc-consumer-link text-danger w-100">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span>Keluar Akun</span>

@@ -2,6 +2,7 @@
 
 <div align="center">
 
+[![🌿 SkinCheck CI/CD DevOps Pipeline](https://github.com/satriafibisaputra18-droid/SkinCheck/actions/workflows/ci.yml/badge.svg)](https://github.com/satriafibisaputra18-droid/SkinCheck/actions/workflows/ci.yml)
 ![PHP](https://img.shields.io/badge/PHP-8.1+-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![NodeJS](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js&logoColor=white)
@@ -11,9 +12,41 @@
 
 **Platform evaluasi mandiri 4 indikator sawar kulit wajah (skin barrier) & verifikasi kerataan tabir surya (sunscreen) berbasis Computer Vision AI terintegrasi dengan Google Gemini.**
 
-[Fitur Utama](#-fitur-utama) • [Arsitektur Sistem](#-arsitektur-sistem) • [Panduan Instalasi](#-panduan-instalasi--menjalankan-proyek) • [Akun Demo](#-kredensial-demo-bawaan) • [Disclaimer Medis](#-disclaimer-medis)
+[Identitas Proyek](#-identitas-proyek-akhir-obe) • [Tautan Video](#-tautan-video-presentasi-proyek) • [Dokumen Rekayasa](#-berkas-dokumen-rekayasa-perangkat-lunak) • [Fitur Utama](#-fitur-utama) • [Panduan Instalasi](#-panduan-instalasi--menjalankan-proyek)
 
 </div>
+
+---
+
+## 🎓 Identitas Proyek Akhir (OBE)
+* **Program Studi**: S1 Teknik Informatika — STMIK IKMI Cirebon
+* **Mata Kuliah**: Rekayasa Perangkat Lunak (TIKB2503021) — 4 SKS (2 Teori + 2 Praktik)
+* **Dosen Pengampu**: Yudhistira Arie Wijaya, M.Kom., CDS.
+* **Mahasiswa / Full-Stack Engineer**: **Satria Fibi Saputra**
+* **NIM**: **41257159**
+* **Tema Topik Kelompok**: *Smart Healthcare & Public Service AI*
+* **Sifat Pengerjaan**: Mandiri / Perorangan (*100% Individual Ownership & Full-App Build*)
+
+---
+
+## 🎥 Tautan Video Presentasi Proyek
+Sesuai pedoman tugas dan rubrik penilaian OBE STMIK IKMI Cirebon:
+1. 📹 **Video Progres 1: PRD & Konsep Aplikasi (Durasi 3–5 Menit)**:  
+   🔗 `[Tempelkan Tautan YouTube / Google Drive Video 1 di Sini]`
+2. 📹 **Video Progres 2: Pemodelan 4 Diagram UML & UI/UX Figma (Durasi 5–7 Menit)**:  
+   🔗 `[Tempelkan Tautan YouTube / Google Drive Video 2 di Sini]`
+3. 📹 **Video Final: Live Demo Aplikasi Web & Sistem Utuh (Durasi 8–12 Menit)**:  
+   🔗 `[Tempelkan Tautan YouTube / Google Drive Video Final di Sini]`
+
+---
+
+## 📑 Berkas Dokumen Rekayasa Perangkat Lunak
+* 📄 **Dokumen PRD / SRS (Standar IEEE 830)**: [`docs/PRD_SRS_SkinCheck.pdf`](docs/PRD_SRS_SkinCheck.pdf)
+* 📄 **Dokumen SDD & Pemodelan UML (Standar IEEE 1016)**: [`docs/SDD_UML_SkinCheck.pdf`](docs/SDD_UML_SkinCheck.pdf)
+* 🧪 **Master Automated Unit Test Runner**: [`tests/run_all_tests.php`](tests/run_all_tests.php)
+* ⚙️ **GitHub Actions CI/CD Pipeline**: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+
+---
 
 ---
 

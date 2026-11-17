@@ -6,11 +6,11 @@
         <div class="row g-4 align-items-center">
             <div class="col-md-6 text-center text-md-start">
                 <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2">
-                    <span class="fw-bold text-white" style="font-family:'Outfit',sans-serif;font-size:1rem;">SkinCheck</span>
-                    <span class="badge sc-badge-gold px-2 py-0.5 rounded-pill" style="font-size:0.7rem;">Clinical Health System</span>
+                    <span class="fw-bold text-dark" style="font-family:'Outfit',sans-serif;font-size:1rem;">Skin<span style="color:var(--primary-color);">Check</span></span>
+                    <span class="badge sc-badge-gold px-2 py-1 rounded-pill" style="font-size:0.7rem;">Clinical Health System</span>
                 </div>
-                <p class="mb-0 text-white-50" style="font-size:0.78rem; line-height:1.5;">
-                    Platform edukasi dan analisis kesehatan kulit terpadu. Seluruh hasil evaluasi berbasis citra visual dan pengenalan pola komputasional ditujukan sebagai panduan mandiri, bukan pengganti diagnosa medis dari Dokter Spesialis Dermatologi, Venereologi, dan Estetika (Sp.D.V.E).
+                <p class="mb-0 text-muted" style="font-size:0.78rem; line-height:1.5;">
+                    Platform analisis kesehatan kulit mandiri. Bukan pengganti diagnosa medis dokter Sp.D.V.E.
                 </p>
             </div>
             <div class="col-md-6 text-center text-md-end">
@@ -20,7 +20,7 @@
                     <a href="<?php echo URLROOT; ?>/sunscreen/check" class="sc-footer-link">Sunscreen Check</a>
                     <a href="<?php echo URLROOT; ?>/customer/aiAssistant" class="sc-footer-link">Konsultasi</a>
                 </div>
-                <p class="mb-0 text-white-50" style="font-size:0.75rem;">
+                <p class="mb-0 text-muted" style="font-size:0.75rem;">
                     &copy; <?php echo date('Y'); ?> SkinCheck Health Technologies. Hak cipta dilindungi undang-undang.
                 </p>
             </div>

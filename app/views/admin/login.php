@@ -14,15 +14,12 @@
     <!-- Custom Style Sheet -->
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/style.css">
 </head>
-<body class="hero-gradient min-vh-100 d-flex align-items-center position-relative overflow-hidden">
-    <!-- Ambient Luxury Glow -->
-    <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 580px; height: 580px; background: radial-gradient(circle, rgba(31, 107, 87, 0.22) 0%, rgba(191, 161, 95, 0.1) 45%, transparent 70%); filter: blur(80px); pointer-events: none;"></div>
-
-    <div class="container position-relative z-1">
+<body class="sc-auth-section min-vh-100 d-flex align-items-center position-relative overflow-hidden">
+    <div class="container position-relative z-1 py-4">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
                 
-                <div class="card glass-card border-0 p-4 p-md-5">
+                <div class="sc-auth-box p-4 p-md-5">
                     <div class="text-center mb-4">
                         <div class="sc-auth-icon-badge">
                             <i class="fa-solid fa-user-shield"></i>
@@ -54,16 +51,16 @@
                         
                         <!-- Submit Button -->
                         <div class="d-grid mb-3">
-                            <button type="submit" class="btn btn-primary py-2.5">
+                            <button type="submit" class="btn sc-btn-gold py-2">
                                 <i class="fa-solid fa-key me-2"></i>Authenticate Panel
                             </button>
                         </div>
                     </form>
                     
-                    <hr class="my-4">
+                    <hr class="my-4" style="border-color: var(--border-subtle);">
                     
                     <div class="text-center small">
-                        <a href="<?php echo URLROOT; ?>/" class="sc-auth-subtitle text-decoration-none" style="transition: color 0.2s ease;" onmouseover="this.style.color='#dfc68b'" onmouseout="this.style.color='#9eb5ab'"><i class="fa-solid fa-arrow-left me-1"></i>Return to Landing Page</a>
+                        <a href="<?php echo URLROOT; ?>/" class="sc-link-gold text-decoration-none"><i class="fa-solid fa-arrow-left me-1"></i>Return to Landing Page</a>
                     </div>
                 </div>
                 

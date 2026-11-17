@@ -42,6 +42,41 @@
         // Restore history
         loadSavedHistory();
 
+        // Clear stale session cache so database settings take immediate effect
+        try {
+            sessionStorage.removeItem('skincheck_current_engine');
+        } catch (e) {}
+
+        // Initialize dynamic active engine status directly from server setting
+        if (window.SKINCHECK_ACTIVE_ENGINE) {
+            updateActiveEngine(window.SKINCHECK_ACTIVE_PROVIDER || '', window.SKINCHECK_ACTIVE_ENGINE);
+        }
+
+        // Live synchronizer if admin changes AI Provider dropdown on Settings page
+        const settingAiProviderEl = document.getElementById('setting_ai_provider');
+        const scNvidiaModelSelect = document.getElementById('scNvidiaModelSelect');
+        if (settingAiProviderEl) {
+            settingAiProviderEl.addEventListener('change', function () {
+                const isNvidia = this.value === 'nvidia';
+                if (isNvidia) {
+                    const nvdInput = document.getElementById('setting_nvidia_model');
+                    const nvdModel = nvdInput ? nvdInput.value : '';
+                    const label = (nvdModel.toLowerCase().indexOf('nemotron') !== -1) ? 'NVIDIA Nemotron' : 'NVIDIA NIM';
+                    updateActiveEngine('nvidia', label);
+                } else {
+                    updateActiveEngine('gemini', 'Gemini AI Studio');
+                }
+            });
+        }
+        if (scNvidiaModelSelect) {
+            scNvidiaModelSelect.addEventListener('change', function () {
+                if (settingAiProviderEl && settingAiProviderEl.value === 'nvidia') {
+                    const label = (this.value.toLowerCase().indexOf('nemotron') !== -1) ? 'NVIDIA Nemotron' : 'NVIDIA NIM';
+                    updateActiveEngine('nvidia', label);
+                }
+            });
+        }
+
         // Event Listeners
         fabBtn.addEventListener('click', toggleChat);
         if (closeBtn) closeBtn.addEventListener('click', closeChat);
@@ -85,20 +120,68 @@
         }
     }
 
+    /**
+     * macOS Genie Effect Open / Restore ("Air Memancar Keluar dari Lubang")
+     */
     function openChat() {
+        if (isOpen) return;
         isOpen = true;
-        widget.classList.add('open');
+
+        // Animate FAB Orb (Vortex Spout / Eruption)
+        fabBtn.classList.add('active');
+        fabBtn.classList.remove('vortex-drain');
+        fabBtn.classList.add('vortex-spout');
         fabBtn.setAttribute('aria-expanded', 'true');
+
+        // Apply Genie Restore on Chat Window
+        widget.classList.remove('sc-genie-out');
+        widget.classList.add('open', 'sc-genie-in');
+
+        const onRestoreEnd = (e) => {
+            if (e && e.target !== widget) return;
+            widget.classList.remove('sc-genie-in');
+            fabBtn.classList.remove('vortex-spout');
+            widget.removeEventListener('animationend', onRestoreEnd);
+        };
+        widget.addEventListener('animationend', onRestoreEnd);
+
+        // Fallback cleanup in case animationend was suppressed
+        setTimeout(onRestoreEnd, 560);
+
         setTimeout(() => {
             if (chatInput) chatInput.focus();
             scrollToBottom();
-        }, 150);
+        }, 280);
     }
 
+    /**
+     * macOS Genie Effect Close / Minimize ("Air Tersedot Masuk ke Lubang")
+     */
     function closeChat() {
+        if (!isOpen) return;
         isOpen = false;
-        widget.classList.remove('open');
+
+        // Animate FAB Orb (Vortex Suction / Drain Hole)
+        fabBtn.classList.remove('active', 'vortex-spout');
+        fabBtn.classList.add('vortex-drain');
         fabBtn.setAttribute('aria-expanded', 'false');
+
+        // Apply Genie Minimize on Chat Window
+        widget.classList.remove('sc-genie-in');
+        widget.classList.add('sc-genie-out');
+
+        const onMinimizeEnd = (e) => {
+            if (e && e.target !== widget) return;
+            if (!isOpen) {
+                widget.classList.remove('open', 'sc-genie-out');
+            }
+            fabBtn.classList.remove('vortex-drain');
+            widget.removeEventListener('animationend', onMinimizeEnd);
+        };
+        widget.addEventListener('animationend', onMinimizeEnd);
+
+        // Fallback cleanup in case animationend was suppressed
+        setTimeout(onMinimizeEnd, 520);
     }
 
     /**
@@ -190,7 +273,10 @@
             }
 
             if (data && data.success && data.reply) {
-                appendBotMessage(data.reply, true);
+                // Dynamically update online engine status label
+                updateActiveEngine(data.provider, data.modelUsed);
+
+                appendBotMessage(data.reply, true, data.modelUsed);
                 chatHistory.push({ role: 'model', text: data.reply });
                 saveHistory();
             } else {
@@ -236,12 +322,13 @@
     /**
      * Append Bot Message Bubble
      */
-    function appendBotMessage(markdownText, save = true) {
+    function appendBotMessage(markdownText, save = true, modelUsed = null) {
         const timeStr = getCurrentTime();
         const msgDiv = document.createElement('div');
         msgDiv.className = 'sc-chat-msg bot';
         
         const parsedHtml = formatMarkdown(markdownText);
+        const engineLabel = document.getElementById('scChatEngineLabel')?.textContent || 'SkinCheck AI';
 
         msgDiv.innerHTML = `
             <div class="sc-chat-msg-avatar">
@@ -249,11 +336,49 @@
             </div>
             <div>
                 <div class="sc-chat-bubble">${parsedHtml}</div>
-                <span class="sc-chat-msg-time">${timeStr} • SkinCheck AI</span>
+                <span class="sc-chat-msg-time">${timeStr} • ${escapeHtml(engineLabel)}</span>
             </div>
         `;
         msgBody.appendChild(msgDiv);
         scrollToBottom();
+    }
+
+    /**
+     * Dynamically update active engine in header, disclaimer, and badge
+     */
+    function updateActiveEngine(provider, modelUsed) {
+        let engineText = 'Gemini AI Studio';
+        const p = String(provider || '').toLowerCase();
+        const m = String(modelUsed || '').toLowerCase();
+
+        if (p === 'nvidia' || m.includes('nvidia') || m.includes('nemotron') || m.includes('laguna') || m.includes('ising')) {
+            if (m.includes('nemotron')) {
+                engineText = 'NVIDIA Nemotron';
+            } else if (m.includes('laguna')) {
+                engineText = 'NVIDIA Laguna';
+            } else {
+                engineText = 'NVIDIA NIM';
+            }
+        } else if (p === 'gemini' || m.includes('gemini') || m.includes('flash') || m.includes('studio')) {
+            engineText = 'Gemini AI Studio';
+        } else if (window.SKINCHECK_ACTIVE_ENGINE) {
+            engineText = window.SKINCHECK_ACTIVE_ENGINE;
+        }
+
+        const labelEl = document.getElementById('scChatEngineLabel');
+        if (labelEl) {
+            labelEl.textContent = engineText;
+        }
+
+        const discEl = document.getElementById('scChatEngineDisclaimer');
+        if (discEl) {
+            discEl.textContent = engineText;
+        }
+
+        const fabBadge = document.getElementById('scChatFabBadge');
+        if (fabBadge) {
+            fabBadge.setAttribute('title', engineText + ' Online');
+        }
     }
 
     /**

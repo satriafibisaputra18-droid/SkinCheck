@@ -1,7 +1,7 @@
 <?php
 /**
- * Global Floating Toast Notification Container & Session Flash Flusher
- * Renders floating toasts at bottom-left corner across all views.
+ * Global Sonner-Style Floating Toast Notification Container & Session Flash Flusher
+ * Styled and engineered to match shadcn/ui Sonner (https://21st.dev/r/shadcn/sonner)
  */
 
 $toastQueue = [];
@@ -27,8 +27,8 @@ foreach ($flashTypes as $type => $keys) {
 }
 ?>
 
-<!-- Global Floating Toast Container (Bottom-Left) -->
-<div id="scToastContainer" class="sc-toast-container" aria-live="polite" aria-atomic="true"></div>
+<!-- Global Sonner Floating Toast Container (shadcn/ui style) -->
+<div id="scToastContainer" class="sc-sonner-toaster" data-position="bottom-right" aria-live="polite" aria-atomic="true"></div>
 
 <?php if (!empty($toastQueue)) : ?>
 <script>
@@ -36,10 +36,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const queue = <?php echo json_encode($toastQueue, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
     queue.forEach(function (item, index) {
         setTimeout(function () {
-            if (window.showToast) {
+            if (window.toast && typeof window.toast[item.type] === 'function') {
+                window.toast[item.type](item.message);
+            } else if (window.showToast) {
                 window.showToast(item.message, item.type);
             }
-        }, index * 220 + 120);
+        }, index * 260 + 150);
     });
 });
 </script>

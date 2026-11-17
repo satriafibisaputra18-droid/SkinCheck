@@ -44,3 +44,6 @@ Thumbs.db
 *.sln
 *.sw?
 
+
+# Temporary Chrome data
+temp_chrome/

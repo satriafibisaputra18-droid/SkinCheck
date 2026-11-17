@@ -5,9 +5,9 @@ function sunBadgeClass($st) {
 }
 
 function sunIcon($st) {
-    if (in_array($st, ['Sangat Merata', 'Protected'], true)) return '<i class="fa-solid fa-shield-check"></i>';
+    if (in_array($st, ['Sangat Merata', 'Protected'], true)) return '<i class="fa-solid fa-circle-check"></i>';
     if (in_array($st, ['Cukup Merata', 'Partially Protected'], true)) return '<i class="fa-solid fa-shield-halved"></i>';
-    return '<i class="fa-solid fa-shield-slash"></i>';
+    return '<i class="fa-solid fa-circle-exclamation"></i>';
 }
 
 $score = $scan->sunscreen_coverage_score ?? 0;
@@ -95,7 +95,7 @@ require APPROOT . '/views/templates/customer_header.php';
                 </div>
 
                 <div class="sc-badge-confidence py-2 px-3 mb-3">
-                    <i class="fa-solid fa-microchip me-1" style="color: #60a5fa;"></i>Keyakinan Estimasi: <strong><?php echo $confidencePct; ?>%</strong>
+                    <i class="fa-solid fa-microchip me-1" style="color: #0369a1;"></i>Keyakinan Estimasi: <strong><?php echo $confidencePct; ?>%</strong>
                 </div>
 
                 <hr class="my-3">
@@ -113,18 +113,18 @@ require APPROOT . '/views/templates/customer_header.php';
         </div>
 
         <!-- Attention Areas Card -->
-        <div class="sc-card mb-4">
+        <div class="sc-card mb-3">
             <div class="sc-card-header">
-                <h5><i class="fa-solid fa-triangle-exclamation me-2" style="color:var(--secondary-color);"></i>Area Perhatian</h5>
+                <h5><i class="fa-solid fa-triangle-exclamation me-2 text-primary"></i>Area Perhatian</h5>
             </div>
             <div class="sc-card-body">
                 <?php if (!empty($lowAreas)) : ?>
                     <p class="small text-muted mb-2">
-                        Area berikut terindikasi memiliki cakupan sunscreen yang kurang merata. Disarankan untuk menambahkan/meratakan aplikasi sunscreen di area ini:
+                        Area berikut perlu diratakan kembali:
                     </p>
                     <ul class="list-group list-group-flush mb-0">
                         <?php foreach ($lowAreas as $area) : ?>
-                            <li class="list-group-item px-0 py-2 d-flex align-items-center gap-2 border-0">
+                            <li class="list-group-item px-0 py-1 d-flex align-items-center gap-2 border-0">
                                 <span class="badge rounded-circle bg-danger-subtle text-danger p-1">
                                     <i class="fa-solid fa-exclamation" style="font-size:0.7rem; width:12px; height:12px;"></i>
                                 </span>
@@ -133,29 +133,17 @@ require APPROOT . '/views/templates/customer_header.php';
                         <?php endforeach; ?>
                     </ul>
                 <?php else : ?>
-                    <div class="text-center py-3 text-success">
-                        <i class="fa-solid fa-circle-check fs-2 mb-2 d-block"></i>
-                        <p class="mb-0 fw-semibold small">Seluruh zona wajah utama terindikasi terlindungi dengan merata.</p>
+                    <div class="text-center py-2 text-success">
+                        <i class="fa-solid fa-circle-check fs-3 mb-1 d-block"></i>
+                        <p class="mb-0 fw-semibold small">Seluruh zona wajah terlindungi merata.</p>
                     </div>
                 <?php endif; ?>
             </div>
         </div>
 
-        <!-- ═══ Mandatory Non-UV Information Notice ═════════════════ -->
-        <div class="sc-advisory-banner">
-            <div class="d-flex gap-3 align-items-start">
-                <i class="fa-solid fa-circle-info fs-4 mt-1" style="color: #dfc68b; flex-shrink: 0;"></i>
-                <div>
-                    <h6 class="fw-bold mb-1 sc-advisory-title">Informasi Penting & Batasan Teknis</h6>
-                    <div class="sc-advisory-quote mb-1">
-                        "Hasil ini merupakan estimasi visual berbasis AI dan bukan pengukuran UV langsung."
-                    </div>
-                    <div class="sc-advisory-sub">
-                        Kamera RGB standar mengestimasi pemerataan berdasarkan pantulan optik dan kilau permukaan kulit, bukan sensor radiasi ultraviolet.
-                    </div>
-                </div>
-            </div>
-        </div>
+        <p class="text-muted small px-1 mb-0" style="font-size:0.78rem;">
+            <i class="fa-solid fa-circle-info me-1 text-primary"></i>Estimasi visual kamera RGB, bukan pengukuran radiasi UV langsung.
+        </p>
 
     </div><!-- /.col-lg-5 -->
 
@@ -170,18 +158,20 @@ require APPROOT . '/views/templates/customer_header.php';
             <div class="sc-card-body p-3">
 
                 <!-- Side-by-side or Tab view -->
-                <ul class="nav nav-pills mb-3 dashboard-tabs justify-content-center" id="heatmapTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active px-3 py-2 small" id="heatmap-view-tab" data-bs-toggle="pill" data-bs-target="#heatmap-view" type="button" role="tab">
-                            <i class="fa-solid fa-map me-1"></i>Peta Heatmap
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link px-3 py-2 small" id="photo-view-tab" data-bs-toggle="pill" data-bs-target="#photo-view" type="button" role="tab">
-                            <i class="fa-solid fa-camera me-1"></i>Foto Asli
-                        </button>
-                    </li>
-                </ul>
+                <div class="d-flex justify-content-center mb-3">
+                    <ul class="nav nav-pills dashboard-tabs mb-0" id="heatmapTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active px-3 py-2 small" id="heatmap-view-tab" data-bs-toggle="pill" data-bs-target="#heatmap-view" type="button" role="tab">
+                                <i class="fa-solid fa-map me-1"></i><span>Peta Heatmap</span>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link px-3 py-2 small" id="photo-view-tab" data-bs-toggle="pill" data-bs-target="#photo-view" type="button" role="tab">
+                                <i class="fa-solid fa-camera me-1"></i><span>Foto Asli</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
 
                 <div class="tab-content text-center" id="heatmapTabContent">
                     <!-- Heatmap Tab -->
@@ -195,7 +185,7 @@ require APPROOT . '/views/templates/customer_header.php';
                             </div>
                         <?php else : ?>
                             <div class="sc-empty-state py-4">
-                                <i class="fa-solid fa-map-slash"></i>
+                                <i class="fa-solid fa-map"></i>
                                 <p class="small">Visualisasi heatmap tidak tersedia untuk scan ini.</p>
                             </div>
                         <?php endif; ?>
@@ -212,7 +202,7 @@ require APPROOT . '/views/templates/customer_header.php';
                             </div>
                         <?php else : ?>
                             <div class="sc-empty-state py-4">
-                                <i class="fa-solid fa-image-slash"></i>
+                                <i class="fa-solid fa-image"></i>
                                 <p class="small">Foto asli tidak tersedia.</p>
                             </div>
                         <?php endif; ?>

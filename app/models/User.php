@@ -25,6 +25,23 @@ class User extends Model {
     }
 
     /**
+     * Find a user by phone / WhatsApp number.
+     * @param string $phone
+     * @return object|false
+     */
+    public function findUserByPhone($phone) {
+        if ($this->db->isConnected() && !empty($phone)) {
+            $this->db->query('SELECT * FROM users WHERE phone = :phone LIMIT 1');
+            $this->db->bind(':phone', $phone);
+            $row = $this->db->single();
+            if ($this->db->rowCount() > 0) {
+                return $row;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Find a user by ID.
      * Only returns the user's own record (used for customer profile).
      * @param int $id
@@ -69,11 +86,12 @@ class User extends Model {
     public function register($data) {
         if ($this->db->isConnected()) {
             $this->db->query(
-                'INSERT INTO users (name, email, telegram_chat_id, telegram_username, password_hash, role, status)
-                 VALUES (:name, :email, :telegram_chat_id, :telegram_username, :password_hash, :role, :status)'
+                'INSERT INTO users (name, email, phone, telegram_chat_id, telegram_username, password_hash, role, status)
+                 VALUES (:name, :email, :phone, :telegram_chat_id, :telegram_username, :password_hash, :role, :status)'
             );
             $this->db->bind(':name',              $data['name']);
             $this->db->bind(':email',             $data['email']);
+            $this->db->bind(':phone',             $data['phone'] ?? null);
             $this->db->bind(':telegram_chat_id',  $data['telegram_chat_id'] ?? null);
             $this->db->bind(':telegram_username', $data['telegram_username'] ?? null);
             $this->db->bind(':password_hash',     password_hash($data['password'], PASSWORD_DEFAULT));

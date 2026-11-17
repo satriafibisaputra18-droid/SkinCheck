@@ -1,27 +1,40 @@
 <?php require APPROOT . '/views/templates/admin_header.php'; ?>
 
-<!-- Custom Styles for Admin Settings Console -->
+<!-- Clean Styles for Admin Settings Console -->
 <style>
 .sc-settings-card {
-    border-radius: 14px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
     background: #ffffff;
-    transition: all 0.25s ease;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .sc-settings-card:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
 }
 
-.sc-card-header-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
+.sc-section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #64748b;
+    margin-bottom: 0.6rem;
+}
+
+.sc-card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 0.15rem;
+}
+
+.sc-card-subtitle {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin-bottom: 0;
 }
 
 .sc-secret-input-wrap {
@@ -30,384 +43,507 @@
 
 .sc-secret-toggle-btn {
     position: absolute;
-    right: 8px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
     border: none;
-    color: #64748b;
-    padding: 4px 8px;
+    color: #94a3b8;
+    padding: 4px;
     cursor: pointer;
-    font-size: 0.9rem;
-    transition: color 0.2s ease;
+    font-size: 0.85rem;
+    line-height: 1;
+    transition: color 0.15s ease;
 }
 
 .sc-secret-toggle-btn:hover {
-    color: #0f172a;
+    color: #334155;
 }
 
 .sc-test-result-box {
-    font-size: 0.85rem;
-    border-radius: 8px;
-    padding: 0.6rem 0.9rem;
+    font-size: 0.82rem;
+    border-radius: 6px;
+    padding: 0.55rem 0.8rem;
     display: none;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
-.sc-badge-secret {
-    background: rgba(239, 68, 68, 0.1);
-    color: #dc2626;
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
+.sc-test-btn {
+    font-size: 0.78rem;
+    padding: 0.28rem 0.75rem;
+    border-radius: 6px;
+    font-weight: 500;
 }
 </style>
 
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 bg-white p-3 p-md-4 rounded-3 shadow-sm border border-secondary border-opacity-10">
-            <div>
-                <h2 class="h5 fw-bold mb-1 text-dark">Pengaturan Sistem & Kunci API</h2>
-                <p class="text-muted small mb-0">Kelola kredensial API dan parameter aplikasi.</p>
-            </div>
-            
-            <div class="d-flex align-items-center gap-2">
-                <a href="<?php echo URLROOT; ?>/admin/dashboard" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
-                    <i class="fa-solid fa-arrow-left me-1"></i> Dashboard
-                </a>
-            </div>
-        </div>
+<!-- Page Header -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 bg-white p-3 p-md-4 rounded-3 border border-secondary border-opacity-10 mb-4 shadow-sm">
+    <div>
+        <h1 class="h5 fw-bold mb-1 text-dark">Pengaturan Sistem & Kunci API</h1>
+        <p class="text-muted small mb-0">Kelola kredensial API dan parameter aplikasi.</p>
+    </div>
+    
+    <div>
+        <a href="<?php echo URLROOT; ?>/admin/dashboard" class="btn btn-outline-secondary btn-sm px-3 rounded-2">
+            Kembali ke Dashboard
+        </a>
     </div>
 </div>
 
+<?php
+// Extract settings for clean direct access
+$aiSettings = [];
+if (!empty($groupedSettings['ai'])) {
+    foreach ($groupedSettings['ai'] as $item) {
+        $aiSettings[$item->setting_key] = $item;
+    }
+}
 
+$nvidiaSettings = [];
+if (!empty($groupedSettings['nvidia'])) {
+    foreach ($groupedSettings['nvidia'] as $item) {
+        $nvidiaSettings[$item->setting_key] = $item;
+    }
+}
+
+$emailSettings = [];
+if (!empty($groupedSettings['email'])) {
+    foreach ($groupedSettings['email'] as $item) {
+        $emailSettings[$item->setting_key] = $item;
+    }
+}
+
+$generalSettings = [];
+if (!empty($groupedSettings['general'])) {
+    foreach ($groupedSettings['general'] as $item) {
+        $generalSettings[$item->setting_key] = $item;
+    }
+}
+
+$telegramSettings = [];
+if (!empty($groupedSettings['telegram'])) {
+    foreach ($groupedSettings['telegram'] as $item) {
+        $telegramSettings[$item->setting_key] = $item;
+    }
+}
+
+$fonnteSettings = [];
+if (!empty($groupedSettings['fonnte'])) {
+    foreach ($groupedSettings['fonnte'] as $item) {
+        $fonnteSettings[$item->setting_key] = $item;
+    }
+}
+$fonnteToken = $fonnteSettings['fonnte_token']->setting_value ?? Setting::getVal('fonnte_token', 'mu2K7LxWSs8KNRLBqJ3v');
+
+// Gemini values
+$geminiApiKey = $aiSettings['gemini_api_key']->setting_value ?? '';
+$geminiPrimaryModel = $aiSettings['gemini_primary_model']->setting_value ?? 'gemini-flash-lite-latest';
+$geminiFallbackModels = $aiSettings['gemini_fallback_models']->setting_value ?? 'gemini-3.8-flash,gemini-3.5-flash,gemini-flash-latest';
+$geminiTemp = $aiSettings['gemini_temperature']->setting_value ?? '0.7';
+
+// NVIDIA values
+$nvidiaApiKey = $nvidiaSettings['nvidia_api_key']->setting_value ?? '';
+$nvidiaModel = $nvidiaSettings['nvidia_model']->setting_value ?? 'nvidia/nemotron-3.5-bolt-e4b';
+$nvidiaFallback = $nvidiaSettings['nvidia_fallback_models']->setting_value ?? 'poolside/laguna-xs-2.1,nvidia/ising-calibration-1.5-31b';
+
+// Priority
+$aiProvider = Setting::getVal('ai_provider', 'gemini');
+?>
 
 <!-- Main Settings Form -->
 <form action="<?php echo URLROOT; ?>/admin/settings" method="POST" id="scSettingsForm">
-    <div class="row g-4">
-        
-        <!-- 1. TELEGRAM BOT INTEGRATION -->
-        <div class="col-lg-6">
-            <div class="card sc-settings-card h-100 p-4">
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="sc-card-header-icon" style="background: rgba(42, 171, 238, 0.12); color: #229ED9;">
-                            <i class="fa-brands fa-telegram fs-4"></i>
-                        </div>
-                        <div>
-                            <h3 class="h6 fw-bold mb-0 text-dark">Telegram Bot</h3>
-                        </div>
+
+    <!-- 1. BAGIAN: MESIN KECERDASAN BUATAN (AI ENGINE & FALLBACK) -->
+    <div class="mb-4">
+        <div class="sc-section-label">Mesin Kecerdasan Buatan (AI Engine & Fallback)</div>
+
+        <!-- Provider Priority Bar -->
+        <div class="card sc-settings-card p-3 mb-3">
+            <div class="row align-items-center g-2">
+                <div class="col-md-5">
+                    <label for="setting_ai_provider" class="form-label small fw-semibold text-dark mb-0">
+                        Prioritas Penyedia AI
+                    </label>
+                    <div class="text-muted small" style="font-size: 0.76rem;">
+                        Penyedia cadangan akan aktif otomatis jika model utama mengalami batas limit atau gangguan.
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1" id="btnTestTelegram" onclick="testApiKey('telegram', 'setting_telegram_bot_token', 'resTelegramTest')">
-                        <i class="fa-solid fa-plug me-1"></i> Uji Bot
-                    </button>
                 </div>
-
-                <div id="resTelegramTest" class="sc-test-result-box mb-3"></div>
-
-                <div class="row g-3">
-                    <?php if (!empty($groupedSettings['telegram'])) : ?>
-                        <?php foreach ($groupedSettings['telegram'] as $s) : ?>
-                            <div class="col-12">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <label for="setting_<?php echo $s->setting_key; ?>" class="form-label small fw-semibold text-dark mb-0">
-                                        <?php echo htmlspecialchars($s->setting_label); ?>
-                                    </label>
-                                    <?php if ($s->is_secret) : ?>
-                                        <span class="sc-badge-secret">Sensitif</span>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="<?php echo $s->is_secret ? 'sc-secret-input-wrap' : ''; ?>">
-                                    <input type="<?php echo $s->is_secret ? 'password' : 'text'; ?>" 
-                                           name="settings[<?php echo $s->setting_key; ?>]" 
-                                           id="setting_<?php echo $s->setting_key; ?>" 
-                                           class="form-control form-control-sm <?php echo $s->is_secret ? 'pe-5' : ''; ?>" 
-                                           value="<?php echo htmlspecialchars($s->setting_value ?? ''); ?>"
-                                           placeholder="<?php echo htmlspecialchars($s->setting_label); ?>"
-                                           required>
-                                    <?php if ($s->is_secret) : ?>
-                                        <button type="button" class="sc-secret-toggle-btn" onclick="toggleSecretVisibility('setting_<?php echo $s->setting_key; ?>', this)" title="Lihat/Sembunyikan">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                <div class="col-md-7">
+                    <select name="settings[ai_provider]" id="setting_ai_provider" class="form-select form-select-sm">
+                        <option value="gemini" <?php echo ($aiProvider === 'gemini') ? 'selected' : ''; ?>>
+                            Google Gemini (Utama) → NVIDIA NIM (Cadangan)
+                        </option>
+                        <option value="nvidia" <?php echo ($aiProvider === 'nvidia') ? 'selected' : ''; ?>>
+                            NVIDIA NIM (Utama) → Google Gemini (Cadangan)
+                        </option>
+                    </select>
                 </div>
             </div>
         </div>
 
-        <!-- 2. GOOGLE GEMINI AI CONFIGURATION -->
-        <div class="col-lg-6">
-            <div class="card sc-settings-card h-100 p-4">
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="sc-card-header-icon" style="background: rgba(234, 179, 8, 0.12); color: #ca8a04;">
-                            <i class="fa-solid fa-brain fs-4"></i>
-                        </div>
+        <!-- AI Cards Grid -->
+        <div class="row g-3">
+            
+            <!-- Google Gemini Card -->
+            <div class="col-lg-6">
+                <div class="card sc-settings-card h-100 p-3 p-md-4">
+                    <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
                         <div>
-                            <h3 class="h6 fw-bold mb-0 text-dark">Google Gemini AI</h3>
+                            <div class="sc-card-title">Google Gemini</div>
+                            <p class="sc-card-subtitle">Layanan utama konsultasi klinis SkinCheck</p>
                         </div>
+                        <button type="button" class="btn btn-outline-secondary sc-test-btn" id="btnTestGemini" onclick="testApiKey('gemini', 'setting_gemini_api_key', 'resGeminiTest', 'setting_gemini_primary_model')">
+                            Uji Koneksi
+                        </button>
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1" id="btnTestGemini" onclick="testApiKey('gemini', 'setting_gemini_api_key', 'resGeminiTest', 'setting_gemini_primary_model')">
-                        <i class="fa-solid fa-plug me-1"></i> Uji AI
-                    </button>
-                </div>
 
-                <div id="resGeminiTest" class="sc-test-result-box mb-3"></div>
+                    <div id="resGeminiTest" class="sc-test-result-box mb-3"></div>
 
-                <div class="row g-3">
-                    <?php
-                    $aiSettings = [];
-                    if (!empty($groupedSettings['ai'])) {
-                        foreach ($groupedSettings['ai'] as $item) {
-                            $aiSettings[$item->setting_key] = $item;
-                        }
-                    }
-                    $currentPrimaryModel = $aiSettings['gemini_primary_model']->setting_value ?? 'gemini-flash-lite-latest';
-                    $currentFallbackModels = $aiSettings['gemini_fallback_models']->setting_value ?? 'gemini-3.8-flash,gemini-3.5-flash,gemini-flash-latest';
-                    $currentTemp = $aiSettings['gemini_temperature']->setting_value ?? '0.7';
-                    $currentApiKey = $aiSettings['gemini_api_key']->setting_value ?? '';
-                    ?>
-
-                    <!-- API Key -->
-                    <div class="col-12">
-                        <div class="d-flex align-items-center justify-content-between mb-1">
-                            <label for="setting_gemini_api_key" class="form-label small fw-semibold text-dark mb-0">
-                                Google Gemini API Key
+                    <div class="row g-3">
+                        <!-- API Key -->
+                        <div class="col-12">
+                            <label for="setting_gemini_api_key" class="form-label small fw-medium text-dark mb-1">
+                                API Key
                             </label>
-                            <span class="sc-badge-secret">Sensitif</span>
+                            <div class="sc-secret-input-wrap">
+                                <input type="password" 
+                                       name="settings[gemini_api_key]" 
+                                       id="setting_gemini_api_key" 
+                                       class="form-control form-control-sm pe-5" 
+                                       value="<?php echo htmlspecialchars($geminiApiKey); ?>"
+                                       placeholder="AIzaSy..."
+                                       required>
+                                <button type="button" class="sc-secret-toggle-btn" onclick="toggleSecretVisibility('setting_gemini_api_key', this)" title="Tampilkan/Sembunyikan">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="sc-secret-input-wrap">
-                            <input type="password" 
-                                   name="settings[gemini_api_key]" 
-                                   id="setting_gemini_api_key" 
-                                   class="form-control form-control-sm pe-5" 
-                                   value="<?php echo htmlspecialchars($currentApiKey); ?>"
-                                   placeholder="AIzaSy..."
+
+                        <!-- Primary Model -->
+                        <div class="col-12">
+                            <label for="scPrimaryModelSelect" class="form-label small fw-medium text-dark mb-1">
+                                Model Utama
+                            </label>
+                            <select id="scPrimaryModelSelect" class="form-select form-select-sm mb-2" onchange="onPrimaryModelChange(this.value)">
+                                <option value="gemini-flash-lite-latest" <?php echo ($geminiPrimaryModel === 'gemini-flash-lite-latest') ? 'selected' : ''; ?>>
+                                    gemini-flash-lite-latest (Default)
+                                </option>
+                                <option value="gemini-3.8-flash" <?php echo ($geminiPrimaryModel === 'gemini-3.8-flash') ? 'selected' : ''; ?>>
+                                    gemini-3.8-flash
+                                </option>
+                                <option value="gemini-3.5-flash" <?php echo ($geminiPrimaryModel === 'gemini-3.5-flash') ? 'selected' : ''; ?>>
+                                    gemini-3.5-flash
+                                </option>
+                                <option value="gemini-flash-latest" <?php echo ($geminiPrimaryModel === 'gemini-flash-latest') ? 'selected' : ''; ?>>
+                                    gemini-flash-latest
+                                </option>
+                                <option value="gemini-3.5-flash-lite" <?php echo ($geminiPrimaryModel === 'gemini-3.5-flash-lite') ? 'selected' : ''; ?>>
+                                    gemini-3.5-flash-lite
+                                </option>
+                                <option value="gemini-2.5-flash" <?php echo ($geminiPrimaryModel === 'gemini-2.5-flash') ? 'selected' : ''; ?>>
+                                    gemini-2.5-flash
+                                </option>
+                                <option value="gemini-2.5-pro" <?php echo ($geminiPrimaryModel === 'gemini-2.5-pro') ? 'selected' : ''; ?>>
+                                    gemini-2.5-pro
+                                </option>
+                                <option value="custom" <?php echo (!in_array($geminiPrimaryModel, ['gemini-flash-lite-latest','gemini-3.8-flash','gemini-3.5-flash','gemini-flash-latest','gemini-3.5-flash-lite','gemini-2.5-flash','gemini-2.5-pro'])) ? 'selected' : ''; ?>>
+                                    Kustom...
+                                </option>
+                            </select>
+                            <input type="text" 
+                                   name="settings[gemini_primary_model]" 
+                                   id="setting_gemini_primary_model" 
+                                   class="form-control form-control-sm" 
+                                   value="<?php echo htmlspecialchars($geminiPrimaryModel); ?>"
+                                   placeholder="gemini-flash-lite-latest"
                                    required>
-                            <button type="button" class="sc-secret-toggle-btn" onclick="toggleSecretVisibility('setting_gemini_api_key', this)" title="Lihat/Sembunyikan">
-                                <i class="fa-regular fa-eye"></i>
-                            </button>
                         </div>
-                    </div>
 
-                    <!-- Primary Model Selector -->
-                    <div class="col-12">
-                        <label for="scPrimaryModelSelect" class="form-label small fw-semibold text-dark mb-1">
-                            Model Utama (Primary)
-                        </label>
-                        <select id="scPrimaryModelSelect" class="form-select form-select-sm mb-1.5" onchange="onPrimaryModelChange(this.value)">
-                            <option value="gemini-flash-lite-latest" <?php echo ($currentPrimaryModel === 'gemini-flash-lite-latest') ? 'selected' : ''; ?>>
-                                gemini-flash-lite-latest (Default)
-                            </option>
-                            <option value="gemini-3.8-flash" <?php echo ($currentPrimaryModel === 'gemini-3.8-flash') ? 'selected' : ''; ?>>
-                                gemini-3.8-flash
-                            </option>
-                            <option value="gemini-3.5-flash" <?php echo ($currentPrimaryModel === 'gemini-3.5-flash') ? 'selected' : ''; ?>>
-                                gemini-3.5-flash
-                            </option>
-                            <option value="gemini-flash-latest" <?php echo ($currentPrimaryModel === 'gemini-flash-latest') ? 'selected' : ''; ?>>
-                                gemini-flash-latest
-                            </option>
-                            <option value="gemini-3.5-flash-lite" <?php echo ($currentPrimaryModel === 'gemini-3.5-flash-lite') ? 'selected' : ''; ?>>
-                                gemini-3.5-flash-lite
-                            </option>
-                            <option value="gemini-2.5-flash" <?php echo ($currentPrimaryModel === 'gemini-2.5-flash') ? 'selected' : ''; ?>>
-                                gemini-2.5-flash
-                            </option>
-                            <option value="gemini-2.5-pro" <?php echo ($currentPrimaryModel === 'gemini-2.5-pro') ? 'selected' : ''; ?>>
-                                gemini-2.5-pro
-                            </option>
-                            <option value="custom" <?php echo (!in_array($currentPrimaryModel, ['gemini-flash-lite-latest','gemini-3.8-flash','gemini-3.5-flash','gemini-flash-latest','gemini-3.5-flash-lite','gemini-2.5-flash','gemini-2.5-pro'])) ? 'selected' : ''; ?>>
-                                Kustom...
-                            </option>
-                        </select>
-                        <input type="text" 
-                               name="settings[gemini_primary_model]" 
-                               id="setting_gemini_primary_model" 
-                               class="form-control form-control-sm" 
-                               value="<?php echo htmlspecialchars($currentPrimaryModel); ?>"
-                               placeholder="Nama model (contoh: gemini-flash-lite-latest)"
-                               required>
-                    </div>
+                        <!-- Fallback Models Chain -->
+                        <div class="col-12">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <label for="setting_gemini_fallback_models" class="form-label small fw-medium text-dark mb-0">
+                                    Model Cadangan (Fallback Chain)
+                                </label>
+                                <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none small text-muted" onclick="applyRecommendedFallback()" style="font-size: 0.75rem;">
+                                    Reset Default
+                                </button>
+                            </div>
+                            <input type="text" 
+                                   name="settings[gemini_fallback_models]" 
+                                   id="setting_gemini_fallback_models" 
+                                   class="form-control form-control-sm" 
+                                   value="<?php echo htmlspecialchars($geminiFallbackModels); ?>"
+                                   placeholder="gemini-3.8-flash,gemini-3.5-flash"
+                                   required>
+                        </div>
 
-                    <!-- Fallback / Backup Models Chain -->
-                    <div class="col-12">
-                        <div class="d-flex align-items-center justify-content-between mb-1">
-                            <label for="setting_gemini_fallback_models" class="form-label small fw-semibold text-dark mb-0">
-                                Model Cadangan (Fallback Chain)
-                            </label>
-                            <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none small text-muted" onclick="applyRecommendedFallback()" style="font-size: 0.78rem;">
-                                Reset Default
-                            </button>
-                        </div>
-                        <input type="text" 
-                               name="settings[gemini_fallback_models]" 
-                               id="setting_gemini_fallback_models" 
-                               class="form-control form-control-sm mb-1.5" 
-                               value="<?php echo htmlspecialchars($currentFallbackModels); ?>"
-                               placeholder="gemini-3.8-flash,gemini-3.5-flash..."
-                               required>
-                        
-                        <!-- Quick Add Badges -->
-                        <div class="d-flex flex-wrap gap-1 align-items-center">
-                            <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2 rounded-pill small" style="font-size: 0.72rem;" onclick="toggleFallbackModel('gemini-3.8-flash')">+ 3.8-flash</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2 rounded-pill small" style="font-size: 0.72rem;" onclick="toggleFallbackModel('gemini-3.5-flash')">+ 3.5-flash</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2 rounded-pill small" style="font-size: 0.72rem;" onclick="toggleFallbackModel('gemini-flash-latest')">+ flash-latest</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2 rounded-pill small" style="font-size: 0.72rem;" onclick="toggleFallbackModel('gemini-flash-lite-latest')">+ flash-lite</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2 rounded-pill small" style="font-size: 0.72rem;" onclick="toggleFallbackModel('gemini-3.5-flash-lite')">+ 3.5-lite</button>
-                        </div>
-                    </div>
-
-                    <!-- AI Temperature -->
-                    <div class="col-12">
-                        <div class="d-flex align-items-center justify-content-between mb-1">
-                            <label for="setting_gemini_temperature" class="form-label small fw-semibold text-dark mb-0">
-                                Temperature
-                            </label>
-                            <span id="tempValueBadge" class="badge bg-secondary-subtle text-dark small fw-bold"><?php echo htmlspecialchars($currentTemp); ?></span>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
+                        <!-- Temperature -->
+                        <div class="col-12">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <label for="setting_gemini_temperature" class="form-label small fw-medium text-dark mb-0">
+                                    Temperature
+                                </label>
+                                <span id="tempValueBadge" class="badge bg-light text-dark border small"><?php echo htmlspecialchars($geminiTemp); ?></span>
+                            </div>
                             <input type="range" 
                                    class="form-range" 
                                    id="tempRangeSlider" 
                                    min="0.0" 
                                    max="1.0" 
                                    step="0.05" 
-                                   value="<?php echo htmlspecialchars($currentTemp); ?>"
+                                   value="<?php echo htmlspecialchars($geminiTemp); ?>"
                                    oninput="onTempSliderChange(this.value)">
                             <input type="hidden" 
                                    name="settings[gemini_temperature]" 
                                    id="setting_gemini_temperature" 
-                                   value="<?php echo htmlspecialchars($currentTemp); ?>">
+                                   value="<?php echo htmlspecialchars($geminiTemp); ?>">
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 3. RESEND EMAIL API CONFIGURATION -->
-        <div class="col-lg-6">
-            <div class="card sc-settings-card h-100 p-4">
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="sc-card-header-icon" style="background: rgba(16, 185, 129, 0.12); color: #059669;">
-                            <i class="fa-solid fa-envelope fs-4"></i>
-                        </div>
+            <!-- NVIDIA NIM Card -->
+            <div class="col-lg-6">
+                <div class="card sc-settings-card h-100 p-3 p-md-4">
+                    <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
                         <div>
-                            <h3 class="h6 fw-bold mb-0 text-dark">Resend Email</h3>
+                            <div class="sc-card-title">NVIDIA NIM</div>
+                            <p class="sc-card-subtitle">Layanan AI cadangan saat kuota Gemini tercapai</p>
+                        </div>
+                        <button type="button" class="btn btn-outline-secondary sc-test-btn" id="btnTestNvidia" onclick="testApiKey('nvidia', 'setting_nvidia_api_key', 'resNvidiaTest', 'setting_nvidia_model')">
+                            Uji Koneksi
+                        </button>
+                    </div>
+
+                    <div id="resNvidiaTest" class="sc-test-result-box mb-3"></div>
+
+                    <div class="row g-3">
+                        <!-- API Key -->
+                        <div class="col-12">
+                            <label for="setting_nvidia_api_key" class="form-label small fw-medium text-dark mb-1">
+                                API Key
+                            </label>
+                            <div class="sc-secret-input-wrap">
+                                <input type="password" 
+                                       name="settings[nvidia_api_key]" 
+                                       id="setting_nvidia_api_key" 
+                                       class="form-control form-control-sm pe-5" 
+                                       value="<?php echo htmlspecialchars($nvidiaApiKey); ?>"
+                                       placeholder="nvapi-..."
+                                       required>
+                                <button type="button" class="sc-secret-toggle-btn" onclick="toggleSecretVisibility('setting_nvidia_api_key', this)" title="Tampilkan/Sembunyikan">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Primary Model -->
+                        <div class="col-12">
+                            <label for="scNvidiaModelSelect" class="form-label small fw-medium text-dark mb-1">
+                                Model Utama
+                            </label>
+                            <select id="scNvidiaModelSelect" class="form-select form-select-sm mb-2" onchange="onNvidiaModelChange(this.value)">
+                                <option value="nvidia/nemotron-3.5-bolt-e4b" <?php echo ($nvidiaModel === 'nvidia/nemotron-3.5-bolt-e4b') ? 'selected' : ''; ?>>
+                                    nvidia/nemotron-3.5-bolt-e4b (Direkomendasikan)
+                                </option>
+                                <option value="poolside/laguna-xs-2.1" <?php echo ($nvidiaModel === 'poolside/laguna-xs-2.1') ? 'selected' : ''; ?>>
+                                    poolside/laguna-xs-2.1
+                                </option>
+                                <option value="nvidia/ising-calibration-1.5-31b" <?php echo ($nvidiaModel === 'nvidia/ising-calibration-1.5-31b') ? 'selected' : ''; ?>>
+                                    nvidia/ising-calibration-1.5-31b
+                                </option>
+                                <option value="custom" <?php echo (!in_array($nvidiaModel, ['nvidia/nemotron-3.5-bolt-e4b','poolside/laguna-xs-2.1','nvidia/ising-calibration-1.5-31b'])) ? 'selected' : ''; ?>>
+                                    Kustom...
+                                </option>
+                            </select>
+                            <input type="text" 
+                                   name="settings[nvidia_model]" 
+                                   id="setting_nvidia_model" 
+                                   class="form-control form-control-sm" 
+                                   value="<?php echo htmlspecialchars($nvidiaModel); ?>"
+                                   placeholder="nvidia/nemotron-3.5-bolt-e4b"
+                                   required>
+                        </div>
+
+                        <!-- Fallback Models Chain -->
+                        <div class="col-12">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <label for="setting_nvidia_fallback_models" class="form-label small fw-medium text-dark mb-0">
+                                    Model Cadangan (Fallback Chain)
+                                </label>
+                                <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none small text-muted" onclick="applyRecommendedNvidiaFallback()" style="font-size: 0.75rem;">
+                                    Reset Default
+                                </button>
+                            </div>
+                            <input type="text" 
+                                   name="settings[nvidia_fallback_models]" 
+                                   id="setting_nvidia_fallback_models" 
+                                   class="form-control form-control-sm" 
+                                   value="<?php echo htmlspecialchars($nvidiaFallback); ?>"
+                                   placeholder="poolside/laguna-xs-2.1,nvidia/ising-calibration-1.5-31b"
+                                   required>
+                        </div>
+
+                        <!-- Note Info -->
+                        <div class="col-12">
+                            <div class="p-2 rounded bg-light border small text-muted" style="font-size: 0.78rem;">
+                                Model NVIDIA menggunakan protokol standar OpenAI dan siap menggantikan Gemini secara otomatis saat kuota harian habis.
+                            </div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1" id="btnTestResend" onclick="testApiKey('resend', 'setting_resend_api_key', 'resResendTest')">
-                        <i class="fa-solid fa-plug me-1"></i> Uji Resend
-                    </button>
-                </div>
-
-                <div id="resResendTest" class="sc-test-result-box mb-3"></div>
-
-                <div class="row g-3">
-                    <?php if (!empty($groupedSettings['email'])) : ?>
-                        <?php foreach ($groupedSettings['email'] as $s) : ?>
-                            <div class="col-12">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <label for="setting_<?php echo $s->setting_key; ?>" class="form-label small fw-semibold text-dark mb-0">
-                                        <?php echo htmlspecialchars($s->setting_label); ?>
-                                    </label>
-                                    <?php if ($s->is_secret) : ?>
-                                        <span class="sc-badge-secret">Sensitif</span>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="<?php echo $s->is_secret ? 'sc-secret-input-wrap' : ''; ?>">
-                                    <input type="<?php echo $s->is_secret ? 'password' : 'text'; ?>" 
-                                           name="settings[<?php echo $s->setting_key; ?>]" 
-                                           id="setting_<?php echo $s->setting_key; ?>" 
-                                           class="form-control form-control-sm <?php echo $s->is_secret ? 'pe-5' : ''; ?>" 
-                                           value="<?php echo htmlspecialchars($s->setting_value ?? ''); ?>"
-                                           placeholder="<?php echo htmlspecialchars($s->setting_label); ?>"
-                                           required>
-                                    <?php if ($s->is_secret) : ?>
-                                        <button type="button" class="sc-secret-toggle-btn" onclick="toggleSecretVisibility('setting_<?php echo $s->setting_key; ?>', this)" title="Lihat/Sembunyikan">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
                 </div>
             </div>
+
         </div>
-
-        <!-- 4. GENERAL SYSTEM & SECURITY PARAMETERS -->
-        <div class="col-lg-6">
-            <div class="card sc-settings-card h-100 p-4">
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="sc-card-header-icon" style="background: rgba(99, 102, 241, 0.12); color: #4f46e5;">
-                            <i class="fa-solid fa-sliders fs-4"></i>
-                        </div>
-                        <div>
-                            <h3 class="h6 fw-bold mb-0 text-dark">Sistem & Keamanan OTP</h3>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row g-3">
-                    <?php if (!empty($groupedSettings['general'])) : ?>
-                        <?php foreach ($groupedSettings['general'] as $s) : ?>
-                            <div class="<?php echo ($s->setting_type === 'number') ? 'col-sm-6' : 'col-12'; ?>">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <label for="setting_<?php echo $s->setting_key; ?>" class="form-label small fw-semibold text-dark mb-0">
-                                        <?php echo htmlspecialchars($s->setting_label); ?>
-                                    </label>
-                                </div>
-                                <div>
-                                    <input type="<?php echo ($s->setting_type === 'number') ? 'number' : 'text'; ?>" 
-                                           <?php echo ($s->setting_type === 'number') ? 'min="1"' : ''; ?>
-                                           name="settings[<?php echo $s->setting_key; ?>]" 
-                                           id="setting_<?php echo $s->setting_key; ?>" 
-                                           class="form-control form-control-sm" 
-                                           value="<?php echo htmlspecialchars($s->setting_value ?? ''); ?>"
-                                           placeholder="<?php echo htmlspecialchars($s->setting_label); ?>"
-                                           required>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-
     </div>
 
-    <!-- Sticky / Bottom Action Bar -->
-    <div class="row mt-4 mb-5">
-        <div class="col-12">
-            <div class="p-3 bg-white rounded-3 shadow-sm border border-secondary border-opacity-10 d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
-                <div class="small text-muted">
-                    <i class="fa-solid fa-circle-check text-success me-1"></i>
-                    Perubahan konfigurasi tersimpan langsung ke database.
+    <!-- 2. BAGIAN: LAYANAN KOMUNIKASI (WHATSAPP GATEWAY - FONNTE) -->
+    <div class="mb-4">
+        <div class="sc-section-label">Layanan Komunikasi & Verifikasi OTP</div>
+
+        <div class="row g-3">
+            
+            <!-- Fonnte WhatsApp Gateway Card -->
+            <div class="col-12">
+                <div class="card sc-settings-card p-3 p-md-4">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pb-3 mb-3 border-bottom">
+                        <div class="d-flex align-items-center gap-3">
+                            <div style="width: 44px; height: 44px; border-radius: 12px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <div class="sc-card-title d-flex align-items-center gap-2">
+                                    <span>Fonnte WhatsApp Gateway</span>
+                                    <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle small fw-semibold" style="font-size: 0.72rem;">
+                                        <i class="fa-solid fa-circle-check me-1"></i> Aktif sebagai Mesin OTP
+                                    </span>
+                                </div>
+                                <p class="sc-card-subtitle mb-0">Pengiriman kode OTP 6-digit verifikasi akun pelanggan secara instan via WhatsApp.</p>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-secondary sc-test-btn" id="btnTestFonnte" onclick="testApiKey('fonnte', 'setting_fonnte_token', 'resFonnteTest')">
+                            <i class="fa-solid fa-tower-broadcast me-1"></i> Uji Koneksi
+                        </button>
+                    </div>
+
+                    <div id="resFonnteTest" class="sc-test-result-box mb-3"></div>
+
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label for="setting_fonnte_token" class="form-label small fw-medium text-dark mb-1">
+                                Token API Fonnte
+                            </label>
+                            <div class="sc-secret-input-wrap">
+                                <input type="password" 
+                                       name="settings[fonnte_token]" 
+                                       id="setting_fonnte_token" 
+                                       class="form-control form-control-sm pe-5" 
+                                       value="<?php echo htmlspecialchars($fonnteToken); ?>"
+                                       placeholder="Masukkan token akun Fonnte..."
+                                       required>
+                                <button type="button" class="sc-secret-toggle-btn" onclick="toggleSecretVisibility('setting_fonnte_token', this)" title="Tampilkan/Sembunyikan">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted mt-1 d-block" style="font-size: 0.75rem;">
+                                <i class="fa-solid fa-circle-info text-primary me-1"></i> Token ini digunakan untuk mengautentikasi pengiriman pesan via <code>https://api.fonnte.com/send</code>.
+                            </small>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label small fw-medium text-dark mb-1">
+                                Status Integrasi
+                            </label>
+                            <div class="p-2 rounded-2 border bg-light small d-flex flex-column gap-1">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted">Metode OTP:</span>
+                                    <strong class="text-success">WhatsApp</strong>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted">Target Nomor:</span>
+                                    <span class="font-monospace text-dark">08... / 628...</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted">Status Engine:</span>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle py-0" style="font-size:0.7rem;">Siap Pakai</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="d-flex gap-2">
-                    <button type="reset" class="btn btn-outline-secondary px-3 py-2 btn-sm rounded-pill">
-                        Reset
-                    </button>
-                    <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold btn-sm rounded-pill shadow-sm">
-                        Simpan Perubahan
-                    </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 3. BAGIAN: SISTEM & KEAMANAN OTP -->
+    <div class="mb-4">
+        <div class="sc-section-label">Parameter Aplikasi & Keamanan OTP</div>
+
+        <div class="card sc-settings-card p-3 p-md-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="setting_site_name" class="form-label small fw-medium text-dark mb-1">
+                        Nama Aplikasi / Brand
+                    </label>
+                    <input type="text" 
+                           name="settings[site_name]" 
+                           id="setting_site_name" 
+                           class="form-control form-control-sm" 
+                           value="<?php echo htmlspecialchars($generalSettings['site_name']->setting_value ?? 'SkinCheck'); ?>"
+                           required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="setting_otp_expiry_minutes" class="form-label small fw-medium text-dark mb-1">
+                        Masa Berlaku OTP (Menit)
+                    </label>
+                    <input type="number" 
+                           min="1" 
+                           name="settings[otp_expiry_minutes]" 
+                           id="setting_otp_expiry_minutes" 
+                           class="form-control form-control-sm" 
+                           value="<?php echo htmlspecialchars($generalSettings['otp_expiry_minutes']->setting_value ?? '5'); ?>"
+                           required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="setting_otp_resend_cooldown" class="form-label small fw-medium text-dark mb-1">
+                        Cooldown Kirim Ulang OTP (Detik)
+                    </label>
+                    <input type="number" 
+                           min="1" 
+                           name="settings[otp_resend_cooldown]" 
+                           id="setting_otp_resend_cooldown" 
+                           class="form-control form-control-sm" 
+                           value="<?php echo htmlspecialchars($generalSettings['otp_resend_cooldown']->setting_value ?? '60'); ?>"
+                           required>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Action Bar -->
+    <div class="card sc-settings-card p-3 mb-5">
+        <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
+            <div class="small text-muted">
+                Perubahan konfigurasi tersimpan langsung ke database sistem.
+            </div>
+            <div class="d-flex gap-2">
+                <button type="reset" class="btn btn-outline-secondary btn-sm px-3 rounded-2">
+                    Reset
+                </button>
+                <button type="submit" class="btn btn-primary btn-sm px-4 fw-semibold rounded-2 shadow-sm">
+                    Simpan Perubahan
+                </button>
+            </div>
+        </div>
+    </div>
+
 </form>
 
-<!-- Client-side Testing & Visibility Toggle Script -->
+<!-- Scripts for Dynamic Selects and Testing -->
 <script>
 // Toggle Password/Secret Visibility
 function toggleSecretVisibility(inputId, btn) {
@@ -426,7 +562,7 @@ function toggleSecretVisibility(inputId, btn) {
     }
 }
 
-// Change Primary Model from Select
+// Change Primary Gemini Model from Select
 function onPrimaryModelChange(val) {
     const input = document.getElementById('setting_gemini_primary_model');
     if (!input) return;
@@ -438,26 +574,32 @@ function onPrimaryModelChange(val) {
     }
 }
 
-// Quick apply recommended fallback order
+// Reset Gemini fallback to recommended default
 function applyRecommendedFallback() {
     const input = document.getElementById('setting_gemini_fallback_models');
     if (input) {
-        input.value = 'gemini-3.8-flash,gemini-3.5-flash,gemini-flash-latest,gemini-flash-lite-latest,gemini-3.5-flash-lite';
+        input.value = 'gemini-3.8-flash,gemini-3.5-flash,gemini-flash-latest';
     }
 }
 
-// Toggle individual fallback model in comma-separated list
-function toggleFallbackModel(modelName) {
-    const input = document.getElementById('setting_gemini_fallback_models');
+// Change NVIDIA Model from Select
+function onNvidiaModelChange(val) {
+    const input = document.getElementById('setting_nvidia_model');
     if (!input) return;
-    let parts = input.value.split(',').map(s => s.trim()).filter(Boolean);
-    const idx = parts.indexOf(modelName);
-    if (idx >= 0) {
-        parts.splice(idx, 1);
+    if (val !== 'custom') {
+        input.value = val;
     } else {
-        parts.push(modelName);
+        input.value = '';
+        input.focus();
     }
-    input.value = parts.join(',');
+}
+
+// Reset NVIDIA fallback to recommended default
+function applyRecommendedNvidiaFallback() {
+    const input = document.getElementById('setting_nvidia_fallback_models');
+    if (input) {
+        input.value = 'poolside/laguna-xs-2.1,nvidia/ising-calibration-1.5-31b';
+    }
 }
 
 // Temperature slider change handler
@@ -468,7 +610,7 @@ function onTempSliderChange(val) {
     if (hidden) hidden.value = val;
 }
 
-// Live AJAX Tester for API Keys
+// AJAX Tester for API Keys
 function testApiKey(service, keyInputId, resultBoxId, extraInputId = null) {
     const keyInput = document.getElementById(keyInputId);
     const resultBox = document.getElementById(resultBoxId);
@@ -488,8 +630,15 @@ function testApiKey(service, keyInputId, resultBoxId, extraInputId = null) {
 
     // Loading State
     resultBox.style.display = 'block';
-    resultBox.className = 'sc-test-result-box mb-3 bg-light text-muted border border-secondary border-opacity-25';
-    resultBox.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Menghubungi endpoint API ' + service.toUpperCase() + '...';
+    resultBox.className = 'sc-test-result-box mb-3 bg-light text-muted border';
+    resultBox.innerHTML = 'Menghubungi endpoint ' + service.toUpperCase() + '...';
+
+    let loadToast = null;
+    if (window.toast && typeof window.toast.loading === 'function') {
+        loadToast = window.toast.loading('Menguji koneksi ' + service.toUpperCase() + '...', {
+            description: 'Memeriksa validitas API Key dan latensi respon.'
+        });
+    }
 
     const formData = new FormData();
     formData.append('service', service);
@@ -502,10 +651,28 @@ function testApiKey(service, keyInputId, resultBoxId, extraInputId = null) {
     })
     .then(res => res.json())
     .then(data => {
+        if (loadToast && typeof loadToast.dismiss === 'function') loadToast.dismiss();
         showResultBox(resultBox, data.success, data.message);
+        if (window.toast) {
+            if (data.success) {
+                window.toast.success('Koneksi ' + service.toUpperCase() + ' Berhasil!', {
+                    description: data.message
+                });
+            } else {
+                window.toast.error('Uji Koneksi ' + service.toUpperCase() + ' Gagal', {
+                    description: data.message
+                });
+            }
+        }
     })
     .catch(err => {
-        showResultBox(resultBox, false, 'Gagal melakukan request cURL: ' + err.message);
+        if (loadToast && typeof loadToast.dismiss === 'function') loadToast.dismiss();
+        showResultBox(resultBox, false, 'Gagal terhubung: ' + err.message);
+        if (window.toast) {
+            window.toast.error('Gagal Menguji Koneksi', {
+                description: err.message
+            });
+        }
     });
 }
 
@@ -513,10 +680,10 @@ function showResultBox(box, isSuccess, msg) {
     box.style.display = 'block';
     if (isSuccess) {
         box.className = 'sc-test-result-box mb-3 bg-success-subtle text-success border border-success border-opacity-25';
-        box.innerHTML = '<i class="fa-solid fa-circle-check me-1.5"></i> ' + msg;
+        box.textContent = msg;
     } else {
         box.className = 'sc-test-result-box mb-3 bg-danger-subtle text-danger border border-danger border-opacity-25';
-        box.innerHTML = '<i class="fa-solid fa-circle-xmark me-1.5"></i> ' + msg;
+        box.textContent = msg;
     }
 }
 </script>

@@ -3,21 +3,28 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <p class="mb-0">&copy; <?php echo date('Y'); ?> SkinCheck Administration Portal.</p>
                         <div>
-                            <span class="me-2 text-success"><i class="fa-solid fa-circle text-success me-1"></i>Server: Online</span>
+                            <span class="me-2 text-success"><i class="fa-solid fa-circle text-success me-1" style="font-size: 0.55rem;"></i>Server: Online</span>
                             <span>PHP MVC Core</span>
                         </div>
                     </div>
                 </footer>
 
-            </div><!-- End Main Content -->
-        </div><!-- End Row -->
-    </div><!-- End Container -->
+            </div><!-- End px-3 px-md-4 container -->
+        </main><!-- End sc-admin-main -->
+    </div><!-- End sc-admin-layout -->
 
     <!-- Bootstrap 5.3 Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     
     <!-- Main Application Scripts -->
-    <script src="<?php echo URLROOT; ?>/public/js/main.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/js/main.js?v=<?php echo time(); ?>"></script>
+
+    <script>
+    // Ensure clean desktop state
+    try {
+        localStorage.removeItem('sc_sidebar_collapsed');
+    } catch (e) {}
+    </script>
 
     <!-- Global Floating Toast Notification System -->
     <?php require APPROOT . '/views/templates/toast.php'; ?>

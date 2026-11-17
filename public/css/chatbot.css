@@ -4,102 +4,148 @@
  * High-Contrast Legibility & CSS Scope Isolation
  */
 
-/* ─── Floating Trigger Button (FAB) ───────────────────────── */
+/* ─── Floating Trigger Button (iOS Liquid Glass Orb) ────── */
+/* ─── Floating Trigger Button (macOS Liquid Glass Orb with Morph) ────── */
 .sc-chatbot-fab {
     position: fixed;
-    bottom: 28px;
-    right: 28px;
+    bottom: 26px;
+    right: 26px;
     z-index: 9999;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: linear-gradient(135deg, #123d34 0%, #1a4a40 50%, #266b5c 100%);
-    color: #ffffff !important;
-    border: 2px solid rgba(191, 161, 95, 0.65);
-    border-radius: 50px;
-    padding: 12px 22px 12px 14px;
-    cursor: pointer;
-    box-shadow: 0 12px 36px rgba(18, 61, 52, 0.38), 0 0 24px rgba(191, 161, 95, 0.28);
-    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    outline: none;
-    user-select: none;
-    font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
-}
-
-.sc-chatbot-fab:hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 18px 48px rgba(18, 61, 52, 0.48), 0 0 32px rgba(191, 161, 95, 0.45);
-    border-color: #dfc68b;
-    color: #ffffff !important;
-}
-
-.sc-chatbot-fab:active {
-    transform: translateY(-1px) scale(0.98);
-}
-
-.sc-chatbot-fab-icon-wrap {
-    position: relative;
-    width: 44px;
-    height: 44px;
-    background: rgba(255, 255, 255, 0.16);
-    backdrop-filter: blur(8px);
-    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
+    background: linear-gradient(145deg, rgba(20, 184, 166, 0.95) 0%, rgba(15, 118, 110, 0.98) 100%);
+    backdrop-filter: blur(20px) saturate(190%);
+    -webkit-backdrop-filter: blur(20px) saturate(190%);
     color: #ffffff !important;
-    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.35);
-    transition: transform 0.3s ease;
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.35rem;
+    box-shadow: 0 14px 34px rgba(15, 118, 110, 0.36), 0 4px 14px rgba(15, 41, 36, 0.14), inset 0 2px 4px rgba(255, 255, 255, 0.5);
+    transition: transform 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, background 0.3s ease;
+    outline: none;
+    user-select: none;
+    will-change: transform, box-shadow;
 }
 
-.sc-chatbot-fab:hover .sc-chatbot-fab-icon-wrap {
-    transform: rotate(8deg) scale(1.06);
+.sc-chatbot-fab:hover {
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 18px 42px rgba(15, 118, 110, 0.44), 0 0 24px rgba(20, 184, 166, 0.35), inset 0 2px 5px rgba(255, 255, 255, 0.65);
+    border-color: rgba(255, 255, 255, 0.98);
+}
+
+.sc-chatbot-fab:active {
+    transform: scale(0.92);
+}
+
+.sc-chatbot-fab .sc-fab-icon-chat,
+.sc-chatbot-fab .sc-fab-icon-close {
+    position: absolute;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.26s ease;
+}
+
+.sc-chatbot-fab .sc-fab-icon-chat {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.sc-chatbot-fab .sc-fab-icon-close {
+    opacity: 0;
+    transform: scale(0.35) rotate(-90deg);
+    font-size: 1.25rem;
+}
+
+/* Morph to close state when active (macOS spring bounce) */
+.sc-chatbot-fab.active {
+    transform: scale(0.96);
+    background: linear-gradient(145deg, rgba(15, 118, 110, 0.96) 0%, rgba(13, 148, 136, 0.98) 100%);
+    box-shadow: 0 8px 24px rgba(15, 118, 110, 0.32), inset 0 2px 3px rgba(255, 255, 255, 0.4);
+}
+
+.sc-chatbot-fab.active:hover {
+    transform: scale(1.04);
+}
+
+.sc-chatbot-fab.active .sc-fab-icon-chat {
+    opacity: 0;
+    transform: scale(0.35) rotate(90deg);
+}
+
+.sc-chatbot-fab.active .sc-fab-icon-close {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
 }
 
 .sc-chatbot-fab-badge-status {
     position: absolute;
-    top: 0;
-    right: 0;
-    width: 13px;
-    height: 13px;
+    top: 1px;
+    right: 1px;
+    width: 12px;
+    height: 12px;
     background: #10b981;
-    border: 2.5px solid #144037;
+    border: 2px solid #ffffff;
     border-radius: 50%;
-    box-shadow: 0 0 10px #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.65);
     animation: sc-pulse 2s infinite;
+    transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-.sc-chatbot-fab-text {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    line-height: 1.25;
+.sc-chatbot-fab.active .sc-chatbot-fab-badge-status {
+    opacity: 0;
+    transform: scale(0.5);
 }
 
-.sc-chatbot-fab-title {
-    font-size: 0.98rem;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #ffffff !important;
+/* Vortex Drain & Spout Animations on the FAB Orb (The "Lubang") */
+@keyframes sc-fab-drain-hole {
+    0% {
+        transform: scale(0.96) rotate(0deg);
+        box-shadow: 0 8px 24px rgba(15, 118, 110, 0.32);
+    }
+    30% {
+        /* Vortex suction expands hole as liquid touches it */
+        transform: scale(0.84) rotate(-12deg);
+        box-shadow: 0 0 0 10px rgba(20, 184, 166, 0.35), 0 4px 16px rgba(15, 118, 110, 0.5);
+    }
+    70% {
+        /* Liquid swallowing pulse */
+        transform: scale(1.12) rotate(8deg);
+        box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.45), 0 18px 38px rgba(15, 118, 110, 0.45);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        box-shadow: 0 14px 34px rgba(15, 118, 110, 0.36);
+    }
 }
 
-.sc-chatbot-fab-title .sparkle {
-    color: #f7d779;
-    font-size: 0.9rem;
-    animation: sc-sparkle 1.8s infinite ease-in-out;
+@keyframes sc-fab-spout-eruption {
+    0% {
+        transform: scale(0.88);
+        box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.7);
+    }
+    45% {
+        /* Water eruption out of hole */
+        transform: scale(1.16);
+        box-shadow: 0 0 0 16px rgba(20, 184, 166, 0), 0 20px 44px rgba(15, 118, 110, 0.45);
+    }
+    100% {
+        transform: scale(0.96);
+        box-shadow: 0 8px 24px rgba(15, 118, 110, 0.32);
+    }
 }
 
-.sc-chatbot-fab-sub {
-    font-size: 0.74rem;
-    color: rgba(255, 255, 255, 0.9) !important;
-    font-weight: 500;
+.sc-chatbot-fab.vortex-drain {
+    animation: sc-fab-drain-hole 0.48s cubic-bezier(0.25, 0, 0.3, 1) forwards;
 }
 
-/* ─── Chat Window Container ──────────────────────────────── */
+.sc-chatbot-fab.vortex-spout {
+    animation: sc-fab-spout-eruption 0.52s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ─── macOS Genie Effect ("Air Masuk Lubang") Physics ─────── */
 .sc-chat-widget {
     position: fixed;
     bottom: 96px;
@@ -108,38 +154,205 @@
     max-width: calc(100vw - 32px);
     height: 640px;
     max-height: calc(100vh - 120px);
-    background: #ffffff !important;
+    background: rgba(255, 255, 255, 0.82) !important;
+    backdrop-filter: blur(34px) saturate(200%);
+    -webkit-backdrop-filter: blur(34px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.95);
     border-radius: 26px;
-    box-shadow: 0 24px 70px rgba(10, 35, 30, 0.35), 0 4px 20px rgba(0, 0, 0, 0.08), 0 0 0 1.5px rgba(191, 161, 95, 0.35);
+    box-shadow: 
+        0 34px 85px -14px rgba(15, 23, 42, 0.28),
+        0 16px 36px -8px rgba(15, 118, 110, 0.12),
+        0 0 0 1px rgba(255, 255, 255, 0.65),
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.95);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     z-index: 99999;
+    
+    /* Collapsed state inside the hole */
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
-    transform: translateY(24px) scale(0.92);
-    transform-origin: bottom right;
-    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translate3d(0, 42px, 0) scale(0.02, 0.01);
+    transform-origin: calc(100% - 26px) calc(100% + 42px);
+    filter: blur(6px);
+    clip-path: polygon(
+        93.5% 100%, 93.5% 100%, 93.5% 100%,
+        93.5% 100%, 93.5% 100%, 93.5% 100%,
+        93.5% 100%, 93.5% 100%,
+        93.5% 100%, 93.5% 100%, 93.5% 100%, 93.5% 100%
+    );
+    will-change: transform, clip-path, opacity, filter;
     font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
     color: #172b25;
 }
 
+/* Resting Open state (Fully crystal clean, unclipped) */
 .sc-chat-widget.open {
-    opacity: 1;
+    visibility: visible;
     pointer-events: auto;
-    transform: translateY(0) scale(1);
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0px);
+}
+
+.sc-chat-widget.open:not(.sc-genie-in):not(.sc-genie-out) {
+    clip-path: none !important;
+    transform: translate3d(0, 0, 0) scale(1) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    filter: blur(0px) !important;
+}
+
+/* Genie Open / Spout Out of Drain Hole */
+.sc-chat-widget.sc-genie-in {
+    visibility: visible !important;
+    pointer-events: auto !important;
+    animation: sc-genie-restore 0.52s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Genie Close / Sucked into Drain Hole */
+.sc-chat-widget.sc-genie-out {
+    visibility: visible !important;
+    pointer-events: none !important;
+    animation: sc-genie-minimize 0.48s cubic-bezier(0.25, 0, 0.3, 1) forwards;
+}
+
+/* ─── macOS Genie Effect Keyframes (Air Masuk Lubang & Memancar Keluar) ─── */
+@keyframes sc-genie-minimize {
+    0% {
+        transform: translate3d(0, 0, 0) scale(1, 1);
+        opacity: 1;
+        filter: blur(0px);
+        clip-path: polygon(
+            0% 0%, 50% 0%, 100% 0%,
+            100% 40%, 100% 75%, 100% 95%,
+            96% 100%, 91% 100%,
+            0% 100%, 0% 75%, 0% 40%, 0% 0%
+        );
+    }
+    25% {
+        transform: translate3d(0, 6px, 0) scale(0.96, 1.02);
+        opacity: 0.98;
+        filter: blur(0px);
+        clip-path: polygon(
+            0% 2%, 50% 0%, 100% 2%,
+            99% 42%, 97% 78%, 95.5% 95%,
+            94.5% 100%, 92.5% 100%,
+            25% 98%, 0% 82%, 0% 45%, 0% 2%
+        );
+    }
+    55% {
+        /* Funnel neck forms directly into the FAB hole (X ≈ 93.5%) */
+        transform: translate3d(0, 18px, 0) scale(0.72, 0.88);
+        opacity: 0.94;
+        filter: blur(1px);
+        clip-path: polygon(
+            22% 14%, 62% 9%, 96% 14%,
+            97% 42%, 96% 75%, 94.8% 93%,
+            94.2% 100%, 92.8% 100%,
+            88% 93%, 72% 75%, 45% 42%, 22% 14%
+        );
+    }
+    82% {
+        /* Sucked deep into the narrow spout */
+        transform: translate3d(0, 32px, 0) scale(0.35, 0.50);
+        opacity: 0.70;
+        filter: blur(3px);
+        clip-path: polygon(
+            76% 40%, 88% 38%, 94.8% 40%,
+            95% 65%, 94.5% 85%, 94% 96%,
+            93.8% 100%, 93.2% 100%,
+            92.5% 96%, 89% 85%, 82% 65%, 76% 40%
+        );
+    }
+    100% {
+        /* Swallowed fully into the hole */
+        transform: translate3d(0, 42px, 0) scale(0.02, 0.01);
+        opacity: 0;
+        filter: blur(6px);
+        clip-path: polygon(
+            93.5% 100%, 93.5% 100%, 93.5% 100%,
+            93.5% 100%, 93.5% 100%, 93.5% 100%,
+            93.5% 100%, 93.5% 100%,
+            93.5% 100%, 93.5% 100%, 93.5% 100%, 93.5% 100%
+        );
+    }
+}
+
+@keyframes sc-genie-restore {
+    0% {
+        /* Starting deep in the hole */
+        transform: translate3d(0, 42px, 0) scale(0.02, 0.01);
+        opacity: 0;
+        filter: blur(6px);
+        clip-path: polygon(
+            93.5% 100%, 93.5% 100%, 93.5% 100%,
+            93.5% 100%, 93.5% 100%, 93.5% 100%,
+            93.5% 100%, 93.5% 100%,
+            93.5% 100%, 93.5% 100%, 93.5% 100%, 93.5% 100%
+        );
+    }
+    22% {
+        /* Erupting upward out of the hole */
+        transform: translate3d(0, 26px, 0) scale(0.38, 0.54);
+        opacity: 0.82;
+        filter: blur(3px);
+        clip-path: polygon(
+            75% 40%, 88% 38%, 94.8% 40%,
+            95.2% 65%, 94.6% 85%, 94% 96%,
+            93.8% 100%, 93.2% 100%,
+            92.4% 96%, 88% 85%, 80% 65%, 75% 40%
+        );
+    }
+    55% {
+        /* Mushrooming outward along the funnel */
+        transform: translate3d(0, 10px, 0) scale(0.80, 0.92);
+        opacity: 0.98;
+        filter: blur(1px);
+        clip-path: polygon(
+            20% 12%, 62% 8%, 96% 12%,
+            97% 42%, 96% 75%, 94.8% 93%,
+            94.2% 100%, 92.8% 100%,
+            88% 93%, 72% 75%, 48% 42%, 20% 12%
+        );
+    }
+    85% {
+        /* Elastic fluid overshoot */
+        transform: translate3d(0, -3px, 0) scale(1.018, 1.012);
+        opacity: 1;
+        filter: blur(0px);
+        clip-path: polygon(
+            0% 0%, 50% 0%, 100% 0%,
+            100% 40%, 100% 75%, 100% 95%,
+            96% 100%, 91% 100%,
+            0% 100%, 0% 75%, 0% 40%, 0% 0%
+        );
+    }
+    100% {
+        /* Settling into full crisp frame */
+        transform: translate3d(0, 0, 0) scale(1, 1);
+        opacity: 1;
+        filter: blur(0px);
+        clip-path: polygon(
+            0% 0%, 50% 0%, 100% 0%,
+            100% 40%, 100% 75%, 100% 95%,
+            96% 100%, 91% 100%,
+            0% 100%, 0% 75%, 0% 40%, 0% 0%
+        );
+    }
 }
 
 /* ─── Chat Header ────────────────────────────────────────── */
 .sc-chat-header {
-    background: linear-gradient(135deg, #103831 0%, #1a4a40 55%, #256658 100%);
+    background: linear-gradient(135deg, #0f766e 0%, #0d9488 60%, #14b8a6 100%);
     color: #ffffff !important;
     padding: 16px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 2px solid rgba(191, 161, 95, 0.5);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 4px 14px rgba(15, 118, 110, 0.15);
 }
 
 .sc-chat-header-left {
@@ -152,16 +365,16 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #bfa15f 0%, #ecd08c 100%);
-    color: #103831;
+    background: #e6f4f1;
+    color: #0f766e;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.3rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(15, 41, 36, 0.16);
     flex-shrink: 0;
     position: relative;
-    border: 1.5px solid rgba(255, 255, 255, 0.6);
+    border: 2px solid #ffffff;
 }
 
 .sc-chat-avatar-status {
@@ -230,12 +443,16 @@
     transform: scale(1.08);
 }
 
+.sc-chat-btn-action:active {
+    transform: scale(0.92);
+}
+
 /* ─── Chat Messages Body ─────────────────────────────────── */
 .sc-chat-body {
     flex: 1;
     overflow-y: auto;
     padding: 20px 18px;
-    background: #f5f8f7 !important;
+    background: rgba(242, 250, 247, 0.58) !important;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -257,13 +474,15 @@
     background: rgba(26, 74, 64, 0.38);
 }
 
-/* ─── Welcome Card (Guaranteed High Contrast) ─────────────── */
+/* ─── Welcome Card (Liquid Glass High Contrast) ──────────── */
 .sc-chat-welcome {
-    background: #ffffff !important;
-    border: 1.5px solid rgba(26, 74, 64, 0.12) !important;
-    border-radius: 18px !important;
+    background: rgba(255, 255, 255, 0.78) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.92) !important;
+    border-radius: 20px !important;
     padding: 18px 16px !important;
-    box-shadow: 0 6px 20px rgba(26, 74, 64, 0.06) !important;
+    box-shadow: 0 8px 24px rgba(15, 41, 36, 0.06), inset 0 1px 0 #ffffff !important;
     margin-bottom: 4px;
     text-align: center;
 }
@@ -272,28 +491,28 @@
     width: 52px;
     height: 52px;
     margin: 0 auto 12px;
-    background: linear-gradient(135deg, rgba(26, 74, 64, 0.12) 0%, rgba(191, 161, 95, 0.18) 100%) !important;
+    background: #e6f4f1 !important;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #1a4a40 !important;
+    color: #0f766e !important;
     font-size: 1.5rem;
-    border: 1px solid rgba(191, 161, 95, 0.3);
+    border: 1px solid #cce6df;
 }
 
 .sc-chat-welcome h5 {
     margin: 0 0 8px !important;
     font-size: 1.05rem !important;
     font-weight: 700 !important;
-    color: #103831 !important;
+    color: #0f2924 !important;
     letter-spacing: -0.2px;
 }
 
 .sc-chat-welcome p {
     margin: 0 0 14px !important;
     font-size: 0.84rem !important;
-    color: #243c34 !important;
+    color: #334e48 !important;
     line-height: 1.55 !important;
 }
 
@@ -307,8 +526,8 @@
 
 .sc-chat-chip {
     background: #ffffff !important;
-    border: 1.5px solid rgba(191, 161, 95, 0.48) !important;
-    color: #143d34 !important;
+    border: 1.5px solid #cce6df !important;
+    color: #0f2924 !important;
     font-size: 0.76rem !important;
     font-weight: 600 !important;
     padding: 7px 14px !important;
@@ -318,16 +537,16 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    box-shadow: 0 2px 8px rgba(15, 41, 36, 0.04) !important;
     user-select: none;
 }
 
 .sc-chat-chip:hover {
-    background: linear-gradient(135deg, #1a4a40 0%, #256658 100%) !important;
+    background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%) !important;
     color: #ffffff !important;
-    border-color: #1a4a40 !important;
+    border-color: #0f766e !important;
     transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(26, 74, 64, 0.22) !important;
+    box-shadow: 0 6px 14px rgba(15, 118, 110, 0.22) !important;
 }
 
 /* ─── Message Rows & Bubbles (CRITICAL CONTRAST FIX) ───────── */
@@ -360,16 +579,16 @@
 }
 
 .sc-chat-msg.bot .sc-chat-msg-avatar {
-    background: #1a4a40;
-    color: #ecd08c !important;
-    box-shadow: 0 3px 8px rgba(26, 74, 64, 0.25);
-    border: 1px solid rgba(191, 161, 95, 0.35);
+    background: #0f766e;
+    color: #ffffff !important;
+    box-shadow: 0 3px 8px rgba(15, 118, 110, 0.22);
+    border: 1px solid rgba(20, 184, 166, 0.35);
 }
 
 .sc-chat-msg.user .sc-chat-msg-avatar {
-    background: #bfa15f;
+    background: #14b8a6;
     color: #ffffff !important;
-    box-shadow: 0 3px 8px rgba(191, 161, 95, 0.25);
+    box-shadow: 0 3px 8px rgba(20, 184, 166, 0.22);
 }
 
 /* Shared bubble frame */
@@ -384,11 +603,11 @@
 
 /* ─── USER BUBBLE: Deep Emerald, Pure White Text ──────────── */
 .sc-chat-msg.user .sc-chat-bubble {
-    background: linear-gradient(135deg, #17483d 0%, #256b5c 100%) !important;
+    background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%) !important;
     color: #ffffff !important;
     border-bottom-right-radius: 4px !important;
-    box-shadow: 0 4px 16px rgba(23, 72, 61, 0.22) !important;
-    border: 1px solid rgba(56, 217, 169, 0.25) !important;
+    box-shadow: 0 4px 16px rgba(15, 118, 110, 0.22) !important;
+    border: 1px solid rgba(20, 184, 166, 0.35) !important;
 }
 
 .sc-chat-msg.user .sc-chat-bubble p,
@@ -397,13 +616,15 @@
     color: #ffffff !important;
 }
 
-/* ─── BOT BUBBLE: Pure White Card, Deep Dark Readable Text ─── */
+/* ─── BOT BUBBLE: Frosted White Glass, Deep Readable Text ──── */
 .sc-chat-msg.bot .sc-chat-bubble {
-    background: #ffffff !important;
+    background: rgba(255, 255, 255, 0.84) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     color: #172b25 !important;
-    border: 1.5px solid rgba(26, 74, 64, 0.12) !important;
-    border-bottom-left-radius: 4px !important;
-    box-shadow: 0 4px 18px rgba(26, 74, 64, 0.07) !important;
+    border: 1px solid rgba(255, 255, 255, 0.92) !important;
+    border-bottom-left-radius: 6px !important;
+    box-shadow: 0 6px 20px rgba(15, 41, 36, 0.065), inset 0 1px 0 #ffffff !important;
 }
 
 /* Enforce child elements inside bot bubble to NEVER be pale gray */
@@ -521,10 +742,12 @@
 .sc-typing-dot:nth-child(1) { animation-delay: -0.32s; }
 .sc-typing-dot:nth-child(2) { animation-delay: -0.16s; }
 
-/* ─── Chat Footer / Input Area ───────────────────────────── */
+/* ─── Chat Footer / Input Area (Frosted Glass) ──────────── */
 .sc-chat-footer {
-    background: #ffffff !important;
-    border-top: 1.5px solid rgba(26, 74, 64, 0.12) !important;
+    background: rgba(255, 255, 255, 0.72) !important;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-top: 1px solid rgba(15, 118, 110, 0.10) !important;
     padding: 14px 18px 16px !important;
 }
 
@@ -532,8 +755,9 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    background: #eef4f1 !important;
-    border: 1.5px solid rgba(26, 74, 64, 0.18) !important;
+    background: rgba(236, 245, 242, 0.72) !important;
+    border: 1px solid rgba(255, 255, 255, 0.9) !important;
+    box-shadow: inset 0 1px 2px rgba(15, 41, 36, 0.05), 0 2px 8px rgba(15, 41, 36, 0.03);
     border-radius: 30px !important;
     padding: 5px 6px 5px 18px !important;
     transition: all 0.25s ease;
@@ -567,7 +791,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #1a4a40 0%, #266b5c 100%) !important;
+    background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%) !important;
     color: #ffffff !important;
     border: none;
     display: flex;
@@ -577,13 +801,13 @@
     font-size: 1rem;
     transition: all 0.2s ease;
     flex-shrink: 0;
-    box-shadow: 0 3px 10px rgba(26, 74, 64, 0.25);
+    box-shadow: 0 3px 10px rgba(15, 118, 110, 0.24);
 }
 
 .sc-chat-btn-send:hover:not(:disabled) {
-    background: linear-gradient(135deg, #143d34 0%, #1f5e51 100%) !important;
+    background: linear-gradient(135deg, #0d5f59 0%, #0f766e 100%) !important;
     transform: scale(1.06);
-    box-shadow: 0 4px 14px rgba(26, 74, 64, 0.35);
+    box-shadow: 0 4px 14px rgba(15, 118, 110, 0.32);
 }
 
 .sc-chat-btn-send:disabled {
@@ -635,10 +859,10 @@
     .sc-chatbot-fab {
         bottom: 20px;
         right: 18px;
-        padding: 10px 18px 10px 12px;
-    }
-    .sc-chatbot-fab-sub {
-        display: none;
+        width: 52px;
+        height: 52px;
+        padding: 0;
+        font-size: 1.25rem;
     }
     .sc-chat-widget {
         bottom: 12px;
@@ -648,6 +872,7 @@
         height: calc(100vh - 24px);
         max-height: 94vh;
         border-radius: 22px;
+        transform-origin: calc(100% - 20px) calc(100% - 20px);
     }
 }
 
@@ -659,25 +884,25 @@
 
 .sc-admin-stat-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(26, 74, 64, 0.12) !important;
-    border-color: rgba(191, 161, 95, 0.45) !important;
+    box-shadow: 0 12px 24px rgba(15, 118, 110, 0.12) !important;
+    border-color: rgba(15, 118, 110, 0.35) !important;
 }
 
 .sc-admin-prompt-pill {
     transition: all 0.25s ease;
     font-size: 0.82rem !important;
     padding: 0.45rem 0.9rem !important;
-    border-color: rgba(26, 74, 64, 0.22) !important;
-    color: #1a4a40 !important;
-    background: rgba(26, 74, 64, 0.04);
+    border-color: #cce6df !important;
+    color: #0f766e !important;
+    background: #f2faf8;
 }
 
 .sc-admin-prompt-pill:hover {
-    background: #1a4a40 !important;
+    background: #0f766e !important;
     color: #ffffff !important;
-    border-color: #1a4a40 !important;
+    border-color: #0f766e !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(26, 74, 64, 0.18);
+    box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
 }
 
 .sc-pulse-dot {

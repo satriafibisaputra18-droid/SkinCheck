@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>PRD SRS — SkinCheck (Satria Fibi Saputra - 41257159)</title>
+    <!-- KaTeX for math formulas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 25mm 20mm 20mm 25mm;
+            @bottom-right {
+                content: counter(page);
+                font-family: 'Segoe UI', Arial, sans-serif;
+                font-size: 9pt;
+                color: #64748b;
+            }
+            @top-right {
+                content: "SkinCheck — PRD / SRS IEEE 830";
+                font-family: 'Segoe UI', Arial, sans-serif;
+                font-size: 8.5pt;
+                color: #94a3b8;
+            }
+        }
+
+        @page:first {
+            margin-top: 15mm;
+            @top-right { content: ""; }
+            @bottom-right { content: ""; }
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 10pt;
+            line-height: 1.6;
+            color: #1e293b;
+            background: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Document Header / Cover Elements */
+        .cover-header {
+            text-align: center;
+            border-bottom: 3px double #0f172a;
+            padding-bottom: 14pt;
+            margin-bottom: 24pt;
+        }
+
+        .cover-inst {
+            font-size: 11pt;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #334155;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .cover-dept {
+            font-size: 13pt;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #0f172a;
+            text-transform: uppercase;
+            margin: 4pt 0 0 0;
+        }
+
+        h1 {
+            font-size: 16pt;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 12pt;
+            margin-bottom: 8pt;
+            line-height: 1.3;
+        }
+
+        /* Clean chapter headings */
+        h2 {
+            font-size: 13pt;
+            font-weight: 700;
+            color: #047857;
+            margin-top: 18pt;
+            margin-bottom: 8pt;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding-bottom: 4px;
+            page-break-after: avoid;
+        }
+
+        /* Explicit page breaks for chapters */
+        .chapter-break {
+            page-break-before: always;
+            padding-top: 10pt;
+        }
+
+        h3 {
+            font-size: 11pt;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 12pt;
+            margin-bottom: 4pt;
+            page-break-after: avoid;
+        }
+
+        h4 {
+            font-size: 10pt;
+            font-weight: 600;
+            color: #334155;
+            margin-top: 8pt;
+            margin-bottom: 2pt;
+            page-break-after: avoid;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 6pt;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        ul, ol {
+            margin-top: 0;
+            margin-bottom: 8pt;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 3pt;
+        }
+
+        /* Tables Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8pt;
+            margin-bottom: 12pt;
+            font-size: 9pt;
+            page-break-inside: avoid;
+        }
+
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 6px 9px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            font-weight: 700;
+            border-bottom: 2px solid #94a3b8;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f8fafc;
+        }
+
+        /* Preformatted Code & Diagrams */
+        pre {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 3.5px solid #059669;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 8pt;
+            line-height: 1.4;
+            overflow-x: auto;
+            margin-top: 6pt;
+            margin-bottom: 10pt;
+            page-break-inside: avoid;
+            color: #0f172a;
+        }
+
+        code {
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 8.5pt;
+            background-color: #f1f5f9;
+            color: #047857;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        blockquote {
+            border-left: 3.5px solid #0284c7;
+            background-color: #f0f9ff;
+            margin: 8pt 0;
+            padding: 6pt 12pt;
+            color: #0369a1;
+            font-size: 9pt;
+            border-radius: 0 4px 4px 0;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #e2e8f0;
+            margin: 12pt 0;
+        }
+
+        strong {
+            color: #0f172a;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cover-header">
+        <p class="cover-inst">STMIK IKMI CIREBON — PROGRAM STUDI S1 TEKNIK INFORMATIKA</p>
+        <p class="cover-dept">TUGAS PROYEK AKHIR MANDIRI REKAYASA PERANGKAT LUNAK (OBE)</p>
+    </div>
+<h1>DOKUMEN SPESIFIKASI KEBUTUHAN PERANGKAT LUNAK (SRS / PRD)</h1>
+<h2>Berdasarkan Standar IEEE 830 / ISO/IEC/IEEE 29148</h2>
+<hr/>
+<h1>🌿 SKINCHECK: AI-Powered Skin Barrier &amp; Sunscreen Analysis Platform</h1>
+<p><strong>Sistem Informasi Berbasis Web untuk Evaluasi Kesehatan Sawar Kulit &amp; Proteksi Tabir Surya Berbasis Artificial Intelligence</strong></p>
+<ul>
+<li><strong>Mata Kuliah</strong>: Rekayasa Perangkat Lunak (TIKB2503021) — 4 SKS</li>
+<li><strong>Penyusun / Mahasiswa</strong>: Satria Fibi Saputra (NIM: 41257159)</li>
+<li><strong>Program Studi</strong>: S1 Teknik Informatika — STMIK IKMI Cirebon</li>
+<li><strong>Dosen Pengampu</strong>: Yudhistira Arie Wijaya, M.Kom., CDS.</li>
+<li><strong>Tema Topik Kelompok</strong>: <em>Smart Healthcare &amp; Public Service AI</em></li>
+<li><strong>Sifat Proyek</strong>: Mandiri / Perorangan (<em>100% Individual Ownership &amp; Full-App Build</em>)</li>
+<li><strong>Versi Dokumen</strong>: 1.0.0</li>
+<li><strong>Tanggal Rilis</strong>: 15 November 2026</li>
+</ul>
+<hr/>
+<h2 class="chapter-break">DAFTAR ISI</h2>
+<ol>
+<li><a href="#bab-i-pendahuluan">BAB I: PENDAHULUAN</a>
+<ul>
+<li>1.1 Tujuan Dokumen</li>
+<li>1.2 Ruang Lingkup Produk</li>
+<li>1.3 Definisi, Akronim, dan Singkatan</li>
+<li>1.4 Referensi Standar</li>
+<li>1.5 Gambaran Umum Dokumen</li>
+</ul>
+</li>
+<li><a href="#bab-ii-deskripsi-umum-sistem">BAB II: DESKRIPSI UMUM SISTEM</a>
+<ul>
+<li>2.1 Latar Belakang Masalah</li>
+<li>2.2 Perspektif Produk &amp; Arsitektur Tingkat Tinggi</li>
+<li>2.3 Karakteristik &amp; Persona Pengguna</li>
+<li>2.4 Batasan Sistem, Asumsi, dan Ketergantungan</li>
+</ul>
+</li>
+<li><a href="#bab-iii-spesifikasi-kebutuhan-fungsional">BAB III: SPESIFIKASI KEBUTUHAN FUNGSIONAL (USER STORIES &amp; ACCEPTANCE CRITERIA)</a>
+<ul>
+<li>3.1 Modul 1: Autentikasi Multi-Kanal &amp; Keamanan OTP</li>
+<li>3.2 Modul 2: Smart Camera HUD Viewfinder &amp; Validasi Citra Wajah</li>
+<li>3.3 Modul 3: Evaluasi Klinis 4 Pilar Sawar Kulit (Skin Barrier)</li>
+<li>3.4 Modul 4: Pemeriksaan Kerataan Sunscreen (Sunscreen Check &amp; Heatmap)</li>
+<li>3.5 Modul 5: AI Skincare Assistant Interaktif (Google Gemini Context-Aware)</li>
+<li>3.6 Modul 6: Riwayat Pemeriksaan &amp; Pelacakan Progres Kesehatan Kulit</li>
+<li>3.7 Modul 7: Kurasi Rekomendasi Produk Skincare Berbasis Masalah</li>
+<li>3.8 Modul 8: Executive Admin Dashboard &amp; Audit Log Pengguna</li>
+<li>3.9 Modul 9: Live Gemini AI Token &amp; Engine Monitor Console</li>
+<li>3.10 Modul 10: Centralized Dynamic Settings &amp; API Gateway Console</li>
+</ul>
+</li>
+<li><a href="#bab-iv-spesifikasi-kebutuhan-non-fungsional-nfr">BAB IV: SPESIFIKASI KEBUTUHAN NON-FUNGSIONAL (NFR)</a>
+<ul>
+<li>4.1 Kinerja dan Efisiensi Waktu (Performance)</li>
+<li>4.2 Keamanan dan Privasi Data (Security)</li>
+<li>4.3 Reliabilitas dan Ketersediaan (Reliability &amp; Availability)</li>
+<li>4.4 Usabilitas dan Aksesibilitas (Usability &amp; Portability)</li>
+<li>4.5 Maintainability dan Kepatuhan Prinsip SOLID</li>
+</ul>
+</li>
+<li><a href="#bab-v-spesifikasi-rekayasa-fitur-artificial-intelligence">BAB V: SPESIFIKASI REKAYASA FITUR ARTIFICIAL INTELLIGENCE</a>
+<ul>
+<li>5.1 Pipeline Computer Vision (MobileNetV3 Multi-Task ONNX)</li>
+<li>5.2 Integrasi Generative AI (Google Gemini Flash &amp; Node.js Engine)</li>
+<li>5.3 Manajemen Token &amp; Audit Konsumsi AI Real-Time</li>
+</ul>
+</li>
+<li><a href="#bab-vi-matriks-keterlacakan-kebutuhan">BAB VI: MATRIKS KETERLACAKAN KEBUTUHAN (TRACEABILITY MATRIX)</a></li>
+</ol>
+<hr/>
+<h2 class="chapter-break">BAB I: PENDAHULUAN</h2>
+<h3>1.1 Tujuan Dokumen</h3>
+<p>Dokumen <em>Product Requirement Document</em> (PRD) yang merangkap sebagai <em>Software Requirements Specification</em> (SRS) ini disusun berdasarkan format standar <strong>IEEE 830</strong> dan <strong>ISO/IEC/IEEE 29148</strong>. Dokumen ini bertujuan untuk:</p>
+<ol>
+<li>Mendefinisikan secara menyeluruh kebutuhan fungsional dan non-fungsional dari platform <strong>SkinCheck</strong>.</li>
+<li>Menguraikan arsitektur dan spesifikasi teknis penanaman fitur <em>Artificial Intelligence</em> (AI) berbasis <em>Computer Vision</em> dan <em>Generative AI</em>.</li>
+<li>Menjadi acuan verifikasi, perancangan diagram UML (SDD), konstruksi kode, pengujian otomatis (<em>Unit Testing</em>), konfigurasi CI/CD, serta live demonstrasi pada Proyek Akhir Mandiri Mata Kuliah Rekayasa Perangkat Lunak.</li>
+</ol>
+<h3>1.2 Ruang Lingkup Produk</h3>
+<p><strong>SkinCheck</strong> adalah platform aplikasi web pintar (<em>AI-Powered HealthTech/BeautyTech</em>) mandiri yang dirancang untuk menganalisis integritas sawar kulit (<em>skin barrier</em>) wajah dan mengevaluasi kerataan aplikasi tabir surya (<em>sunscreen</em>) secara langsung melalui browser (tanpa perlu mengunduh aplikasi native dari app store).</p>
+<p>Sistem ini mengintegrasikan:</p>
+<ul>
+<li><strong>Computer Vision (MobileNetV3 ONNX &amp; Algoritma Visi Komputer RGB)</strong> untuk mendeteksi 4 pilar sawar kulit (Jerawat/Pori, Eritema/Kemerahan, Kehalusan Tekstur, dan Hiperpigmentasi) serta pemetaan <em>Heatmap</em> proteksi tabir surya.</li>
+<li><strong>Large Language Model (Google Gemini Flash API)</strong> sebagai asisten konsultasi interaktif yang sadar-konteks (<em>context-aware</em>) terhadap hasil scan riwayat pengguna, serta konsol analitik cerdas untuk level eksekutif/administrator.</li>
+<li><strong>Microservices Chatbot Engine (Node.js/Express)</strong> yang menjembatani komunikasi data real-time dengan server inti PHP MVC.</li>
+</ul>
+<h3>1.3 Definisi, Akronim, dan Singkatan</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Istilah / Akronim</th>
+<th style="text-align:left">Definisi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>SRS / PRD</strong></td>
+<td style="text-align:left"><em>Software Requirements Specification</em> / <em>Product Requirement Document</em></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Skin Barrier</strong></td>
+<td style="text-align:left">Lapisan pelindung terluar kulit (stratum korneum) yang menjaga hidrasi dan menangkal patogen eksternal.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Eritema (Redness)</strong></td>
+<td style="text-align:left">Kemerahan pada kulit akibat pelebaran pembuluh darah kapiler yang menandakan iritasi atau peradangan.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Computer Vision</strong></td>
+<td style="text-align:left">Bidang AI yang memungkinkan komputer mengekstrak dan memahami informasi visual dari citra digital.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>ONNX</strong></td>
+<td style="text-align:left"><em>Open Neural Network Exchange</em>, format representasi model machine learning terbuka untuk inferensi performa tinggi.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LLM</strong></td>
+<td style="text-align:left"><em>Large Language Model</em> (dalam sistem ini menggunakan Google Gemini Flash).</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>OTP</strong></td>
+<td style="text-align:left"><em>One-Time Password</em>, kode verifikasi keamanan sekali pakai 6-digit.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HUD</strong></td>
+<td style="text-align:left"><em>Heads-Up Display</em>, overlay visual panduan pemosisian wajah pada viewfinder kamera peramban.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MVC</strong></td>
+<td style="text-align:left"><em>Model-View-Controller</em>, pola arsitektur perangkat lunak yang memisahkan logika data, presentasi, dan alur aplikasi.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SOLID</strong></td>
+<td style="text-align:left">Lima prinsip desain berorientasi objek: <em>Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion</em>.</td>
+</tr>
+</tbody>
+</table>
+<h3>1.4 Referensi Standar</h3>
+<ol>
+<li><strong>IEEE Std 830-1998</strong>: <em>IEEE Recommended Practice for Software Requirements Specifications</em>.</li>
+<li><strong>ISO/IEC/IEEE 29148:2018</strong>: <em>Systems and software engineering — Life cycle processes — Requirements engineering</em>.</li>
+<li><strong>Clean Code &amp; SOLID Principles</strong>: Robert C. Martin (2008), <em>Clean Code: A Handbook of Agile Software Craftsmanship</em>.</li>
+<li><strong>Google AI Gemini Developer Documentation</strong>: <em>Gemini Flash Inference &amp; Context Protocol</em>.</li>
+</ol>
+<h3>1.5 Gambaran Umum Dokumen</h3>
+<p>Dokumen ini terbagi ke dalam 6 bab utama. Bab II mendeskripsikan konteks permasalahan dan persona pengguna. Bab III merinci seluruh kebutuhan fungsional dalam format <em>User Stories</em> dan <em>Acceptance Criteria</em>. Bab IV menjelaskan kebutuhan kualitas non-fungsional. Bab V membedah spesifikasi arsitektur AI secara matematis dan prosedural, dan Bab VI merangkum matriks keterlacakan (<em>traceability matrix</em>).</p>
+<hr/>
+<h2 class="chapter-break">BAB II: DESKRIPSI UMUM SISTEM</h2>
+<h3>2.1 Latar Belakang Masalah</h3>
+<p>Kesehatan kulit wajah, khususnya sawar kulit (<em>skin barrier</em>), memegang peranan krusial dalam melindungi tubuh dari polusi lingkungan, infeksi bakteri, dan radiasi sinar ultraviolet (UV). Berdasarkan data dermatologi, kerusakan sawar kulit sering kali dipicu oleh penggunaan produk perawatan kulit yang tidak sesuai, over-eksfoliasi, serta kurangnya perlindungan tabir surya.</p>
+<p>Namun, terdapat 3 kesenjangan utama di masyarakat:</p>
+<ol>
+<li><strong>Tingginya Biaya &amp; Keterbatasan Akses Konsultasi Klinis</strong>: Akses ke dokter spesialis kulit atau klinik estetika berbiaya tinggi dan tidak terjangkau bagi sebagian besar masyarakat umum, pelajar, maupun mahasiswa.</li>
+<li><strong>Subjektivitas &amp; Sulitnya Deteksi Dini Kerusakan Kulit</strong>: Kebanyakan individu tidak mampu menilai secara objektif apakah kulit mereka mengalami iritasi mikroskopis, kerusakan tekstur, atau ketidakmerataan tabir surya sebelum masalah berkembang menjadi lesi jerawat parah atau flek hitam menetap.</li>
+<li><strong>Kesalahan Penggunaan Sunscreen (Under-application)</strong>: Lebih dari 70% pengguna sunscreen tidak mengaplikasikan tabir surya secara merata, meninggalkan area rawan seperti sudut hidung, kelopak mata, dan batas rahang tanpa perlindungan UV memadai.</li>
+</ol>
+<p><strong>SkinCheck</strong> hadir sebagai solusi teknologi <em>Smart Healthcare AI</em> berbasis web yang menghadirkan evaluasi klinis sawar kulit mandiri yang cepat, presisi, gratis, dan dapat diakses dari perangkat apa pun secara langsung melalui peramban web.</p>
+<h3>2.2 Perspektif Produk &amp; Arsitektur Tingkat Tinggi</h3>
+<p>SkinCheck dirancang sebagai sistem terdistribusi modular yang mengedepankan prinsip <em>Separation of Concerns</em> (SoC):</p>
+<pre><code>┌────────────────────────────────────────────────────────┐
+│                   Pengguna / Browser                   │
+│   (Webcam HUD, Dashboard, Konsul Chatbot, Scan History) │
+└───────────────────────────┬────────────────────────────┘
+                            │ HTTP / JSON AJAX
+┌───────────────────────────▼────────────────────────────┐
+│                    Web Server Apache                   │
+│             SkinCheck Core (PHP 8.1+ MVC)              │
+│   [Controllers: Auth, Scan, Sunscreen, Chatbot, Admin] │
+│   [Services: ImageValidator, Storage, Email, Telegram] │
+└─────────────┬───────────────────────────┬──────────────┘
+              │                           │
+              ▼                           ▼
+┌───────────────────────────┐   ┌───────────────────────────┐
+│       MySQL Database      │   │   Node.js Chatbot Engine  │
+│  (Users, Scans, Products, │   │    (Express Microservice) │
+│    Settings, AI Tokens)   │   └─────────────┬─────────────┘
+└───────────────────────────┘                 │
+              ▲                               ▼
+              │                  ┌──────────────────────────┐
+┌─────────────┴─────────────┐    │   Google Gemini API Hub  │
+│  Computer Vision / ONNX   │    │  (Flash Models Inference)│
+│ (MobileNetV3 Multi-Task)  │    └──────────────────────────┘
+└───────────────────────────┘
+</code></pre>
+<h3>2.3 Karakteristik &amp; Persona Pengguna</h3>
+<p>Sistem mengakomodasi 2 aktor utama:</p>
+<ol>
+<li>
+<p><strong>Pelanggan / Pengguna Umum (Customer)</strong></p>
+<ul>
+<li>Mahasiswa, profesional, atau masyarakat umum yang peduli terhadap kesehatan kulit.</li>
+<li>Menggunakan ponsel cerdas atau laptop dengan kamera terintegrasi.</li>
+<li>Memerlukan kemudahan pemindaian tanpa instalasi aplikasi rumit, visualisasi hasil yang mudah dipahami (skor 0-100), rekomendasi produk yang cocok, dan asisten konsultasi yang ramah.</li>
+</ul>
+</li>
+<li>
+<p><strong>Administrator Eksekutif (Admin)</strong></p>
+<ul>
+<li>Pengelola platform dan sistem analis kesehatan.</li>
+<li>Membutuhkan visibilitas terhadap metrik sistem: volume scan, registrasi pengguna, inventaris katalog kosmetik, pemantauan konsumsi token API Gemini secara real-time, serta asisten analitik data tingkat eksekutif.</li>
+</ul>
+</li>
+</ol>
+<h3>2.4 Batasan Sistem, Asumsi, dan Ketergantungan</h3>
+<ul>
+<li><strong>Batasan</strong>: SkinCheck merupakan instrumen skrining dan evaluasi mandiri (<em>screening tool</em>), <strong>bukan pengganti diagnosis medis resmi dokter spesialis kulit</strong>. Terdapat klausul sangkalan (<em>medical disclaimer</em>) wajib di setiap hasil analisis.</li>
+<li><strong>Asumsi</strong>: Pengguna memiliki koneksi internet aktif dan peramban modern (Chrome/Firefox/Edge/Safari) yang mendukung WebRTC (<em>getUserMedia API</em>) serta HTML5 Canvas.</li>
+<li><strong>Ketergantungan</strong>: Layanan bergantung pada ketersediaan API Google Gemini untuk fungsionalitas asisten cerdas, serta dependensi Python/ONNX Runtime untuk pipeline inferensi <em>Computer Vision</em>.</li>
+</ul>
+<hr/>
+<h2 class="chapter-break">BAB III: SPESIFIKASI KEBUTUHAN FUNGSIONAL</h2>
+<h3>3.1 Modul 1: Autentikasi Multi-Kanal &amp; Keamanan OTP</h3>
+<ul>
+<li><strong>Deskripsi</strong>: Sistem mengelola registrasi, login, dan pemulihan akun dengan perlindungan verifikasi dua langkah (2FA/OTP) menggunakan saluran Telegram dan Email.</li>
+</ul>
+<h4>User Story 1.1: Registrasi Akun dengan Verifikasi OTP</h4>
+<ul>
+<li>
+<p><strong>Sebagai</strong>: Calon pengguna SkinCheck,</p>
+</li>
+<li>
+<p><strong>Saya ingin</strong>: Mendaftar akun dengan nama, email, dan password yang diverifikasi menggunakan kode OTP 6-digit,</p>
+</li>
+<li>
+<p><strong>Agar</strong>: Akun saya aman, terhindar dari bot, dan riwayat analisis kulit saya tersimpan secara privat.</p>
+</li>
+<li>
+<p><strong>Acceptance Criteria (AC-1.1)</strong>:</p>
+<ul>
+<li><em>Given</em> pengguna berada di halaman registrasi,</li>
+<li><em>When</em> pengguna mengisi data valid dan menekan tombol "Daftar",</li>
+<li><em>Then</em> sistem meng-hash password menggunakan <code>PASSWORD_BCRYPT</code>, membuat token OTP 6 digit acak dengan masa kedaluwarsa 10 menit, menyimpannya di basis data, dan mengirimkannya via Bot Telegram / Email Resend API,</li>
+<li><em>And</em> pengguna dialihkan ke halaman verifikasi OTP yang dilengkapi penghitung mundur (<em>cooldown timer</em>) 60 detik sebelum tombol kirim ulang aktif.</li>
+</ul>
+</li>
+</ul>
+<h4>User Story 1.2: Pemulihan Password via Instant Verification Link</h4>
+<ul>
+<li><strong>Sebagai</strong>: Pengguna yang lupa kata sandi,</li>
+<li><strong>Saya ingin</strong>: Menerima tautan reset sandi instan atau kode OTP pemulihan via email,</li>
+<li><strong>Agar</strong>: Saya dapat mengatur ulang kata sandi dan mengakses kembali akun saya dengan aman.</li>
+</ul>
+<hr/>
+<h3>3.2 Modul 2: Smart Camera HUD Viewfinder &amp; Validasi Citra Wajah</h3>
+<ul>
+<li><strong>Deskripsi</strong>: Antarmuka kamera berbasis web yang memandu pengguna memosisikan wajah secara presisi dan memvalidasi kelayakan citra sebelum diproses oleh modul AI.</li>
+</ul>
+<h4>User Story 2.1: Panduan Pemosisian Wajah (HUD Face Oval Guide)</h4>
+<ul>
+<li><strong>Sebagai</strong>: Pengguna yang akan melakukan pemindaian wajah,</li>
+<li><strong>Saya ingin</strong>: Melihat garis panduan berbentuk oval (<em>Face Oval HUD</em>) dan efek visual <em>laser scanner</em> di layar webcam,</li>
+<li><strong>Agar</strong>: Posisi wajah saya simetris, pas di tengah bingkai, dan memenuhi jarak ideal untuk analisis mikroskopis.</li>
+</ul>
+<h4>User Story 2.2: Validasi Kelayakan Citra Otomatis</h4>
+<ul>
+<li>
+<p><strong>Sebagai</strong>: Mesin inferensi SkinCheck,</p>
+</li>
+<li>
+<p><strong>Saya ingin</strong>: Melakukan pra-validasi terhadap citra yang ditangkap (kecerahan, resolusi minimal 640x480, dan deteksi wajah),</p>
+</li>
+<li>
+<p><strong>Agar</strong>: Model AI tidak memproses gambar yang terlalu gelap, buram (<em>blur</em>), atau citra non-wajah yang dapat merusak akurasi skor.</p>
+</li>
+<li>
+<p><strong>Acceptance Criteria (AC-2.2)</strong>:</p>
+<ul>
+<li><em>Given</em> kamera menangkap frame gambar,</li>
+<li><em>When</em> rata-rata nilai intensitas piksel (<em>luminance</em>) di bawah ambang batas (terlalu gelap) atau melebihi ambang batas (over-exposure),</li>
+<li><em>Then</em> sistem menampilkan pesan peringatan interaktif pada HUD (<em>"Pencahayaan Kurang! Arahkan wajah ke sumber cahaya"</em>) dan menonaktifkan tombol pemindaian hingga kondisi optimal tercapai.</li>
+</ul>
+</li>
+</ul>
+<hr/>
+<h3>3.3 Modul 3: Evaluasi Klinis 4 Pilar Sawar Kulit (Skin Barrier)</h3>
+<ul>
+<li><strong>Deskripsi</strong>: Ekstraksi dan evaluasi kuantitatif terhadap 4 indikator utama integritas sawar kulit wajah menggunakan model MobileNetV3 ONNX dan algoritma visi komputer.</li>
+</ul>
+<h4>User Story 3.1: Evaluasi Komprehensif Sawar Kulit</h4>
+<ul>
+<li>
+<p><strong>Sebagai</strong>: Pengguna SkinCheck,</p>
+</li>
+<li>
+<p><strong>Saya ingin</strong>: Menerima skor kuantitatif (0–100) untuk 4 indikator: Jerawat/Pori, Kemerahan/Eritema, Kehalusan Tekstur, dan Hiperpigmentasi, serta Skor Kesehatan Kulit Keseluruhan (<em>Overall Score</em>),</p>
+</li>
+<li>
+<p><strong>Agar</strong>: Saya mengetahui kondisi spesifik sawar kulit saya dan tingkat keparahan peradangan secara objektif.</p>
+</li>
+<li>
+<p><strong>Acceptance Criteria (AC-3.1)</strong>:</p>
+<ul>
+<li><em>Given</em> citra wajah yang valid telah diunggah,</li>
+<li><em>When</em> proses inferensi AI dijalankan oleh <code>SkinAnalysisService</code>,</li>
+<li><em>Then</em> sistem mengembalikan data terstruktur berupa:
+<ol>
+<li><code>acne_score</code> (Skor Jerawat &amp; Kepadatan Pori, 0–100)</li>
+<li><code>redness_score</code> (Skor Eritema &amp; Iritasi Vaskular, 0–100)</li>
+<li><code>texture_score</code> (Skor Kehalusan Tekstur Permukaan, 0–100)</li>
+<li><code>hyperpigmentation_score</code> (Skor Noda Hitam &amp; Melanin, 0–100)</li>
+<li><code>overall_score</code> (Skor Agregat Integritas Sawar Kulit, 0–100)</li>
+<li><code>ai_response</code> (Penjelasan naratif ringkas kondisi kulit)</li>
+</ol>
+</li>
+<li><em>And</em> waktu komputasi inferensi tidak melebihi 2.0 detik.</li>
+</ul>
+</li>
+</ul>
+<hr/>
+<h3>3.4 Modul 4: Pemeriksaan Kerataan Sunscreen (Sunscreen Check &amp; Heatmap)</h3>
+<ul>
+<li><strong>Deskripsi</strong>: Analisis distribusi tabir surya pada wajah untuk mendeteksi area yang terlewat (<em>missed spots</em>) serta memvisualisasikan peta sebaran panas (<em>protection heatmap</em>).</li>
+</ul>
+<h4>User Story 4.1: Analisis Cakupan Sunscreen &amp; Visualisasi Heatmap</h4>
+<ul>
+<li>
+<p><strong>Sebagai</strong>: Pengguna yang telah mengaplikasikan sunscreen,</p>
+</li>
+<li>
+<p><strong>Saya ingin</strong>: Mengetahui persentase kerataan tabir surya (<em>Coverage Score 0–100%</em>), status kerataan, area rawan yang belum tercover, dan melihat gambar <em>Heatmap</em>,</p>
+</li>
+<li>
+<p><strong>Agar</strong>: Saya dapat mengaplikasikan ulang sunscreen pada bagian wajah yang belum terproteksi optimal sebelum beraktivitas di bawah sinar matahari.</p>
+</li>
+<li>
+<p><strong>Acceptance Criteria (AC-4.1)</strong>:</p>
+<ul>
+<li><em>Given</em> foto wajah pengguna setelah memakai tabir surya,</li>
+<li><em>When</em> pengguna menekan "Periksa Kerataan Sunscreen",</li>
+<li><em>Then</em> <code>SunscreenAnalysisService</code> menghasilkan:
+<ul>
+<li><code>coverage_score</code>: Nilai persentase 0-100%.</li>
+<li><code>coverage_status</code>: Klasifikasi (<em>Sangat Merata</em> $\ge 85%$, <em>Cukup Merata</em> $70-84%$, <em>Kurang Merata</em> $&lt; 70%$).</li>
+<li><code>heatmap_path</code>: Citra representasi visual gradien warna (area hijau = proteksi tinggi, kuning = sedang, merah = terlewat).</li>
+<li><code>low_coverage_areas</code>: Daftar teks area yang kurang terlindungi (contoh: "Sudut Hidung Kiri", "Garis Rahang").</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr/>
+<h3>3.5 Modul 5: AI Skincare Assistant Interaktif (Google Gemini Context-Aware)</h3>
+<ul>
+<li><strong>Deskripsi</strong>: Layanan chatbot cerdas berbasis LLM yang tertanam di peramban, memiliki kesadaran konteks terhadap riwayat kesehatan kulit pengguna, dan mampu merekomendasikan bahan aktif yang tepat.</li>
+</ul>
+<h4>User Story 5.1: Konsultasi Interaktif Sadar Konteks Riwayat Scan</h4>
+<ul>
+<li>
+<p><strong>Sebagai</strong>: Pengguna SkinCheck,</p>
+</li>
+<li>
+<p><strong>Saya ingin</strong>: Berkonsultasi via obrolan teks interaktif dengan AI mengenai cara memperbaiki sawar kulit saya,</p>
+</li>
+<li>
+<p><strong>Agar</strong>: Saya mendapatkan rekomendasi bahan aktif skincare (misal: Ceramide, Hyaluronic Acid, Centella Asiatica) yang disesuaikan secara presisi dengan skor scan terakhir saya.</p>
+</li>
+<li>
+<p><strong>Acceptance Criteria (AC-5.1)</strong>:</p>
+<ul>
+<li><em>Given</em> pengguna membuka widget AI Assistant,</li>
+<li><em>When</em> pengguna mengirimkan pertanyaan tentang keluhan kulitnya,</li>
+<li><em>Then</em> <code>ChatbotController</code> menginjeksi metadata scan terbaru pengguna (<em>acne score</em>, <em>redness</em>, <em>overall health</em>) ke dalam <em>system prompt</em> Google Gemini Flash,</li>
+<li><em>And</em> AI memberikan respon edukatif, empatik, berbasis bukti dermatologi, tanpa memberikan resep obat keras (disertai disclaimer bahwa jawaban bersifat edukatif).</li>
+</ul>
+</li>
+</ul>
+<hr/>
+<h3>3.6 Modul 6: Riwayat Pemeriksaan &amp; Pelacakan Progres Kesehatan Kulit</h3>
+<ul>
+<li><strong>Deskripsi</strong>: Modul pencatatan historis dan perbandingan metrik kesehatan kulit dari waktu ke waktu.</li>
+</ul>
+<h4>User Story 6.1: Pelacakan Progres dan Keamanan Akses Citra</h4>
+<ul>
+<li>
+<p><strong>Sebagai</strong>: Pengguna terdaftar,</p>
+</li>
+<li>
+<p><strong>Saya ingin</strong>: Melihat linimasa seluruh riwayat pemindaian saya lengkap dengan foto, tanggal, grafik skor, dan detail hasil,</p>
+</li>
+<li>
+<p><strong>Agar</strong>: Saya dapat mengevaluasi apakah kondisi sawar kulit saya membaik setelah menggunakan produk perawatan tertentu.</p>
+</li>
+<li>
+<p><strong>Acceptance Criteria (AC-6.1)</strong>:</p>
+<ul>
+<li>Akses terhadap berkas citra scan dienkapsulasi menggunakan <em>ownership-scoped streaming route</em> (<code>/scan/image?id=X</code>), sehingga pengguna lain tidak dapat mengintip foto pengguna berbeda meskipun menebak URL gambar.</li>
+</ul>
+</li>
+</ul>
+<hr/>
+<h3>3.7 Modul 7: Kurasi Rekomendasi Produk Skincare Berbasis Masalah</h3>
+<ul>
+<li><strong>Deskripsi</strong>: Sistem pencocokan otomatis (<em>rule-based matcher</em>) antara masalah dominan pengguna dengan database katalog produk.</li>
+</ul>
+<h4>User Story 7.1: Rekomendasi Produk yang Cocok Secara Otomatis</h4>
+<ul>
+<li><strong>Sebagai</strong>: Pengguna yang baru saja selesai melakukan pemindaian,</li>
+<li><strong>Saya ingin</strong>: Melihat daftar rekomendasi produk skincare lokal/resmi (nama, kategori, bahan aktif, panduan pakai) yang sesuai dengan indikator skor terlemah saya,</li>
+<li><strong>Agar</strong>: Saya tidak bingung memilih produk yang tepat untuk memulihkan sawar kulit saya.</li>
+</ul>
+<hr/>
+<h3>3.8 Modul 8: Executive Admin Dashboard &amp; Audit Log Pengguna</h3>
+<ul>
+<li><strong>Deskripsi</strong>: Panel administrasi tingkat tinggi untuk memantau KPI sistem secara menyeluruh.</li>
+</ul>
+<h4>User Story 8.1: Pemantauan KPI Platform</h4>
+<ul>
+<li><strong>Sebagai</strong>: Administrator Eksekutif,</li>
+<li><strong>Saya ingin</strong>: Melihat dashboard dengan ringkasan metrik: Total Pengguna, Total Pemindaian Wajah, Katalog Produk Aktif, dan Rata-rata Skor Kesehatan Kulit Global,</li>
+<li><strong>Agar</strong>: Saya memiliki gambaran makro mengenai adopsi platform dan kondisi umum kesehatan kulit para pengguna.</li>
+</ul>
+<hr/>
+<h3>3.9 Modul 9: Live Gemini AI Token &amp; Engine Monitor Console</h3>
+<ul>
+<li><strong>Deskripsi</strong>: Konsol observabilitas real-time untuk memantau konsumsi token, latensi inferensi, dan status operasional kuota API Google Gemini.</li>
+</ul>
+<h4>User Story 9.1: Pemantauan Konsumsi Token Gemini Real-time</h4>
+<ul>
+<li>
+<p><strong>Sebagai</strong>: Administrator Eksekutif,</p>
+</li>
+<li>
+<p><strong>Saya ingin</strong>: Memantau statistik pemakaian token Gemini API (Input Tokens, Output Tokens, Total Tokens Today, dan Volume Request),</p>
+</li>
+<li>
+<p><strong>Agar</strong>: Biaya operasional API terkontrol dan sistem terhindar dari <em>rate limit quota exhaustion</em>.</p>
+</li>
+<li>
+<p><strong>Acceptance Criteria (AC-9.1)</strong>:</p>
+<ul>
+<li>Konsol menampilkan metrik akumulatif harian dan status tier mesin (<em>Free Tier / Active Tier</em>), diperbarui secara langsung melalui pencatatan log pada tabel <code>activity_logs</code> / <code>settings</code>.</li>
+</ul>
+</li>
+</ul>
+<hr/>
+<h3>3.10 Modul 10: Centralized Dynamic Settings &amp; API Gateway Console</h3>
+<ul>
+<li><strong>Deskripsi</strong>: Pusat kendali konfigurasi kunci API eksternal dan parameter sistem secara dinamis dari basis data tanpa perlu mengubah kode sumber (<em>zero-downtime reconfiguration</em>).</li>
+</ul>
+<h4>User Story 10.1: Manajemen Konfigurasi Kunci API &amp; Uji Koneksi Live</h4>
+<ul>
+<li><strong>Sebagai</strong>: Administrator Eksekutif,</li>
+<li><strong>Saya ingin</strong>: Mengubah token bot Telegram, API Key Google Gemini, dan API Key Resend Email secara langsung dari UI, serta melakukan uji koneksi (<em>Live AJAX Test</em>),</li>
+<li><strong>Agar</strong>: Sistem dapat dialihkan ke API Key cadangan dengan cepat tanpa perlu deploy ulang kode aplikasi.</li>
+</ul>
+<hr/>
+<h2 class="chapter-break">BAB IV: SPESIFIKASI KEBUTUHAN NON-FUNGSIONAL (NFR)</h2>
+<h3>4.1 Kinerja dan Efisiensi Waktu (Performance)</h3>
+<ul>
+<li><strong>NFR-01 (Inference Latency)</strong>: Waktu pemrosesan citra oleh pipeline Computer Vision (MobileNetV3 ONNX) harus selesai dalam waktu $\le 1.5$ detik pada server standar lokal (Intel Core i5 / 8 GB RAM).</li>
+<li><strong>NFR-02 (Chatbot Response Latency)</strong>: Waktu respon pertama (<em>Time-to-First-Token</em>) dari integrasi Google Gemini API melalui microservice Node.js tidak boleh melebihi 2.5 detik pada koneksi internet berkecepatan 10 Mbps.</li>
+<li><strong>NFR-03 (Page Load Time)</strong>: Halaman antarmuka utama pengguna (<em>Customer Dashboard</em>) harus memuat secara tuntas dalam waktu $\le 2.0$ detik.</li>
+</ul>
+<h3>4.2 Keamanan dan Privasi Data (Security)</h3>
+<ul>
+<li><strong>NFR-04 (Password Hashing)</strong>: Seluruh kata sandi pengguna wajib di-hash menggunakan algoritma <code>PASSWORD_BCRYPT</code> dengan cost factor standar PHP ($cost \ge 10$).</li>
+<li><strong>NFR-05 (Image Access Isolation)</strong>: Citra wajah pengguna disimpan pada direktori terproteksi di luar jangkauan langsung peramban (<em>web-root isolation</em>) dan hanya dapat diakses melalui mekanisme <em>Session Ownership Verification</em>.</li>
+<li><strong>NFR-06 (API Key Masking &amp; Secret Protection)</strong>: Kunci API eksternal (Gemini, Telegram, Resend) disimpan dalam tabel <code>settings</code> dengan atribut <code>is_secret = 1</code> dan disamarkan (<em>masked</em>, contoh: <code>AIzaSy...XXXX</code>) pada antarmuka admin untuk mencegah <em>credential sniffing</em>.</li>
+<li><strong>NFR-07 (Input Sanitization &amp; CSRF Prevention)</strong>: Setiap input formulir wajib dibersihkan (<em>sanitized</em>) dari entitas berbahaya untuk mencegah serangan <em>Cross-Site Scripting</em> (XSS) dan <em>SQL Injection</em> (menggunakan PDO Prepared Statements).</li>
+</ul>
+<h3>4.3 Reliabilitas dan Ketersediaan (Reliability &amp; Availability)</h3>
+<ul>
+<li><strong>NFR-08 (Graceful AI Degradation / Fallback)</strong>: Apabila layanan eksternal Google Gemini API mengalami <em>downtime</em> atau <em>rate limit (HTTP 429)</em>, sistem tidak boleh crash, melainkan otomatis beralih ke <em>Fallback Engine</em> atau menampilkan pesan ramah (<em>"Asisten AI sedang dalam pemeliharaan berkala, silakan periksa skor hasil scan Anda"</em>).</li>
+<li><strong>NFR-09 (Database Data Integrity)</strong>: Integritas relasional antar-tabel (Users, Scans, Analysis Results) dilindungi menggunakan <em>Foreign Key Constraints</em> dengan mode <code>ON DELETE CASCADE</code> atau <code>ON DELETE SET NULL</code>.</li>
+</ul>
+<h3>4.4 Usabilitas dan Aksesibilitas (Usability &amp; Portability)</h3>
+<ul>
+<li><strong>NFR-10 (Zero-Install Requirement)</strong>: Seluruh fungsionalitas kamera dan pemindaian berjalan 100% di dalam peramban web modern tanpa memerlukan instalasi aplikasi tambahan atau plugin pihak ketiga.</li>
+<li><strong>NFR-11 (Responsive Layout)</strong>: Tampilan antarmuka beradaptasi mulus (<em>mobile-first responsive design</em>) pada layar smartphone (resolusi minimal 360x640) hingga layar monitor desktop (1920x1080).</li>
+</ul>
+<h3>4.5 Maintainability dan Kepatuhan Prinsip SOLID</h3>
+<ul>
+<li><strong>NFR-12 (Decoupled Architecture)</strong>: Modul analisis sawar kulit dan sunscreen wajib mengimplementasikan interface terpisah (<code>SkinAnalysisProviderInterface</code>, <code>SunscreenAnalysisProviderInterface</code>) sehingga provider inferensi baru (misal: migrasi dari ONNX ke Cloud API) dapat ditambahkan tanpa memodifikasi kode kontroler (<em>Open/Closed Principle</em>).</li>
+</ul>
+<hr/>
+<h2 class="chapter-break">BAB V: SPESIFIKASI REKAYASA FITUR ARTIFICIAL INTELLIGENCE</h2>
+<h3>5.1 Pipeline Computer Vision (MobileNetV3 Multi-Task ONNX)</h3>
+<p>Model <em>Computer Vision</em> pada platform SkinCheck dirancang untuk menyelesaikan tugas regresi multi-output secara simultan dari satu citra wajah masukan:</p>
+<pre><code>[Citra Wajah Input: 640x480 RGB]
+           │
+           ▼
+[Preprocessing &amp; Normalisasi]
+- Resize ke Tensor masukan: (1, 3, 224, 224)
+- Normalisasi ImageNet (Mean: [0.485, 0.456, 0.406], Std: [0.229, 0.224, 0.225])
+           │
+           ▼
+[MobileNetV3 Backbone Feature Extractor]
+- Inverted Residual Blocks &amp; Squeeze-and-Excitation (SE) Units
+           │
+           ▼
+[Multi-Task Regression Heads]
+┌──────────────┬──────────────┬──────────────┬──────────────┐
+│  Acne Head   │ Redness Head │ Texture Head │ Hyperpig Head│
+│ (Dense Layer)│ (Dense Layer)│ (Dense Layer)│ (Dense Layer)│
+└──────┬───────┴──────┬───────┴──────┬───────┴──────┬───────┘
+       ▼              ▼              ▼              ▼
+[Acne Score]   [Redness Score][Texture Score][Hyperpig Score]
+ (0 - 100)        (0 - 100)      (0 - 100)      (0 - 100)
+       │              │              │              │
+       └──────────────┴──────┬───────┴──────────────┘
+                             ▼
+               [Overall Skin Barrier Score]
+           Formula: Skor Agregat Tertimbang (0 - 100)
+</code></pre>
+<h4>Pipeline Sunscreen Coverage &amp; Heatmap Generation:</h4>
+<ol>
+<li><strong>Ekstraksi Saluran Warna &amp; Konversi Ruang Warna (RGB $\rightarrow$ LAB / HSV)</strong>: Memisahkan komponen reflektansi UV dan absorpsi tabir surya pada permukaan epidermis.</li>
+<li><strong>Segmentasi Area Wajah</strong>: Menerapkan masker wajah oval (<em>Face Contour Mask</em>) untuk mengeliminasi latar belakang non-kulit.</li>
+<li><strong>Thresholding Kepadatan Tabir Surya</strong>: Menghitung rasio piksel terlindungi terhadap total piksel area wajah:
+$$\text{Coverage Score} = \left( \frac{\sum \text{Piksel Terproteksi}}{\sum \text{Total Piksel Wajah}} \right) \times 100%$$</li>
+<li><strong>Pembangkitan Heatmap Proteksi</strong>: Mentransformasikan matriks densitas ke dalam color map gradien (<em>Jet/Turbo Color Gradient</em>) yang disimpan sebagai citra visual PNG transparan untuk ditampilkan kembali kepada pengguna.</li>
+</ol>
+<h3>5.2 Integrasi Generative AI (Google Gemini Flash &amp; Node.js Engine)</h3>
+<p>Layanan konsultasi cerdas memanfaatkan model <strong>Google Gemini Flash</strong> yang dioptimalkan untuk latensi rendah (<em>low-latency streaming inference</em>).</p>
+<h4>Struktur System Prompt &amp; Injeksi Konteks Klinis:</h4>
+<pre><code class="language-text">System Role: Anda adalah Konsultan Sawar Kulit &amp; Skincare Cerdas (SkinCheck AI Assistant).
+Context Payload:
+- Nama Pengguna: {{user_name}}
+- Skor Kesehatan Sawar Kulit: {{overall_score}}/100
+- Skor Jerawat/Pori: {{acne_score}}/100
+- Skor Eritema/Kemerahan: {{redness_score}}/100
+- Skor Tekstur: {{texture_score}}/100
+- Skor Hiperpigmentasi: {{hyperpigmentation_score}}/100
+- Riwayat Cakupan Sunscreen: {{sunscreen_coverage}}%
+
+Instruksi Khusus:
+1. Berikan tanggapan yang empatik, ilmiah, ringkas, dan mudah dipahami oleh awam.
+2. Fokuskan rekomendasi bahan aktif (misal: Niacinamide, Ceramide, Cica, Zinc PCA) yang relevan dengan skor terlemah pengguna.
+3. Selalu cantumkan disclaimer bahwa saran ini bersifat edukatif dan bukan pengganti resep dokter spesialis.
+</code></pre>
+<h3>5.3 Manajemen Token &amp; Audit Konsumsi AI Real-Time</h3>
+<p>Untuk menjaga transparansi biaya dan performa:</p>
+<ul>
+<li>Setiap pemanggilan Gemini API mengekstrak metadata respon: <code>promptTokenCount</code>, <code>candidatesTokenCount</code>, dan <code>totalTokenCount</code>.</li>
+<li>Nilai token diagregasi ke dalam tabel statistik sistem secara asinkron.</li>
+<li>Administrator dapat memantau grafik konsumsi harian serta mengatur limit penghentian darurat jika kuota token mendekati ambang batas maksimal.</li>
+</ul>
+<hr/>
+<h2 class="chapter-break">BAB VI: MATRIKS KETERLACAKAN KEBUTUHAN (TRACEABILITY MATRIX)</h2>
+<p>Tabel berikut memetakan keterkaitan langsung antara Kebutuhan Bisnis/Pengguna dengan Modul Kode dan Metode Pengujian:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">ID Kebutuhan</th>
+<th style="text-align:left">Deskripsi Singkat</th>
+<th style="text-align:left">File Modul / Controller</th>
+<th style="text-align:left">Komponen AI Terlibat</th>
+<th style="text-align:left">Metode Pengujian (Unit / CI-CD)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>FR-01</strong></td>
+<td style="text-align:left">Autentikasi &amp; Verifikasi OTP</td>
+<td style="text-align:left"><code>app/controllers/AuthController.php</code></td>
+<td style="text-align:left">Telegram Bot API / Resend</td>
+<td style="text-align:left"><code>tests/AuthTest.php</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FR-02</strong></td>
+<td style="text-align:left">Smart Camera HUD &amp; Validasi</td>
+<td style="text-align:left"><code>public/js/main.js</code>, <code>ImageValidator.php</code></td>
+<td style="text-align:left">Client Canvas Heuristics</td>
+<td style="text-align:left">E2E Browser Testing</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FR-03</strong></td>
+<td style="text-align:left">Evaluasi 4 Pilar Sawar Kulit</td>
+<td style="text-align:left"><code>ScanController.php</code>, <code>SkinAnalysisService.php</code></td>
+<td style="text-align:left">MobileNetV3 ONNX (<code>predict.py</code>)</td>
+<td style="text-align:left"><code>tests/SkinAnalysisTest.php</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FR-04</strong></td>
+<td style="text-align:left">Analisis Kerataan Sunscreen</td>
+<td style="text-align:left"><code>SunscreenController.php</code>, <code>RGBSunscreenProvider.php</code></td>
+<td style="text-align:left">CV Heatmap Pipeline</td>
+<td style="text-align:left"><code>tests/SunscreenAnalysisTest.php</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FR-05</strong></td>
+<td style="text-align:left">Asisten Chatbot Skincare</td>
+<td style="text-align:left"><code>ChatbotController.php</code>, <code>server.js</code></td>
+<td style="text-align:left">Google Gemini Flash LLM</td>
+<td style="text-align:left"><code>tests/ChatbotApiTest.php</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FR-06</strong></td>
+<td style="text-align:left">Riwayat &amp; Scoped Image Access</td>
+<td style="text-align:left"><code>CustomerController.php</code>, <code>ImageStorage.php</code></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">Security Boundary Test</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FR-07</strong></td>
+<td style="text-align:left">Rekomendasi Produk Skincare</td>
+<td style="text-align:left"><code>CustomerController.php</code>, <code>Product.php</code></td>
+<td style="text-align:left">Rule-based Engine</td>
+<td style="text-align:left"><code>tests/ProductCatalogTest.php</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FR-08</strong></td>
+<td style="text-align:left">Executive Admin Dashboard</td>
+<td style="text-align:left"><code>AdminController.php</code></td>
+<td style="text-align:left">Analytics Aggregator</td>
+<td style="text-align:left">Dashboard Integration Test</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FR-09</strong></td>
+<td style="text-align:left">Live AI Token &amp; Engine Monitor</td>
+<td style="text-align:left"><code>AdminController.php</code>, <code>Setting.php</code></td>
+<td style="text-align:left">Gemini Usage Metadata</td>
+<td style="text-align:left">Token Metrics Verification</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FR-10</strong></td>
+<td style="text-align:left">Centralized Dynamic Settings</td>
+<td style="text-align:left"><code>AdminController.php</code>, <code>Setting.php</code></td>
+<td style="text-align:left">Dynamic Key Ingestion</td>
+<td style="text-align:left">Settings Live AJAX Test</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 class="chapter-break">PENGESAHAN DOKUMEN</h2>
+<p>Dokumen Kebutuhan Perangkat Lunak (PRD/SRS) ini telah disusun secara komprehensif untuk memenuhi kualifikasi <strong>Skor 4 (Sangat Baik)</strong> pada Rubrik Penilaian OBE Proyek Akhir Mandiri Mata Kuliah Rekayasa Perangkat Lunak.</p>
+<p><em>Cirebon, 15 November 2026</em><br/>
+<strong>Penyusun / Full-Stack Software Engineer:</strong><br/>
+<strong>Satria Fibi Saputra</strong> (NIM: 41257159)<br/>
+S1 Teknik Informatika — STMIK IKMI Cirebon</p>
+
+</body>
+</html>

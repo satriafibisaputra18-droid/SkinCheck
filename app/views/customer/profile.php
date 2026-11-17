@@ -5,7 +5,7 @@
     <a href="<?php echo URLROOT; ?>/customer/dashboard" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
         <i class="fa-solid fa-arrow-left me-1"></i>Dashboard
     </a>
-    <span class="small" style="color: #c9ded5;">/ Profil Pengguna</span>
+    <span class="small text-muted">/ Profil Pengguna</span>
 </div>
 
 <div class="row g-4">
@@ -31,8 +31,8 @@
                         </button>
                     </div>
                     <div class="pb-1">
-                        <h3 class="mb-0 fw-bold text-white"><?php echo htmlspecialchars($data['user']->name ?? $_SESSION['user_name']); ?></h3>
-                        <p class="mb-0 small" style="color: #94a3b8;"><?php echo htmlspecialchars($data['user']->email ?? $_SESSION['user_email']); ?></p>
+                        <h3 class="mb-0 fw-bold text-dark"><?php echo htmlspecialchars($data['user']->name ?? $_SESSION['user_name']); ?></h3>
+                        <p class="mb-0 small text-muted"><?php echo htmlspecialchars($data['user']->email ?? $_SESSION['user_email']); ?></p>
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
     <div class="col-md-7">
         <div class="sc-card">
             <div class="sc-card-header">
-                <h5 class="mb-0 text-white"><i class="fa-solid fa-pen-to-square me-2" style="color: #dfc68b;"></i>Edit Profile</h5>
+                <h5 class="mb-0 text-dark"><i class="fa-solid fa-pen-to-square me-2 text-primary"></i>Edit Profile</h5>
             </div>
             <div class="sc-card-body">
 
@@ -58,18 +58,18 @@
                 <form action="<?php echo URLROOT; ?>/customer/profile" method="POST" enctype="multipart/form-data" id="profileForm">
 
                     <!-- Profile Image Upload Field -->
-                    <div class="mb-4 p-3 rounded-3" style="background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(223, 198, 139, 0.28);">
+                    <div class="mb-4 p-3 rounded-3" style="background: var(--primary-tint-soft); border: 1px dashed rgba(15, 118, 110, 0.35);">
                         <div class="d-flex justify-content-between align-items-center mb-1">
-                            <label for="profile_image" class="form-label mb-0 fw-semibold" style="color: #dfc68b; font-size: 0.88rem;">
-                                <i class="fa-solid fa-camera-retro me-1.5"></i>Ubah Foto Profil
+                            <label for="profile_image" class="form-label mb-0 fw-semibold text-primary" style="font-size: 0.88rem;">
+                                <i class="fa-solid fa-camera-retro me-2"></i>Ubah Foto Profil
                             </label>
-                            <span class="small" style="color: #94a3b8; font-size: 0.72rem;">Maks. 5 MB (JPG, PNG, WebP)</span>
+                            <span class="small text-muted" style="font-size: 0.72rem;">Maks. 5 MB (JPG, PNG, WebP)</span>
                         </div>
                         <input type="file" name="profile_image" id="profile_image"
                                class="form-control form-control-sm mt-2 <?php echo !empty($data['avatar_err']) ? 'is-invalid' : ''; ?>"
                                accept="image/jpeg,image/png,image/webp">
-                        <div class="form-text mt-1.5" style="color: #94a3b8; font-size: 0.75rem;">
-                            Pilih gambar dari perangkat Anda. Klik <em>Simpan Perubahan</em> di bawah untuk menerapkan foto baru.
+                        <div class="form-text mt-2 text-muted" style="font-size: 0.75rem;">
+                            Klik Simpan Perubahan untuk menerapkan foto baru.
                         </div>
                     </div>
 
@@ -88,7 +88,7 @@
                     <div class="mb-4">
                         <label class="form-label">Email Address</label>
                         <input type="email" class="form-control" value="<?php echo htmlspecialchars($_SESSION['user_email']); ?>" disabled readonly>
-                        <div class="form-text">Alamat email terdaftar dan terikat pada akun Anda. Hubungi dukungan bila ingin mengubahnya.</div>
+                        <div class="form-text">Email terdaftar tidak dapat diubah langsung.</div>
                     </div>
 
                     <button type="submit" class="btn btn-primary rounded-pill px-4">
@@ -103,29 +103,29 @@
     <div class="col-md-5">
         <div class="sc-card">
             <div class="sc-card-header">
-                <h5 class="mb-0 text-white"><i class="fa-solid fa-circle-info me-2" style="color: #dfc68b;"></i>Informasi Akun</h5>
+                <h5 class="mb-0 text-dark"><i class="fa-solid fa-circle-info me-2 text-primary"></i>Informasi Akun</h5>
             </div>
             <div class="sc-card-body">
                 <ul class="list-unstyled mb-0">
-                    <li class="d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                        <span class="small" style="color: #94a3b8; font-size: 0.88rem;">Peran</span>
-                        <span class="badge" style="background: rgba(191,161,95,0.15); color: #dfc68b; border: 1px solid rgba(191,161,95,0.3); border-radius: 50px; font-size: 0.78rem; padding: 0.4rem 0.85rem;">Customer</span>
+                    <li class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                        <span class="small text-muted" style="font-size: 0.88rem;">Peran</span>
+                        <span class="badge sc-badge-gold rounded-pill" style="font-size: 0.78rem; padding: 0.4rem 0.85rem;">Customer</span>
                     </li>
-                    <li class="d-flex justify-content-between align-items-center py-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                        <span class="small" style="color: #94a3b8; font-size: 0.88rem;">Bergabung Sejak</span>
-                        <span class="fw-semibold text-white" style="font-size: 0.9rem;">
+                    <li class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                        <span class="small text-muted" style="font-size: 0.88rem;">Bergabung Sejak</span>
+                        <span class="fw-semibold text-dark" style="font-size: 0.9rem;">
                             <?php echo $data['user'] && $data['user']->created_at ? date('d M Y', strtotime($data['user']->created_at)) : 'N/A'; ?>
                         </span>
                     </li>
                     <li class="d-flex justify-content-between align-items-center py-3">
-                        <span class="small" style="color: #94a3b8; font-size: 0.88rem;">Status Akun</span>
-                        <span class="badge sc-badge-secure px-3 py-1.5 rounded-pill" style="font-size: 0.78rem;">
+                        <span class="small text-muted" style="font-size: 0.88rem;">Status Akun</span>
+                        <span class="badge sc-badge-secure px-3 py-1 rounded-pill" style="font-size: 0.78rem;">
                             <?php echo ucfirst($data['user']->status ?? 'Active'); ?>
                         </span>
                     </li>
                 </ul>
 
-                <div class="mt-4 pt-3" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
+                <div class="mt-4 pt-3 border-top">
                     <a href="<?php echo URLROOT; ?>/auth/logout" class="btn btn-outline-danger btn-sm w-100 rounded-pill py-2">
                         <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Keluar Akun
                     </a>

@@ -136,6 +136,27 @@ class Setting extends Model {
         if (isset($settings['gemini_fallback_models']) && $settings['gemini_fallback_models'] !== '') {
             $envContent = preg_replace('/^FALLBACK_MODELS=.*/m', 'FALLBACK_MODELS=' . $settings['gemini_fallback_models'], $envContent);
         }
+        if (isset($settings['nvidia_api_key']) && $settings['nvidia_api_key'] !== '') {
+            if (preg_match('/^NVIDIA_API_KEY=/m', $envContent)) {
+                $envContent = preg_replace('/^NVIDIA_API_KEY=.*/m', 'NVIDIA_API_KEY=' . $settings['nvidia_api_key'], $envContent);
+            } else {
+                $envContent .= "\nNVIDIA_API_KEY=" . $settings['nvidia_api_key'];
+            }
+        }
+        if (isset($settings['nvidia_model']) && $settings['nvidia_model'] !== '') {
+            if (preg_match('/^NVIDIA_MODEL=/m', $envContent)) {
+                $envContent = preg_replace('/^NVIDIA_MODEL=.*/m', 'NVIDIA_MODEL=' . $settings['nvidia_model'], $envContent);
+            } else {
+                $envContent .= "\nNVIDIA_MODEL=" . $settings['nvidia_model'];
+            }
+        }
+        if (isset($settings['nvidia_fallback_models']) && $settings['nvidia_fallback_models'] !== '') {
+            if (preg_match('/^NVIDIA_FALLBACK_MODELS=/m', $envContent)) {
+                $envContent = preg_replace('/^NVIDIA_FALLBACK_MODELS=.*/m', 'NVIDIA_FALLBACK_MODELS=' . $settings['nvidia_fallback_models'], $envContent);
+            } else {
+                $envContent .= "\nNVIDIA_FALLBACK_MODELS=" . $settings['nvidia_fallback_models'];
+            }
+        }
 
         @file_put_contents($envPath, $envContent);
     }
@@ -233,6 +254,55 @@ class Setting extends Model {
     }
 
     /**
+     * Live test for Fonnte WhatsApp Gateway API Token.
+     * @param string $token
+     * @return array
+     */
+    public function testFonnte(string $token): array {
+        $token = trim($token);
+        if (empty($token)) {
+            return ['success' => false, 'message' => 'Token Fonnte WhatsApp tidak boleh kosong.'];
+        }
+
+        $url = 'https://api.fonnte.com/device';
+        $ch = curl_init();
+        curl_setopt_array($ch, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_HTTPHEADER => [
+                'Authorization: ' . $token
+            ],
+            CURLOPT_SSL_VERIFYPEER => false
+        ]);
+
+        $res = curl_exec($ch);
+        $err = curl_error($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($err) {
+            return ['success' => false, 'message' => "Koneksi cURL gagal: {$err}"];
+        }
+
+        $json = json_decode($res, true);
+        if ($httpCode === 200 && !empty($json['status'])) {
+            $device = $json['device'] ?? '-';
+            $name = $json['name'] ?? '-';
+            $status = $json['device_status'] ?? 'unknown';
+            $quota = $json['quota'] ?? '0';
+            return [
+                'success' => true,
+                'message' => "Koneksi Berhasil! Terhubung ke WhatsApp {$name} ({$device}) • Status: {$status} • Sisa Kuota: {$quota} pesan."
+            ];
+        }
+
+        $reason = $json['reason'] ?? $json['message'] ?? 'Token Fonnte tidak valid atau tidak terdaftar.';
+        return ['success' => false, 'message' => "Autentikasi Gagal: {$reason} (HTTP {$httpCode})"];
+    }
+
+    /**
      * Live test for Google Gemini API Key.
      * @param string $apiKey
      * @param string $model
@@ -294,5 +364,66 @@ class Setting extends Model {
 
         $errMsg = $json['error']['message'] ?? "HTTP {$httpCode} - API Key ditolak atau kuota habis.";
         return ['success' => false, 'message' => "Gemini API Error: {$errMsg}"];
+    }
+
+    /**
+     * Live test for NVIDIA NIM API Key.
+     * @param string $apiKey
+     * @param string $model
+     * @return array
+     */
+    public function testNvidia(string $apiKey, string $model = 'nvidia/nemotron-3.5-bolt-e4b'): array {
+        $apiKey = trim($apiKey);
+        $model = trim($model) ?: 'nvidia/nemotron-3.5-bolt-e4b';
+
+        if (empty($apiKey)) {
+            return ['success' => false, 'message' => 'NVIDIA API Key tidak boleh kosong.'];
+        }
+
+        $url = 'https://integrate.api.nvidia.com/v1/chat/completions';
+        $payload = json_encode([
+            'model' => $model,
+            'messages' => [
+                ['role' => 'system', 'content' => 'Anda asisten SkinCheck.'],
+                ['role' => 'user', 'content' => 'Tes koneksi sistem SkinCheck. Jawab singkat: OK']
+            ],
+            'max_tokens' => 15,
+            'temperature' => 0.2
+        ]);
+
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $payload,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 15,
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $apiKey,
+                'Accept: application/json'
+            ],
+            CURLOPT_SSL_VERIFYPEER => false
+        ]);
+
+        $res = curl_exec($ch);
+        $err = curl_error($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($err) {
+            return ['success' => false, 'message' => "Koneksi cURL gagal: {$err}"];
+        }
+
+        $json = json_decode($res, true);
+        if ($httpCode === 200 && !empty($json['choices'][0]['message']['content'])) {
+            $reply = trim($json['choices'][0]['message']['content']);
+            return [
+                'success' => true,
+                'message' => "Koneksi Berhasil! Model NVIDIA '{$model}' aktif: \"{$reply}\""
+            ];
+        }
+
+        $errMsg = $json['detail'] ?? ($json['error']['message'] ?? "HTTP {$httpCode} - Kunci API ditolak atau model tidak ditemukan.");
+        return ['success' => false, 'message' => "NVIDIA API Error: {$errMsg}"];
     }
 }

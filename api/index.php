@@ -9,3 +9,4 @@ chdir(__DIR__ . '/..');
 
 // Require main application bootstrap
 require_once __DIR__ . '/../public/index.php';
+

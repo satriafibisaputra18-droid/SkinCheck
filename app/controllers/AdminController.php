@@ -222,6 +222,9 @@ class AdminController extends Controller {
         $extra = trim($_POST['extra'] ?? '');
 
         switch ($service) {
+            case 'fonnte':
+                $res = $this->settingModel->testFonnte($key);
+                break;
             case 'telegram':
                 $res = $this->settingModel->testTelegram($key);
                 break;
@@ -230,6 +233,9 @@ class AdminController extends Controller {
                 break;
             case 'gemini':
                 $res = $this->settingModel->testGemini($key, $extra ?: 'gemini-2.5-flash');
+                break;
+            case 'nvidia':
+                $res = $this->settingModel->testNvidia($key, $extra ?: 'nvidia/nemotron-3.5-bolt-e4b');
                 break;
             default:
                 $res = ['success' => false, 'message' => 'Layanan API tidak dikenali.'];

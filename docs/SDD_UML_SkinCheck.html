@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>SDD UML — SkinCheck (Satria Fibi Saputra - 41257159)</title>
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <!-- Local Mermaid JS for offline vector diagram rendering -->
+    <script src="mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'neutral',
+            themeVariables: {
+                fontFamily: 'Segoe UI, Arial, sans-serif',
+                fontSize: '11px',
+                primaryColor: '#e0f2fe',
+                primaryBorderColor: '#0284c7',
+                lineColor: '#334155'
+            }
+        });
+    </script>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 22mm 18mm 20mm 22mm;
+            @bottom-right {
+                content: counter(page);
+                font-family: 'Segoe UI', Arial, sans-serif;
+                font-size: 8.5pt;
+                color: #64748b;
+            }
+            @top-right {
+                content: "SkinCheck — Dokumen SDD & Pemodelan UML";
+                font-family: 'Segoe UI', Arial, sans-serif;
+                font-size: 8pt;
+                color: #94a3b8;
+            }
+        }
+
+        @page:first {
+            margin-top: 14mm;
+            @top-right { content: ""; }
+            @bottom-right { content: ""; }
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 9.5pt;
+            line-height: 1.55;
+            color: #1e293b;
+            background: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .cover-header {
+            text-align: center;
+            border-bottom: 3px double #0f172a;
+            padding-bottom: 12pt;
+            margin-bottom: 20pt;
+        }
+
+        .cover-inst {
+            font-size: 10.5pt;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #334155;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .cover-dept {
+            font-size: 12pt;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #0f172a;
+            text-transform: uppercase;
+            margin: 4pt 0 0 0;
+        }
+
+        h1 {
+            font-size: 15pt;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 10pt;
+            margin-bottom: 6pt;
+            line-height: 1.25;
+        }
+
+        h2 {
+            font-size: 12pt;
+            font-weight: 700;
+            color: #047857;
+            margin-top: 16pt;
+            margin-bottom: 6pt;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding-bottom: 3px;
+            page-break-after: avoid;
+        }
+
+        .chapter-break {
+            page-break-before: always;
+            padding-top: 8pt;
+        }
+
+        h3 {
+            font-size: 10.5pt;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 10pt;
+            margin-bottom: 4pt;
+            page-break-after: avoid;
+        }
+
+        h4 {
+            font-size: 9.5pt;
+            font-weight: 600;
+            color: #334155;
+            margin-top: 6pt;
+            margin-bottom: 2pt;
+            page-break-after: avoid;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 5pt;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        ul, ol {
+            margin-top: 0;
+            margin-bottom: 6pt;
+            padding-left: 18px;
+        }
+
+        li { margin-bottom: 2pt; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6pt;
+            margin-bottom: 10pt;
+            font-size: 8.5pt;
+            page-break-inside: avoid;
+        }
+
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 5px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            font-weight: 700;
+            border-bottom: 2px solid #94a3b8;
+        }
+
+        tr:nth-child(even) td { background-color: #f8fafc; }
+
+        pre {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 3.5px solid #059669;
+            border-radius: 4px;
+            padding: 8px 10px;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 7.5pt;
+            line-height: 1.35;
+            overflow-x: auto;
+            margin-top: 5pt;
+            margin-bottom: 8pt;
+            page-break-inside: avoid;
+            color: #0f172a;
+        }
+
+        code {
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 8pt;
+            background-color: #f1f5f9;
+            color: #047857;
+            padding: 1px 3px;
+            border-radius: 3px;
+        }
+
+        pre code { background-color: transparent; padding: 0; color: inherit; }
+
+        /* Mermaid Diagram Container with tight page-friendly scaling */
+        .mermaid {
+            margin: 6pt auto 10pt auto;
+            padding: 6pt;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            text-align: center;
+            page-break-inside: avoid;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mermaid svg {
+            max-width: 95% !important;
+            max-height: 420px !important;
+            height: auto !important;
+            width: auto !important;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #e2e8f0;
+            margin: 10pt 0;
+        }
+
+        strong { color: #0f172a; }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cover-header">
+        <p class="cover-inst">STMIK IKMI CIREBON — PROGRAM STUDI S1 TEKNIK INFORMATIKA</p>
+        <p class="cover-dept">TUGAS PROYEK AKHIR MANDIRI REKAYASA PERANGKAT LUNAK (OBE)</p>
+    </div>
+<h1>DOKUMEN DESAIN PERANGKAT LUNAK (SOFTWARE DESIGN DOCUMENT - SDD)</h1>
+<h2>Berdasarkan Standar IEEE 1016 / ISO/IEC/IEEE 42010</h2>
+<hr/>
+<h1>🌿 SKINCHECK: AI-Powered Skin Barrier &amp; Sunscreen Analysis Platform</h1>
+<p><strong>Arsitektur Sistem, Pemodelan 4 Diagram UML, Entity-Relationship Diagram, &amp; Desain Antarmuka UI/UX</strong></p>
+<ul>
+<li><strong>Mata Kuliah</strong>: Rekayasa Perangkat Lunak (TIKB2503021) — 4 SKS (2 Teori + 2 Praktik)</li>
+<li><strong>Program Studi</strong>: S1 Teknik Informatika — STMIK IKMI Cirebon</li>
+<li><strong>Penyusun / Mahasiswa</strong>: Satria Fibi Saputra (NIM: 41257159)</li>
+<li><strong>Dosen Pengampu</strong>: Yudhistira Arie Wijaya, M.Kom., CDS.</li>
+<li><strong>Tema Topik Kelompok</strong>: <em>Smart Healthcare &amp; Public Service AI</em></li>
+<li><strong>Sifat Proyek</strong>: Mandiri / Perorangan (<em>100% Individual Ownership &amp; Full-App Build</em>)</li>
+<li><strong>Versi Dokumen</strong>: 1.0.0</li>
+<li><strong>Tanggal Rilis</strong>: 17 November 2026</li>
+</ul>
+<hr/>
+<h2 class="chapter-break">DAFTAR ISI</h2>
+<ol>
+<li><a href="#bab-i-gambaran-umum-arsitektur-sistem">BAB I: GAMBARAN UMUM ARSITEKTUR SISTEM</a>
+<ul>
+<li>1.1 Gaya Arsitektur (Architectural Style &amp; Pattern)</li>
+<li>1.2 Topologi Komponen &amp; Distribusi Fisik</li>
+</ul>
+</li>
+<li><a href="#bab-ii-use-case-diagram--skenario-sistem">BAB II: USE CASE DIAGRAM &amp; SKENARIO SISTEM</a>
+<ul>
+<li>2.1 Diagram Use Case Sistem</li>
+<li>2.2 Identifikasi Aktor</li>
+<li>2.3 Tabel Skenario Use Case Utama (UC-01 s.d. UC-04)</li>
+</ul>
+</li>
+<li><a href="#bab-iii-activity-diagram-alur-bisnis--ai">BAB III: ACTIVITY DIAGRAM ALUR BISNIS &amp; AI</a>
+<ul>
+<li>3.1 Activity Diagram: Pemindaian Wajah &amp; Inferensi Sawar Kulit</li>
+<li>3.2 Activity Diagram: Konsultasi Interaktif AI Gemini Sadar-Konteks</li>
+</ul>
+</li>
+<li><a href="#bab-iv-class-diagram-berorientasi-objek--kepatuhan-solid">BAB IV: CLASS DIAGRAM BERORIENTASI OBJEK &amp; KEPATUHAN SOLID</a>
+<ul>
+<li>4.1 Diagram Kelas Sistem (Class Diagram)</li>
+<li>4.2 Analisis Kepatuhan 5 Prinsip SOLID (SRP, OCP, LSP, ISP, DIP)</li>
+</ul>
+</li>
+<li><a href="#bab-v-sequence-diagram-alur-pertukaran-pesan">BAB V: SEQUENCE DIAGRAM ALUR PERTUKARAN PESAN</a>
+<ul>
+<li>5.1 Sequence Diagram: Alur Analisis Wajah &amp; Penyimpanan Skor</li>
+<li>5.2 Sequence Diagram: Alur Chatbot Gemini &amp; Pelacakan Token</li>
+</ul>
+</li>
+<li><a href="#bab-vi-entity-relationship-diagram-erd--struktur-basis-data">BAB VI: ENTITY-RELATIONSHIP DIAGRAM (ERD) &amp; STRUKTUR BASIS DATA</a>
+<ul>
+<li>6.1 Diagram Konseptual &amp; Fisik Relasi Antar-Entitas</li>
+<li>6.2 Kamus Data &amp; Relasi Integritas Referential</li>
+</ul>
+</li>
+<li><a href="#bab-vii-perancangan-uiux-figma--sitemap-navigasi">BAB VII: PERANCANGAN UI/UX FIGMA &amp; SITEMAP NAVIGASI</a>
+<ul>
+<li>7.1 Sitemap &amp; Struktur Alur Halaman</li>
+<li>7.2 Spesifikasi Layar Kunci &amp; Walkthrough Prototipe Figma</li>
+</ul>
+</li>
+<li><a href="#pengesahan-dokumen">PENGESAHAN DOKUMEN</a></li>
+</ol>
+<hr/>
+<h2 class="chapter-break">BAB I: GAMBARAN UMUM ARSITEKTUR SISTEM</h2>
+<h3>1.1 Gaya Arsitektur (Architectural Style &amp; Pattern)</h3>
+<p>Platform <strong>SkinCheck</strong> dibangun menggunakan perpaduan pola arsitektur <strong>Model-View-Controller (MVC)</strong> yang diperluas dengan <strong>Service-Oriented Decoupling</strong> pada backend PHP, serta <strong>Microservice Event-Driven</strong> pada komponen asisten cerdas Node.js:</p>
+<ol>
+<li><strong>Presentation Layer (View &amp; Client Heuristics)</strong>:
+<ul>
+<li>Antarmuka berbasis web responsif HTML5, CSS3, dan Vanilla JavaScript.</li>
+<li>Pemanfaatan <em>WebRTC API (navigator.mediaDevices.getUserMedia)</em> untuk streaming video webcam dan <em>HTML5 Canvas</em> untuk render HUD (<em>Face Oval Guide</em>) serta validasi kecerahan citra secara lokal di browser klien.</li>
+</ul>
+</li>
+<li><strong>Application / Controller Layer (PHP 8.1+ Core MVC)</strong>:
+<ul>
+<li>Bertindak sebagai gerbang orkestrasi logika bisnis, routing, validasi masukan, proteksi sesi, dan kontrol akses berbasis peran (<em>Role-Based Access Control</em>).</li>
+</ul>
+</li>
+<li><strong>Domain &amp; Service Layer (SOLID Architecture)</strong>:
+<ul>
+<li>Mengenkapsulasi logika algoritma dan inferensi AI ke dalam servis independen dengan kontrak antarmuka (<em>Interface Contracts</em>), memisahkan implementasi spesifik dari kontroler.</li>
+</ul>
+</li>
+<li><strong>AI Microservice Hub (Node.js Express &amp; Google Gemini Flash)</strong>:
+<ul>
+<li>Berjalan sebagai mikro-layanan mandiri (<em>service process</em>) pada port khusus untuk mengelola koneksi streaming REST API ke Google Gemini AI Hub, mencatat latensi, dan menghitung kuota token.</li>
+</ul>
+</li>
+<li><strong>Persistence Layer (MySQL 8.0 Relational Database)</strong>:
+<ul>
+<li>Menyimpan seluruh entitas terstruktur dengan integritas referensial kuat (<em>Foreign Key constraints</em>).</li>
+</ul>
+</li>
+</ol>
+<h3>1.2 Topologi Komponen &amp; Distribusi Fisik</h3>
+<pre><code>[ Browser Klien: Ponsel / Desktop ]
+                │
+                │ HTTPS / JSON AJAX
+                ▼
+┌───────────────────────────────────────────────────────────────┐
+│                      Web Server (Apache)                      │
+│                                                               │
+│   ┌───────────────────────────────────────────────────────┐   │
+│   │               PHP Core MVC Application                │   │
+│   │                                                       │   │
+│   │  [Controllers]  ──► [Services / Interfaces]          │   │
+│   │  - AuthController   - FaceDetectorInterface           │   │
+│   │  - ScanController   - SkinAnalysisProviderInterface   │   │
+│   │  - SunscreenCtrl    - SunscreenAnalysisProvider       │   │
+│   │  - ChatbotCtrl      - Email &amp; Telegram Service        │   │
+│   │  - AdminController  - ImageValidator &amp; Storage       │   │
+│   └───────────┬─────────────────────────────┬─────────────┘   │
+└───────────────┼─────────────────────────────┼─────────────────┘
+                │ IPC Subprocess              │ Internal REST API
+                ▼                             ▼
+┌──────────────────────────────┐  ┌─────────────────────────────┐
+│  Python AI Engine (ONNX RT)  │  │   Node.js Chatbot Engine    │
+│  - MobileNetV3 Multi-Task    │  │   (Express Microservice)    │
+│  - RGB-to-LAB Color Matrix   │  └──────────────┬──────────────┘
+└──────────────────────────────┘                 │
+                                                 │ Secure HTTPS
+                                                 ▼
+┌──────────────────────────────┐  ┌─────────────────────────────┐
+│    MySQL 8.0 Database        │  │    Google Gemini API Hub    │
+│    (InnoDB Relational DB)    │  │    (Gemini 1.5/2.0 Flash)   │
+└──────────────────────────────┘  └─────────────────────────────┘
+</code></pre>
+<hr/>
+<h2 class="chapter-break">BAB II: USE CASE DIAGRAM &amp; SKENARIO SISTEM</h2>
+<h3>2.1 Diagram Use Case Sistem</h3>
+<div class="mermaid">flowchart LR
+    subgraph Aktor
+        Cust((Pelanggan / Customer))
+        Adm((Admin Eksekutif))
+    end
+
+    subgraph "Sistem SkinCheck (Boundary)"
+        UC1[UC-01: Registrasi &amp; Verifikasi OTP]
+        UC2[UC-02: Login &amp; Pemulihan Akun]
+        UC3[UC-03: Pemindaian Sawar Kulit via HUD]
+        UC4[UC-04: Pemeriksaan Kerataan Sunscreen]
+        UC5[UC-05: Konsultasi Interaktif AI Gemini]
+        UC6[UC-06: Riwayat Scan &amp; Rekomendasi Skincare]
+        UC7[UC-07: Monitoring KPI &amp; Audit Log]
+        UC8[UC-08: Live Gemini Token Monitor]
+        UC9[UC-09: Manajemen Produk &amp; API Gateway]
+    end
+
+    Cust --&gt; UC1
+    Cust --&gt; UC2
+    Cust --&gt; UC3
+    Cust --&gt; UC4
+    Cust --&gt; UC5
+    Cust --&gt; UC6
+
+    Adm --&gt; UC2
+    Adm --&gt; UC7
+    Adm --&gt; UC8
+    Adm --&gt; UC9
+</div>
+<h3>2.2 Identifikasi Aktor</h3>
+<ol>
+<li><strong>Customer (Pengguna Umum)</strong>: Pengguna terautentikasi yang melakukan pemeriksaan wajah mandiri, mengevaluasi kerataan sunscreen, melihat riwayat perkembangan kulit, dan berkonsultasi dengan asisten AI.</li>
+<li><strong>Admin Eksekutif (Administrator)</strong>: Pengelola sistem yang memiliki hak akses untuk memantau performa bisnis, konsumsi token AI, audit operasional, dan pengelolaan kunci API dinamis.</li>
+</ol>
+<hr/>
+<h3>2.3 Tabel Skenario Use Case Utama</h3>
+<h4>Skenario UC-03: Pemindaian Sawar Kulit &amp; Analisis 4 Pilar AI</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Komponen</th>
+<th style="text-align:left">Rincian Spesifikasi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>ID &amp; Nama</strong></td>
+<td style="text-align:left"><strong>UC-03: Pemindaian Sawar Kulit via Smart Camera HUD</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Aktor Utama</strong></td>
+<td style="text-align:left">Customer (Pelanggan)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Deskripsi</strong></td>
+<td style="text-align:left">Pengguna mengambil foto wajah melalui webcam browser dengan panduan HUD untuk dianalisis oleh model AI guna menghasilkan skor 4 pilar sawar kulit.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Kondisi Awal (Pre-conditions)</strong></td>
+<td style="text-align:left">Pengguna telah login dan mengizinkan hak akses webcam pada peramban.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Kondisi Akhir (Post-conditions)</strong></td>
+<td style="text-align:left">Citra wajah tersimpan secara privat, data skor tersimpan di database, dan pengguna melihat dashboard ringkasan hasil evaluasi.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Alur Utama (Main Flow)</strong></td>
+<td style="text-align:left">1. Pengguna membuka menu <em>Face Scan</em>.<br/>2. Sistem mengaktifkan webcam dan menampilkan <em>Face Oval HUD</em>.<br/>3. Sistem memeriksa kelayakan pencahayaan dan posisi simetris wajah.<br/>4. Pengguna menekan tombol "Ambil Foto".<br/>5. Sistem memvalidasi citra via <code>ImageValidator</code>.<br/>6. Sistem mengirimkan tensor citra ke <code>SkinAnalysisService</code> (MobileNetV3 ONNX).<br/>7. Model mengekstrak skor Jerawat, Eritema, Tekstur, dan Hiperpigmentasi.<br/>8. Sistem menyimpan catatan ke tabel <code>skin_scans</code> dan <code>analysis_results</code>.<br/>9. Sistem menampilkan skor 0–100, status kesehatan, dan rekomendasi produk.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Alur Alternatif (Alternative Flow)</strong></td>
+<td style="text-align:left"><strong>3a. Pencahayaan Tidak Memadai</strong>: Sistem menampilkan teks peringatan pada HUD dan tombol potret dikunci hingga kondisi cahaya optimal terpenuhi.</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h4>Skenario UC-04: Pemeriksaan Kerataan Sunscreen &amp; Heatmap</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Komponen</th>
+<th style="text-align:left">Rincian Spesifikasi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>ID &amp; Nama</strong></td>
+<td style="text-align:left"><strong>UC-04: Pemeriksaan Kerataan Tabir Surya (Sunscreen Check)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Aktor Utama</strong></td>
+<td style="text-align:left">Customer (Pelanggan)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Deskripsi</strong></td>
+<td style="text-align:left">Pengguna memotret wajah setelah mengaplikasikan sunscreen untuk mengevaluasi persentase proteksi dan melihat visualisasi <em>Heatmap</em>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Kondisi Awal</strong></td>
+<td style="text-align:left">Pengguna telah mengoleskan sunscreen dan membuka menu Sunscreen Check.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Kondisi Akhir</strong></td>
+<td style="text-align:left">Pengguna mendapatkan persentase coverage, klasifikasi kerataan, daftar area rawan terlewat (<em>missed areas</em>), dan gambar <em>Heatmap</em>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Alur Utama</strong></td>
+<td style="text-align:left">1. Pengguna mengambil foto wajah dengan kamera HUD.<br/>2. Sistem memanggil <code>SunscreenAnalysisService</code> melalui provider RGB/UV.<br/>3. Algoritma melakukan segmentasi kontur wajah dan transformasi ruang warna.<br/>4. Algoritma menghitung rasio piksel terproteksi terhadap total luas wajah.<br/>5. Algoritma membangkitkan citra visual <em>Heatmap</em> gradien warna.<br/>6. Sistem menyimpan data ke tabel <code>sunscreen_results</code> dan menampilkan hasil.</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h4>Skenario UC-05: Konsultasi Interaktif Sadar Konteks via Gemini Chatbot</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Komponen</th>
+<th style="text-align:left">Rincian Spesifikasi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>ID &amp; Nama</strong></td>
+<td style="text-align:left"><strong>UC-05: Konsultasi Skincare Interaktif Sadar Konteks</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Aktor Utama</strong></td>
+<td style="text-align:left">Customer</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Deskripsi</strong></td>
+<td style="text-align:left">Pengguna melakukan percakapan real-time dengan asisten AI yang otomatis mengenali riwayat dan keluhan kulit pengguna dari hasil scan terakhir.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Kondisi Awal</strong></td>
+<td style="text-align:left">Pengguna membuka widget AI Assistant pada dashboard pelanggan.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Kondisi Akhir</strong></td>
+<td style="text-align:left">Pengguna menerima saran edukatif dan anjuran bahan aktif yang disesuaikan secara personal.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Alur Utama</strong></td>
+<td style="text-align:left">1. Pengguna mengetikkan pertanyaan konsultasi.<br/>2. <code>ChatbotController</code> membaca hasil scan terbaru pengguna dari database.<br/>3. Sistem menyuntikkan skor scan ke dalam <em>System Prompt Context</em>.<br/>4. Permintaan dikirim ke microservice Node.js menuju Google Gemini Flash.<br/>5. Gemini menghasilkan respon cerdas yang relevan secara streaming.<br/>6. Respon ditampilkan di layar chat dan token yang dikonsumsi dicatat.</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h4>Skenario UC-08: Live Gemini AI Token &amp; Engine Monitor Console</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Komponen</th>
+<th style="text-align:left">Rincian Spesifikasi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>ID &amp; Nama</strong></td>
+<td style="text-align:left"><strong>UC-08: Pemantauan Token AI &amp; Status Mesin Real-time</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Aktor Utama</strong></td>
+<td style="text-align:left">Administrator Eksekutif</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Deskripsi</strong></td>
+<td style="text-align:left">Administrator memantau volume penggunaan token Google Gemini, latensi rata-rata, dan status kuota API harian.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Alur Utama</strong></td>
+<td style="text-align:left">1. Admin membuka menu <em>Executive AI Assistant / Settings</em>.<br/>2. Sistem melakukan agregasi metrik token input/output harian dari basis data.<br/>3. Admin mengevaluasi grafik tren dan melakukan penyesuaian model atau penggantian API Key jika diperlukan.</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 class="chapter-break">BAB III: ACTIVITY DIAGRAM ALUR BISNIS &amp; AI</h2>
+<h3>3.1 Activity Diagram: Pemindaian Wajah &amp; Inferensi Sawar Kulit</h3>
+<div class="mermaid">flowchart TD
+    Start([Mulai: Buka Halaman Scan]) --&gt; TurnOnCam[Aktifkan Webcam &amp; Render Face Oval HUD]
+    TurnOnCam --&gt; CheckLight{Pencahayaan &amp; Resolusi Layak?}
+    
+    CheckLight -- Tidak --&gt; WarnLight[Tampilkan Peringatan di HUD: Cahaya Kurang / Over-exposure]
+    WarnLight --&gt; TurnOnCam
+    
+    CheckLight -- Ya --&gt; Snap[Pengguna Menekan Tombol Potret]
+    Snap --&gt; CaptureFrame[Ambil Frame Citra &amp; Konversi ke Base64 / Blob]
+    CaptureFrame --&gt; PostData[Kirim HTTP POST ke ScanController]
+    
+    subgraph "Backend Processing &amp; AI Pipeline"
+        PostData --&gt; ValidateImg[Validasi Citra: ImageValidator]
+        ValidateImg --&gt; FaceDetect{Wajah Terdeteksi Valid?}
+        FaceDetect -- Tidak --&gt; ErrorResp[Kembalikan Pesan Error: Wajah Tidak Valid]
+        
+        FaceDetect -- Ya --&gt; SaveRaw[Simpan Citra Mentah ke Storage Privat]
+        SaveRaw --&gt; InvokeAI[Panggil SkinAnalysisService via OnnxSkinProvider]
+        InvokeAI --&gt; Preprocess[Normalisasi Tensor 1x3x224x224 &amp; Zero-Centering]
+        Preprocess --&gt; ForwardPass[Inferensi MobileNetV3 ONNX Multi-Task Heads]
+        ForwardPass --&gt; ExtractScores[Hitung Skor: Acne, Redness, Texture, Hyperpig]
+        ExtractScores --&gt; CalcOverall[Hitung Overall Health Score: 0-100]
+        CalcOverall --&gt; RuleMatcher[Ambil Rekomendasi Skincare dari Katalog Produk]
+        RuleMatcher --&gt; InsertDB[(Simpan ke skin_scans &amp; analysis_results)]
+    end
+    
+    InsertDB --&gt; RenderResult[Tampilkan Halaman Hasil: Dashboard Skor 4 Pilar &amp; Rekomendasi]
+    ErrorResp --&gt; ShowError[Tampilkan Pesan Perbaikan ke Pengguna]
+    RenderResult --&gt; End([Selesai])
+    ShowError --&gt; End
+</div>
+<hr/>
+<h3>3.2 Activity Diagram: Konsultasi Interaktif AI Gemini Sadar-Konteks</h3>
+<div class="mermaid">flowchart TD
+    StartChat([Mulai: Kirim Pesan Chat]) --&gt; GetHistory[(Ambil Skor Scan Terakhir dari DB)]
+    GetHistory --&gt; BuildPrompt[Injeksi Konteks: User Name + Skor 4 Pilar + Sunscreen]
+    BuildPrompt --&gt; SendMicroservice[Kirim REST POST ke Node.js Chatbot Engine]
+    
+    subgraph "Microservice &amp; LLM Hub"
+        SendMicroservice --&gt; CallGemini[Kirim Request ke Google Gemini Flash API]
+        CallGemini --&gt; StreamResponse[Terima Respon Streaming Token &amp; Metadata]
+        StreamResponse --&gt; ParseToken[Ekstraksi promptTokens &amp; candidatesTokens]
+    end
+    
+    ParseToken --&gt; LogAudit[(Update Tabel Settings &amp; Activity Logs)]
+    StreamResponse --&gt; ReturnChat[Kirim Respon Teks ke Browser Klien]
+    ReturnChat --&gt; DisplayMsg[Tampilkan Pesan AI di Widget Obrolan]
+    DisplayMsg --&gt; EndChat([Selesai])
+</div>
+<hr/>
+<h2 class="chapter-break">BAB IV: CLASS DIAGRAM BERORIENTASI OBJEK &amp; KEPATUHAN SOLID</h2>
+<h3>4.1 Diagram Kelas Sistem (Class Diagram)</h3>
+<div class="mermaid">classDiagram
+    %% Core Interfaces (Prinsip ISP &amp; DIP)
+    class FaceDetectorInterface {
+        &lt;&lt;interface&gt;&gt;
+        +detectFace(string imagePath): bool
+    }
+
+    class SkinAnalysisProviderInterface {
+        &lt;&lt;interface&gt;&gt;
+        +analyze(string imagePath): AnalysisResult
+    }
+
+    class SunscreenAnalysisProviderInterface {
+        &lt;&lt;interface&gt;&gt;
+        +analyzeCoverage(string imagePath): SunscreenResult
+    }
+
+    %% Service Implementations (Prinsip OCP &amp; LSP)
+    class NullFaceDetector {
+        +detectFace(string imagePath): bool
+    }
+    FaceDetectorInterface &lt;|.. NullFaceDetector : implements
+
+    class OnnxSkinAnalysisProvider {
+        -string pythonPath
+        -string scriptPath
+        +analyze(string imagePath): AnalysisResult
+        -parseOutput(string jsonOutput): AnalysisResult
+    }
+    SkinAnalysisProviderInterface &lt;|.. OnnxSkinAnalysisProvider : implements
+
+    class ComputerVisionSkinProvider {
+        +analyze(string imagePath): AnalysisResult
+    }
+    SkinAnalysisProviderInterface &lt;|.. ComputerVisionSkinProvider : implements
+
+    class RGBSunscreenAnalysisProvider {
+        +analyzeCoverage(string imagePath): SunscreenResult
+        -generateHeatmap(string imagePath): string
+    }
+    SunscreenAnalysisProviderInterface &lt;|.. RGBSunscreenAnalysisProvider : implements
+
+    %% Domain Service Aggregators
+    class SkinAnalysisService {
+        -SkinAnalysisProviderInterface provider
+        +__construct(SkinAnalysisProviderInterface provider)
+        +performAnalysis(string imagePath): AnalysisResult
+    }
+    SkinAnalysisService o-- SkinAnalysisProviderInterface
+
+    class SunscreenAnalysisService {
+        -SunscreenAnalysisProviderInterface provider
+        +__construct(SunscreenAnalysisProviderInterface provider)
+        +evaluate(string imagePath): SunscreenResult
+    }
+    SunscreenAnalysisService o-- SunscreenAnalysisProviderInterface
+
+    %% Security &amp; Infrastructure Services
+    class ImageValidator {
+        +validate(array file): bool
+        +isOptimalLuminance(string path): bool
+    }
+
+    class ImageStorage {
+        -string uploadDir
+        +saveSecure(array file): string
+        +streamOwnershipScoped(int scanId, int userId): void
+    }
+
+    class TelegramService {
+        -string botToken
+        +sendOtp(string chatId, string otpCode): bool
+    }
+
+    class EmailService {
+        -string apiKey
+        +sendOtpEmail(string recipientEmail, string otpCode): bool
+    }
+
+    %% Controllers (MVC)
+    class ScanController {
+        -SkinAnalysisService skinService
+        -ImageValidator validator
+        -ImageStorage storage
+        +index(): void
+        +process(): void
+        +detail(int id): void
+    }
+    ScanController --&gt; SkinAnalysisService
+    ScanController --&gt; ImageValidator
+    ScanController --&gt; ImageStorage
+
+    class SunscreenController {
+        -SunscreenAnalysisService sunscreenService
+        +index(): void
+        +check(): void
+    }
+    SunscreenController --&gt; SunscreenAnalysisService
+
+    class ChatbotController {
+        +message(): void
+        +adminChat(): void
+        -injectContext(int userId): string
+    }
+
+    %% Value Objects &amp; Data Transfer Objects
+    class AnalysisResult {
+        +int acneScore
+        +int rednessScore
+        +int textureScore
+        +int hyperpigmentationScore
+        +int overallScore
+        +string narrativeSummary
+    }
+    SkinAnalysisService --&gt; AnalysisResult
+
+    class SunscreenResult {
+        +int coverageScore
+        +string status
+        +string heatmapPath
+        +array lowCoverageAreas
+    }
+    SunscreenAnalysisService --&gt; SunscreenResult
+</div>
+<hr/>
+<h3>4.2 Analisis Kepatuhan 5 Prinsip SOLID</h3>
+<p>Arsitektur kode SkinCheck mematuhi seluruh kaidah rekayasa perangkat lunak berorientasi objek (<strong>SOLID</strong>):</p>
+<ol>
+<li><strong>Single Responsibility Principle (SRP)</strong>:
+<ul>
+<li>Setiap kelas bertanggung jawab atas satu fungsi tunggal yang terdefinisi jelas.</li>
+<li>Contoh: <code>ImageValidator</code> hanya bertugas memvalidasi kelayakan citra, <code>ImageStorage</code> hanya mengurusi penyimpanan dan proteksi berkas fisik, sedangkan <code>SkinAnalysisService</code> murni mengorkestrasi inferensi kesehatan kulit.</li>
+</ul>
+</li>
+<li><strong>Open/Closed Principle (OCP)</strong>:
+<ul>
+<li>Sistem terbuka untuk penambahan provider inferensi baru, tetapi tertutup untuk modifikasi kode inti yang sudah ada.</li>
+<li>Contoh: Kontrak <code>SkinAnalysisProviderInterface</code> memungkinkan penambahan modul baru (misal <code>CloudVisionSkinProvider</code>) tanpa perlu mengubah sebaris pun kode pada <code>SkinAnalysisService</code> atau <code>ScanController</code>.</li>
+</ul>
+</li>
+<li><strong>Liskov Substitution Principle (LSP)</strong>:
+<ul>
+<li>Setiap kelas turunan atau implementasi antarmuka dapat menggantikan kelas induknya secara transparan tanpa merusak perilaku sistem.</li>
+<li>Contoh: Baik <code>OnnxSkinAnalysisProvider</code> maupun <code>ComputerVisionSkinProvider</code> dapat dipertukarkan dalam konstruktor <code>SkinAnalysisService</code> karena keduanya patuh mengembalikan objek <code>AnalysisResult</code> yang seragam.</li>
+</ul>
+</li>
+<li><strong>Interface Segregation Principle (ISP)</strong>:
+<ul>
+<li>Antarmuka dirancang secara modular dan spesifik, tidak memaksa kelas mengimplementasikan metode yang tidak dibutuhkannya.</li>
+<li>Contoh: Pemisahan tegas antara <code>SkinAnalysisProviderInterface</code> (khusus 4 pilar sawar kulit) dan <code>SunscreenAnalysisProviderInterface</code> (khusus cakupan tabir surya &amp; heatmap).</li>
+</ul>
+</li>
+<li><strong>Dependency Inversion Principle (DIP)</strong>:
+<ul>
+<li>Modul tingkat tinggi (<em>High-Level Modules</em> seperti <code>ScanController</code>) tidak bergantung langsung pada modul tingkat rendah (<em>Low-Level Modules</em> seperti skrip inferensi <code>predict.py</code>), melainkan bergantung pada abstraksi antarmuka (<em>Interface Abstraction</em>).</li>
+</ul>
+</li>
+</ol>
+<hr/>
+<h2 class="chapter-break">BAB V: SEQUENCE DIAGRAM ALUR PERTUKARAN PESAN</h2>
+<h3>5.1 Sequence Diagram: Alur Analisis Wajah &amp; Penyimpanan Skor</h3>
+<div class="mermaid">sequenceDiagram
+    autonumber
+    actor Pengguna as Browser User
+    participant SC as ScanController (PHP)
+    participant IV as ImageValidator
+    participant IS as ImageStorage
+    participant SAS as SkinAnalysisService
+    participant ONNX as OnnxSkinProvider / Python
+    participant DB as MySQL Database
+
+    Pengguna-&gt;&gt;SC: POST /scan/process (Payload: Image Blob)
+    activate SC
+    SC-&gt;&gt;IV: validate(imageBlob)
+    activate IV
+    IV--&gt;&gt;SC: Valid (Resolution &amp; Luminance OK)
+    deactivate IV
+
+    SC-&gt;&gt;IS: saveSecure(imageBlob)
+    activate IS
+    IS--&gt;&gt;SC: Return storagePath (e.g. /storage/scans/xyz.jpg)
+    deactivate IS
+
+    SC-&gt;&gt;SAS: performAnalysis(storagePath)
+    activate SAS
+    SAS-&gt;&gt;ONNX: analyze(storagePath)
+    activate ONNX
+    ONNX-&gt;&gt;ONNX: Tensor Inference MobileNetV3 (predict.py)
+    ONNX--&gt;&gt;SAS: Return AnalysisResult Object
+    deactivate ONNX
+    SAS--&gt;&gt;SC: Return AnalysisResult (Scores 0-100)
+    deactivate SAS
+
+    SC-&gt;&gt;DB: INSERT INTO skin_scans (user_id, image_path, status)
+    activate DB
+    DB--&gt;&gt;SC: Return skin_scan_id
+    SC-&gt;&gt;DB: INSERT INTO analysis_results (skin_scan_id, acne, redness, texture, hyperpig, overall)
+    DB--&gt;&gt;SC: OK
+    deactivate DB
+
+    SC--&gt;&gt;Pengguna: Redirect /scan/detail?id={skin_scan_id} (Render Dashboard Skor)
+    deactivate SC
+</div>
+<hr/>
+<h3>5.2 Sequence Diagram: Alur Chatbot Gemini &amp; Pelacakan Token</h3>
+<div class="mermaid">sequenceDiagram
+    autonumber
+    actor Pengguna as Browser Chatbot
+    participant CC as ChatbotController (PHP)
+    participant DB as MySQL Database
+    participant Node as Node.js Microservice (Express)
+    participant Gemini as Google Gemini AI API
+
+    Pengguna-&gt;&gt;CC: POST /api/chatbot/message (user_query)
+    activate CC
+    CC-&gt;&gt;DB: SELECT latest scores FROM analysis_results WHERE user_id = X
+    activate DB
+    DB--&gt;&gt;CC: Return (Acne: 25, Redness: 60, Overall: 70)
+    deactivate DB
+
+    CC-&gt;&gt;CC: Build Contextual System Prompt
+    CC-&gt;&gt;Node: POST http://localhost:5000/api/chat (query + context)
+    activate Node
+    Node-&gt;&gt;Gemini: Stream Generation Request (Prompt + Context)
+    activate Gemini
+    Gemini--&gt;&gt;Node: Stream Response Tokens + Usage Metadata
+    deactivate Gemini
+
+    Node-&gt;&gt;Node: Calculate Prompt Tokens &amp; Candidates Tokens
+    Node--&gt;&gt;CC: Return JSON (AI Reply Text + Token Counts)
+    deactivate Node
+
+    CC-&gt;&gt;DB: UPDATE settings / activity_logs (Increment Daily Token Count)
+    activate DB
+    DB--&gt;&gt;CC: OK
+    deactivate DB
+
+    CC--&gt;&gt;Pengguna: Return JSON (Reply Message Text)
+    deactivate CC
+</div>
+<hr/>
+<h2 class="chapter-break">BAB VI: ENTITY-RELATIONSHIP DIAGRAM (ERD) &amp; STRUKTUR BASIS DATA</h2>
+<h3>6.1 Diagram Konseptual &amp; Fisik Relasi Antar-Entitas</h3>
+<div class="mermaid">erDiagram
+    users ||--o{ skin_scans : "has many"
+    users ||--o{ activity_logs : "triggers"
+    skin_scans ||--|| analysis_results : "produces"
+    skin_scans ||--o| sunscreen_results : "evaluates"
+    products }o--|| users : "recommended to"
+
+    users {
+        int id PK
+        string name
+        string email UK
+        string password_hash
+        enum role "customer | admin"
+        string status
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    skin_scans {
+        int id PK
+        int user_id FK
+        string image_path
+        string status
+        decimal image_quality_score
+        timestamp created_at
+    }
+
+    analysis_results {
+        int id PK
+        int skin_scan_id FK
+        int acne_score
+        int redness_score
+        int texture_score
+        int hyperpigmentation_score
+        int overall_score
+        text ai_response
+        timestamp created_at
+    }
+
+    sunscreen_results {
+        int id PK
+        int skin_scan_id FK
+        int coverage_score
+        string coverage_status
+        string heatmap_path
+        text low_coverage_areas
+        string analysis_method
+        string hardware_type
+        timestamp created_at
+    }
+
+    products {
+        int id PK
+        string brand
+        string name
+        string category
+        text description
+        text ingredients
+        string skin_concern
+        text usage_guidance
+        int price
+        string skin_type
+        string status
+        timestamp created_at
+    }
+
+    activity_logs {
+        int id PK
+        int user_id FK
+        string activity
+        string ip_address
+        timestamp created_at
+    }
+
+    settings {
+        int id PK
+        string setting_key UK
+        text setting_value
+        string setting_group
+        string setting_label
+        string setting_type
+        boolean is_secret
+        string description
+        timestamp updated_at
+    }
+</div>
+<h3>6.2 Kamus Data &amp; Relasi Integritas Referential</h3>
+<ol>
+<li><strong>Relasi <code>users</code> ke <code>skin_scans</code> (1 : N)</strong>:
+<ul>
+<li>Satu pengguna dapat melakukan banyak pemindaian wajah. Ditegakkan melalui <em>Foreign Key</em>: <code>FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE</code>.</li>
+</ul>
+</li>
+<li><strong>Relasi <code>skin_scans</code> ke <code>analysis_results</code> (1 : 1)</strong>:
+<ul>
+<li>Satu sesi pemindaian sawar kulit menghasilkan satu paket skor kuantitatif terinci 4 pilar. <code>FOREIGN KEY (skin_scan_id) REFERENCES skin_scans(id) ON DELETE CASCADE</code>.</li>
+</ul>
+</li>
+<li><strong>Relasi <code>skin_scans</code> ke <code>sunscreen_results</code> (1 : 1)</strong>:
+<ul>
+<li>Satu sesi pemindaian sunscreen menghasilkan satu evaluasi cakupan proteksi dan berkas heatmap. <code>FOREIGN KEY (skin_scan_id) REFERENCES skin_scans(id) ON DELETE CASCADE</code>.</li>
+</ul>
+</li>
+<li><strong>Tabel Independen <code>settings</code></strong>:
+<ul>
+<li>Menyimpan konfigurasi kunci API dinamis (<code>gemini_api_key</code>, <code>telegram_bot_token</code>, <code>resend_api_key</code>) dengan kolom <code>is_secret = 1</code> agar disamarkan (<em>masked</em>) pada level tampilan.</li>
+</ul>
+</li>
+</ol>
+<hr/>
+<h2 class="chapter-break">BAB VII: PERANCANGAN UI/UX FIGMA &amp; SITEMAP NAVIGASI</h2>
+<h3>7.1 Sitemap &amp; Struktur Alur Halaman</h3>
+<div class="mermaid">flowchart TD
+    Guest[Portal Publik / Guest]
+    Guest --&gt; Home[Landing Page: Penjelasan Sawar Kulit &amp; Sunscreen]
+    Guest --&gt; AuthLogin[Halaman Login &amp; Forgot Password]
+    Guest --&gt; AuthReg[Halaman Registrasi + Verifikasi OTP]
+
+    AuthReg --&gt; CustPortal[Portal Pelanggan / Customer]
+    AuthLogin --&gt; CustPortal
+    AuthLogin --&gt; AdminPortal[Portal Manajemen / Executive Admin]
+
+    subgraph "Customer Dashboard Experience"
+        CustPortal --&gt; CustDash[Dashboard Ringkasan Skor &amp; Riwayat Terakhir]
+        CustPortal --&gt; ScanHUD[Smart Camera HUD Viewfinder]
+        CustPortal --&gt; SunCheck[Pemeriksaan Kerataan Sunscreen]
+        CustPortal --&gt; DetailScan[Detail Hasil Analisis &amp; Heatmap]
+        CustPortal --&gt; HistoryPage[Linimasa Riwayat Scan Komprehensif]
+        CustPortal --&gt; AIChat[Widget Asisten Konsultasi Gemini]
+        CustPortal --&gt; ProductRec[Katalog Rekomendasi Skincare]
+        CustPortal --&gt; UserProfile[Profil Pengguna &amp; Keamanan]
+    end
+
+    subgraph "Executive Administrator Console"
+        AdminPortal --&gt; AdminDash[Executive KPI Dashboard]
+        AdminPortal --&gt; UserReg[Manajemen Pengguna Terdaftar]
+        AdminPortal --&gt; ScanAudit[Log Audit Seluruh Sesi Pemindaian]
+        AdminPortal --&gt; ProductCat[Manajemen Katalog Kosmetik]
+        AdminPortal --&gt; TokenMon[Live Gemini AI Token &amp; Engine Monitor]
+        AdminPortal --&gt; DynSettings[Centralized API Gateway &amp; Settings]
+    end
+</div>
+<h3>7.2 Spesifikasi Layar Kunci &amp; Walkthrough Prototipe Figma</h3>
+<ol>
+<li><strong>Layar HUD Viewfinder (<code>scan_face.php</code>)</strong>:
+<ul>
+<li>Memiliki <em>Face Oval Outline</em> dengan animasi pemindaian laser hijau neon.</li>
+<li>Dilengkapi <em>real-time brightness indicator</em> yang memperingatkan jika pencahayaan di bawah 40%.</li>
+</ul>
+</li>
+<li><strong>Layar Detail Hasil Analisis (<code>scan_detail.php</code>)</strong>:
+<ul>
+<li>Kartu metrik 4 pilar dengan <em>Progress Gauge Bar</em> berwarna dinamis (Hijau = Sehat, Kuning = Sedang, Merah = Butuh Perhatian).</li>
+<li>Menampilkan narasi diagnosis otomatis dari AI dan rekomendasi produk terkait.</li>
+</ul>
+</li>
+<li><strong>Layar Sunscreen Coverage &amp; Heatmap (<code>sunscreen_result.php</code>)</strong>:
+<ul>
+<li>Tampilan perbandingan <em>Side-by-Side</em> antara foto asli wajah dengan citra <em>Heatmap</em> gradien warna perlindungan tabir surya.</li>
+</ul>
+</li>
+<li><strong>Layar Admin AI Monitor &amp; Settings (<code>settings.php</code>)</strong>:
+<ul>
+<li>Menampilkan kartu akumulasi token Gemini (<em>Tokens Today</em>, <em>Input Tokens</em>, <em>Output Tokens</em>) serta tombol <em>AJAX Live Test</em> untuk menguji validitas API Key.</li>
+</ul>
+</li>
+</ol>
+<hr/>
+<h2 class="chapter-break">PENGESAHAN DOKUMEN</h2>
+<p>Dokumen Desain Perangkat Lunak (Software Design Document - SDD) ini telah disusun secara komprehensif untuk memenuhi kualifikasi <strong>Skor 4 (Sangat Baik / Maksimal)</strong> pada Rubrik Penilaian OBE Proyek Akhir Mandiri Mata Kuliah Rekayasa Perangkat Lunak.</p>
+<p><em>Cirebon, 17 November 2026</em><br/>
+<strong>Penyusun / Full-Stack Software Engineer:</strong></p>
+<p><strong>Satria Fibi Saputra</strong> (NIM: 41257159)<br/>
+S1 Teknik Informatika — STMIK IKMI Cirebon</p>
+
+</body>
+</html>

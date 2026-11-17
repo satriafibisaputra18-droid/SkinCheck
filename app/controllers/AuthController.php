@@ -8,12 +8,15 @@ class AuthController extends Controller {
     private $userModel;
     private $emailService;
     private $telegramService;
+    private $fonnteService;
 
     public function __construct() {
-        // Instantiate the User model, Email service, and Telegram Bot service
+        // Instantiate User model and Services
         $this->userModel = $this->model('User');
         $this->emailService = new EmailService();
         $this->telegramService = new TelegramService();
+        require_once APPROOT . '/services/FonnteService.php';
+        $this->fonnteService = new FonnteService();
     }
 
     /**
@@ -85,7 +88,7 @@ class AuthController extends Controller {
     }
 
     /**
-     * Customer Registration page and post action with OTP initiation.
+     * Customer Registration page and post action with OTP initiation via WhatsApp (Fonnte).
      */
     public function register() {
         // If already logged in, redirect
@@ -98,10 +101,12 @@ class AuthController extends Controller {
             'title' => 'Register a SkinCheck Account',
             'name' => '',
             'email' => '',
+            'phone' => '',
             'password' => '',
             'confirm_password' => '',
             'name_err' => '',
             'email_err' => '',
+            'phone_err' => '',
             'password_err' => '',
             'confirm_password_err' => ''
         ];
@@ -113,6 +118,7 @@ class AuthController extends Controller {
             
             $data['name'] = trim($_POST['name'] ?? '');
             $data['email'] = trim($_POST['email'] ?? '');
+            $data['phone'] = trim($_POST['phone'] ?? '');
             $data['password'] = trim($_POST['password'] ?? '');
             $data['confirm_password'] = trim($_POST['confirm_password'] ?? '');
 
@@ -128,6 +134,16 @@ class AuthController extends Controller {
                 $data['email_err'] = 'Format email tidak valid.';
             } elseif ($this->userModel->findUserByEmail($data['email'])) {
                 $data['email_err'] = 'Email ini sudah terdaftar. Silakan gunakan email lain atau langsung login.';
+            }
+
+            // Validate Phone (WhatsApp Number)
+            $cleanedPhone = preg_replace('/[^0-9]/', '', $data['phone']);
+            if (empty($data['phone'])) {
+                $data['phone_err'] = 'Nomor WhatsApp wajib diisi untuk verifikasi OTP.';
+            } elseif (strlen($cleanedPhone) < 10 || strlen($cleanedPhone) > 15) {
+                $data['phone_err'] = 'Nomor WhatsApp tidak valid (minimal 10 digit, contoh: 081234567890).';
+            } elseif ($this->userModel->findUserByPhone($cleanedPhone)) {
+                $data['phone_err'] = 'Nomor WhatsApp ini sudah terdaftar. Silakan gunakan nomor lain.';
             }
 
             // Validate Password
@@ -146,15 +162,11 @@ class AuthController extends Controller {
                 }
             }
 
-            // Check if errors are empty -> Generate OTP and route to verification
-            if (empty($data['name_err']) && empty($data['email_err']) && empty($data['password_err']) && empty($data['confirm_password_err'])) {
+            // Check if errors are empty -> Generate OTP and route to WhatsApp verification
+            if (empty($data['name_err']) && empty($data['email_err']) && empty($data['phone_err']) && empty($data['password_err']) && empty($data['confirm_password_err'])) {
                 // Generate 6-digit random OTP
                 $otpCode = (string)random_int(100000, 999999);
-                // Generate secure random verification token for 1-click link
                 $regToken = bin2hex(random_bytes(16));
-
-                // Direct verification link
-                $verifyLink = URLROOT . '/auth/verifyDirect?token=' . $regToken;
 
                 $otpExpirySec = ((int)Setting::getVal('otp_expiry_minutes', 5)) * 60;
                 $resendCooldownSec = (int)Setting::getVal('otp_resend_cooldown', 60);
@@ -163,8 +175,7 @@ class AuthController extends Controller {
                 $_SESSION['pending_otp_registration'] = [
                     'name' => $data['name'],
                     'email' => $data['email'],
-                    'telegram_username' => null,
-                    'telegram_chat_id' => null,
+                    'phone' => $cleanedPhone,
                     'password' => $data['password'],
                     'otp' => $otpCode,
                     'token' => $regToken,
@@ -172,14 +183,17 @@ class AuthController extends Controller {
                     'resend_available_at' => time() + $resendCooldownSec,
                     'attempts' => 0,
                     'created_at' => time(),
-                    'otp_sent_to_tg' => false
+                    'otp_sent' => true
                 ];
 
-                // Attempt sending OTP to email as well if email service is configured
+                // Dispatch OTP directly to WhatsApp via Fonnte Gateway
                 try {
-                    $this->sendOtpEmail($data['email'], $data['name'], $otpCode);
+                    $sendRes = $this->fonnteService->sendOtp($cleanedPhone, $data['name'], $otpCode);
+                    if (!$sendRes['success']) {
+                        error_log('Fonnte WhatsApp dispatch warning: ' . ($sendRes['message'] ?? 'Unknown error'));
+                    }
                 } catch (\Throwable $e) {
-                    error_log('Failed to send OTP email: ' . $e->getMessage());
+                    error_log('Failed to dispatch WhatsApp OTP: ' . $e->getMessage());
                 }
 
                 unset($_SESSION['otp_notice']);
@@ -192,7 +206,7 @@ class AuthController extends Controller {
     }
 
     /**
-     * Customer OTP Verification page and submit action.
+     * Customer OTP Verification page and submit action (via WhatsApp Fonnte).
      * Route: GET /auth/verifyOtp and POST /auth/verifyOtp
      */
     public function verifyOtp() {
@@ -210,20 +224,17 @@ class AuthController extends Controller {
         }
 
         $pending = &$_SESSION['pending_otp_registration'];
-
-        $telegramBotLink = $this->telegramService->getBotStartLink($pending['token'] ?? '');
-        $telegramWebLink = $this->telegramService->getBotWebLink($pending['token'] ?? '');
-        $telegramAppLink = $this->telegramService->getBotAppProtocolLink($pending['token'] ?? '');
+        $rawPhone = $pending['phone'] ?? '';
+        $phoneMasked = (strlen($rawPhone) >= 8) 
+            ? substr($rawPhone, 0, 4) . ' •••• ' . substr($rawPhone, -3) 
+            : $rawPhone;
 
         $data = [
-            'title' => 'Verifikasi Akun - SkinCheck',
+            'title' => 'Verifikasi OTP WhatsApp - SkinCheck',
             'email' => $pending['email'],
             'name' => $pending['name'],
-            'token' => $pending['token'] ?? '',
-            'telegram_bot_name' => $this->telegramService->getBotName(),
-            'telegram_bot_link' => $telegramBotLink,
-            'telegram_web_link' => $telegramWebLink,
-            'telegram_app_link' => $telegramAppLink,
+            'phone' => $rawPhone,
+            'phone_masked' => $phoneMasked,
             'otp' => '',
             'otp_err' => '',
             'expires_in' => max(0, $pending['expires_at'] - time()),
@@ -259,11 +270,10 @@ class AuthController extends Controller {
             } else {
                 // OTP VALID! Register user in MySQL
                 $registerData = [
-                    'name'              => $pending['name'],
-                    'email'             => $pending['email'],
-                    'telegram_chat_id'  => $pending['telegram_chat_id'] ?? null,
-                    'telegram_username' => $pending['telegram_username'] ?? null,
-                    'password'          => $pending['password']
+                    'name'     => $pending['name'],
+                    'email'    => $pending['email'],
+                    'phone'    => $pending['phone'],
+                    'password' => $pending['password']
                 ];
 
                 if ($this->userModel->register($registerData)) {
@@ -278,7 +288,7 @@ class AuthController extends Controller {
                         $_SESSION['user_email'] = $newUser->email;
                         $_SESSION['user_role'] = $newUser->role;
                         $_SESSION['user_avatar'] = $newUser->profile_image ?? null;
-                        $_SESSION['flash_success'] = 'Selamat datang, ' . htmlspecialchars($newUser->name) . '! Pendaftaran dan verifikasi akun berhasil.';
+                        $_SESSION['flash_success'] = 'Selamat datang, ' . htmlspecialchars($newUser->name) . '! Pendaftaran dan verifikasi akun via WhatsApp berhasil.';
                         header('Location: ' . URLROOT . '/customer/dashboard');
                     } else {
                         $_SESSION['register_success'] = 'Pendaftaran & verifikasi akun berhasil! Silakan masuk ke akun Anda.';
@@ -311,7 +321,7 @@ class AuthController extends Controller {
     }
 
     /**
-     * AJAX Endpoint for Real-time Polling: Check if user tapped START in Telegram
+     * AJAX Endpoint for Real-time Polling / Verification Status
      * Route: GET /auth/checkOtpStatus
      */
     public function checkOtpStatus() {
@@ -330,46 +340,16 @@ class AuthController extends Controller {
             exit;
         }
 
-        $pending = &$_SESSION['pending_otp_registration'];
-        $token = $pending['token'] ?? '';
-
-        // If OTP was already sent to Telegram, notify frontend
-        if (!empty($pending['otp_sent_to_tg'])) {
-            echo json_encode([
-                'verified' => false,
-                'otp_sent' => true,
-                'message' => 'Kode OTP telah terkirim ke Telegram Anda. Silakan ketik 6 digit kode pada kotak di bawah.'
-            ]);
-            exit;
-        }
-
-        if (!empty($token)) {
-            // Check Telegram getUpdates for /start REG_{token}
-            $tgUser = $this->telegramService->checkStartToken($token);
-
-            if ($tgUser && !empty($tgUser['chat_id'])) {
-                $pending['telegram_chat_id'] = $tgUser['chat_id'];
-                $pending['telegram_username'] = $tgUser['username'] ?? null;
-                $pending['otp_sent_to_tg'] = true;
-
-                // Send 6-digit OTP code to Telegram (manual entry only, no auto-register!)
-                $this->telegramService->sendOtp($tgUser['chat_id'], $pending['name'], $pending['otp']);
-
-                echo json_encode([
-                    'verified' => false,
-                    'otp_sent' => true,
-                    'message' => 'Kode OTP berhasil dikirimkan ke Telegram! Silakan ketik 6 digit kode di bawah.'
-                ]);
-                exit;
-            }
-        }
-
-        echo json_encode(['verified' => false, 'otp_sent' => false]);
+        echo json_encode([
+            'verified' => false,
+            'otp_sent' => true,
+            'message' => 'Kode OTP telah berhasil dikirimkan ke WhatsApp Anda.'
+        ]);
         exit;
     }
 
     /**
-     * Resend a fresh OTP code.
+     * Resend a fresh OTP code via WhatsApp (Fonnte).
      * Route: GET or POST /auth/resendOtp
      */
     public function resendOtp() {
@@ -388,34 +368,24 @@ class AuthController extends Controller {
             exit;
         }
 
-        // Generate fresh OTP & Token
+        // Generate fresh OTP
         $newOtp = (string)random_int(100000, 999999);
-        $newToken = bin2hex(random_bytes(16));
-
         $otpExpirySec = ((int)Setting::getVal('otp_expiry_minutes', 5)) * 60;
         $resendCooldownSec = (int)Setting::getVal('otp_resend_cooldown', 60);
 
         $pending['otp'] = $newOtp;
-        $pending['token'] = $newToken;
         $pending['expires_at'] = time() + $otpExpirySec;
         $pending['resend_available_at'] = time() + $resendCooldownSec;
         $pending['attempts'] = 0;
-        $pending['otp_sent_to_tg'] = false;
 
-        // If telegram chat ID is already known, send to Telegram immediately
-        if (!empty($pending['telegram_chat_id'])) {
-            $this->telegramService->sendOtp($pending['telegram_chat_id'], $pending['name'], $newOtp);
-            $pending['otp_sent_to_tg'] = true;
-        }
-
-        // Also try resending to email if configured
+        // Dispatch to WhatsApp via Fonnte Gateway
         try {
-            $this->sendOtpEmail($pending['email'], $pending['name'], $newOtp);
+            $this->fonnteService->sendOtp($pending['phone'], $pending['name'], $newOtp);
         } catch (\Throwable $e) {
-            error_log('Failed to resend OTP email: ' . $e->getMessage());
+            error_log('Failed to resend WhatsApp OTP: ' . $e->getMessage());
         }
 
-        $_SESSION['otp_notice'] = 'Kode OTP baru telah diperbarui. Silakan periksa Telegram / Email Anda lalu masukkan 6 digit kode di bawah.';
+        $_SESSION['otp_notice'] = 'Kode OTP baru telah berhasil dikirimkan ke WhatsApp Anda (' . htmlspecialchars($pending['phone']) . '). Silakan masukkan 6 digit kode di bawah.';
         unset($_SESSION['otp_error']);
 
         header('Location: ' . URLROOT . '/auth/verifyOtp');

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentasi Progres 1 — SkinCheck PRD & Konsep Aplikasi</title>
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-dark: #047857;
+            --primary-light: #10b981;
+            --secondary: #0284c7;
+            --accent: #8b5cf6;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+        }
+
+        /* Top Progress Bar */
+        #progress-container {
+            width: 100%;
+            height: 5px;
+            background: #1e293b;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 16.66%;
+            background: linear-gradient(90deg, #10b981, #06b6d4, #8b5cf6);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Top Bar Info */
+        .top-nav {
+            position: fixed;
+            top: 14px;
+            left: 28px;
+            right: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 50;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .badge-live {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #34d399;
+            padding: 4px 14px;
+            border-radius: 9999px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-live::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
+
+        /* Slide Stage */
+        .slide-stage {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 60px 80px 80px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(60px) scale(0.98);
+            pointer-events: none;
+            transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .slide.prev {
+            transform: translateX(-60px) scale(0.98);
+        }
+
+        /* Typography & Components */
+        .slide-tag {
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slide-title {
+            font-size: 2.75rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 900px;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        /* Cards Layout */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 10px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+            margin-top: 10px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            border-color: #475569;
+            transform: translateY(-2px);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 14px;
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #f1f5f9;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .card-highlight {
+            border-top: 3px solid var(--primary-light);
+        }
+
+        .card-highlight-blue {
+            border-top: 3px solid var(--secondary);
+        }
+
+        .card-highlight-purple {
+            border-top: 3px solid var(--accent);
+        }
+
+        /* Hero Banner Slide 1 */
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.15) 0%, rgba(2, 132, 199, 0.1) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #34d399 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .meta-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 24px;
+            font-size: 0.95rem;
+        }
+
+        .meta-item {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #334155;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: #cbd5e1;
+        }
+
+        .meta-item strong {
+            color: #38bdf8;
+        }
+
+        /* Pill tags */
+        .pill {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-right: 6px;
+            margin-bottom: 8px;
+        }
+
+        /* Bottom Control Bar */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(8px);
+            border-top: 1px solid #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            z-index: 50;
+        }
+
+        .nav-btn {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: var(--text-main);
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover {
+            background: #334155;
+            border-color: #475569;
+        }
+
+        .counter {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .counter span {
+            color: var(--primary-light);
+        }
+
+        /* Timer in bottom bar */
+        #timer {
+            font-family: monospace;
+            font-size: 1.05rem;
+            color: #facc15;
+            background: rgba(250, 204, 21, 0.1);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(250, 204, 21, 0.3);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Progress Bar -->
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <!-- Top Status Bar -->
+    <div class="top-nav">
+        <div class="badge-live">STMIK IKMI CIREBON — REKAYASA PERANGKAT LUNAK</div>
+        <div>Mata Kuliah: <strong>TIKB2503021</strong> | Dosen: <strong>Yudhistira Arie Wijaya, M.Kom., CDS.</strong></div>
+    </div>
+
+    <!-- Presentation Stage -->
+    <div class="slide-stage">
+
+        <!-- SLIDE 1: COVER -->
+        <div class="slide active" id="slide-1">
+            <div class="hero-banner">
+                <div class="slide-tag">✨ PROGRES TAHAP 1: INISIASI & PRD / SRS MANDIRI</div>
+                <h1 class="hero-title">🌿 SkinCheck</h1>
+                <p class="slide-subtitle">AI-Powered Skin Barrier & Sunscreen Analysis Platform: Sistem Informasi Berbasis Web untuk Evaluasi Kesehatan Sawar Kulit & Proteksi Tabir Surya Berbasis Artificial Intelligence.</p>
+                
+                <div class="meta-list">
+                    <div class="meta-item">Nama: <strong>Satria Fibi Saputra</strong></div>
+                    <div class="meta-item">NIM: <strong>41257159</strong></div>
+                    <div class="meta-item">Tema Kelompok: <strong>Smart Healthcare & Public Service AI</strong></div>
+                    <div class="meta-item">Sifat Pengerjaan: <strong>100% Individual Ownership & Full-App Build</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: LATAR BELAKANG MASALAH -->
+        <div class="slide" id="slide-2">
+            <div class="slide-tag">🔍 IDENTIFIKASI MASALAH NYATA</div>
+            <h2 class="slide-title">Mengapa SkinCheck Dibutuhkan?</h2>
+            <p class="slide-subtitle">Sawar kulit (*skin barrier*) adalah pelindung vital tubuh dari polusi dan radiasi UV. Namun, masyarakat menghadapi 3 kendala utama dalam menjaganya:</p>
+
+            <div class="grid-3">
+                <div class="card card-highlight">
+                    <div class="card-icon">🏥</div>
+                    <h3 class="card-title">1. Biaya Klinis Mahal</h3>
+                    <p class="card-desc">Akses konsultasi ke dokter spesialis kulit atau klinik estetika berbiaya tinggi dan tidak terjangkau bagi sebagian besar pelajar dan mahasiswa umum.</p>
+                </div>
+                <div class="card card-highlight-blue">
+                    <div class="card-icon">🔬</div>
+                    <h3 class="card-title">2. Sulit Deteksi Dini</h3>
+                    <p class="card-desc">Kerusakan sawar kulit dan iritasi mikroskopis sering tidak disadari secara mandiri hingga berubah menjadi lesi jerawat parah atau hiperpigmentasi permanen.</p>
+                </div>
+                <div class="card card-highlight-purple">
+                    <div class="card-icon">☀️</div>
+                    <h3 class="card-title">3. Under-Application Sunscreen</h3>
+                    <p class="card-desc">Riset dermatologi membuktikan >70% pengguna tabir surya mengaplikasikannya secara tidak merata, meninggalkan area rawan wajah tanpa perlindungan UV optimal.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: SOLUSI PRODUK -->
+        <div class="slide" id="slide-3">
+            <div class="slide-tag">💡 NILAI GUNA & SOLUSI PRODUK</div>
+            <h2 class="slide-title">Solusi Cerdas: Platform SkinCheck</h2>
+            <p class="slide-subtitle">Platform web mandiri yang menghadirkan teknologi skrining kesehatan kulit profesional langsung ke peramban pengguna secara cepat, akurat, dan tanpa instalasi aplikasi.</p>
+
+            <div class="grid-4">
+                <div class="card card-highlight">
+                    <div class="card-icon">📷</div>
+                    <h3 class="card-title">Browser HUD Viewfinder</h3>
+                    <p class="card-desc">Panduan oval wajah (*Face Oval HUD*) dan validasi otomatis kecerahan & resolusi gambar via webcam tanpa perlu download aplikasi Play Store.</p>
+                </div>
+                <div class="card card-highlight">
+                    <div class="card-icon">🧬</div>
+                    <h3 class="card-title">4 Pilar Sawar Kulit</h3>
+                    <p class="card-desc">Skor kuantitatif objektif (0–100) untuk Jerawat/Pori, Kemerahan/Eritema, Kehalusan Tekstur, dan Hiperpigmentasi Melanin.</p>
+                </div>
+                <div class="card card-highlight-blue">
+                    <div class="card-icon">☀️</div>
+                    <h3 class="card-title">Sunscreen & Heatmap</h3>
+                    <p class="card-desc">Evaluasi persentase cakupan proteksi (*Coverage Score*), deteksi area rawan yang terlewat, dan visualisasi peta warna perlindungan UV.</p>
+                </div>
+                <div class="card card-highlight-purple">
+                    <div class="card-icon">🤖</div>
+                    <h3 class="card-title">Gemini AI Assistant</h3>
+                    <p class="card-desc">Chatbot konsultasi cerdas sadar-konteks (*context-aware*) yang menganalisis skor riwayat scan untuk anjuran bahan aktif yang tepat.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: PRD / SRS STANDAR IEEE 830 -->
+        <div class="slide" id="slide-4">
+            <div class="slide-tag">📋 DOKUMEN SPESIFIKASI KEBUTUHAN (PRD / SRS IEEE 830)</div>
+            <h2 class="slide-title">Kebutuhan Fungsional & Kualitas Sistem</h2>
+            <p class="slide-subtitle">Disusun terstruktur memuat User Stories, Acceptance Criteria (Gherkin), dan Kebutuhan Non-Fungsional (NFR) terukur:</p>
+
+            <div class="grid-2">
+                <div class="card card-highlight">
+                    <h3 class="card-title">👤 Kebutuhan Fungsional Kunci (10 Modul)</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.8; margin-left: 20px;">
+                        <li><strong>Autentikasi Multi-Kanal</strong>: OTP 6-Digit via Bot Telegram & Resend Email API.</li>
+                        <li><strong>Smart Camera HUD</strong>: Validasi kelayakan citra & deteksi orientasi.</li>
+                        <li><strong>Engine Analisis Kulit & Sunscreen</strong>: Komputasi skor terstruktur 0–100.</li>
+                        <li><strong>Security Boundary</strong>: Akses citra via <em>Scoped Streaming</em> (anti-intip foto).</li>
+                        <li><strong>Executive Admin Console</strong>: Audit log, inventaris produk, & pengaturan dinamis.</li>
+                    </ul>
+                </div>
+                <div class="card card-highlight-blue">
+                    <h3 class="card-title">⚡ Standar Kebutuhan Non-Fungsional (NFR)</h3>
+                    <div style="margin-top: 10px;">
+                        <span class="pill">⏱️ Latensi Inferensi &le; 1.5 Detik</span>
+                        <span class="pill">🔒 Bcrypt Password Hash ($cost &ge; 10)</span>
+                        <span class="pill">🌐 100% Zero-Install WebRTC</span>
+                        <span class="pill">🛡️ API Key Obfuscation (Masked)</span>
+                        <span class="pill">🔄 Graceful AI Fallback (HTTP 429)</span>
+                        <span class="pill">📐 Prinsip SOLID & Interface Decoupled</span>
+                    </div>
+                    <p class="card-desc" style="margin-top: 14px;">Memastikan keandalan, keamanan privasi foto wajah pengguna, dan ketersediaan sistem tanpa hambatan.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: ARSITEKTUR KECERDASAN ARTIFISIAL -->
+        <div class="slide" id="slide-5">
+            <div class="slide-tag">🧠 PERAN STRATEGIS FITUR ARTIFICIAL INTELLIGENCE</div>
+            <h2 class="slide-title">Sinergi Dua Engine AI Mandiri</h2>
+            <p class="slide-subtitle">Kekuatan utama SkinCheck terletak pada kombinasi Computer Vision berlatensi rendah dengan Generative AI tingkat lanjut:</p>
+
+            <div class="grid-2">
+                <div class="card card-highlight">
+                    <div class="card-icon">👁️</div>
+                    <h3 class="card-title">1. Computer Vision: MobileNetV3 ONNX</h3>
+                    <p class="card-desc"><strong>Peran</strong>: Inferensi citra lokal berlatensi sangat rendah (&le; 1.5 detik).</p>
+                    <ul style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin-left: 18px; margin-top: 10px;">
+                        <li><strong>Backbone</strong>: MobileNetV3 dengan 4 kepala regresi (*Multi-Task Heads*).</li>
+                        <li><strong>Output</strong>: Skor kontinu Jerawat, Eritema, Tekstur, dan Hiperpigmentasi.</li>
+                        <li><strong>Sunscreen Pipeline</strong>: Algoritma transformasi warna RGB &rarr; LAB/HSV untuk mengalkulasi rasio proteksi dan membangkitkan visualisasi <em>Heatmap</em>.</li>
+                    </ul>
+                </div>
+
+                <div class="card card-highlight-purple">
+                    <div class="card-icon">💬</div>
+                    <h3 class="card-title">2. Generative AI: Google Gemini Flash</h3>
+                    <p class="card-desc"><strong>Peran</strong>: Asisten dermatologi interaktif sadar-konteks (*Context-Aware*).</p>
+                    <ul style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin-left: 18px; margin-top: 10px;">
+                        <li><strong>Context Injection</strong>: Metadata scan pengguna otomatis disuntikkan ke dalam <em>System Prompt</em> Gemini.</li>
+                        <li><strong>Rekomendasi Ilmiah</strong>: Menyarankan bahan aktif (Niacinamide, Ceramide, Cica) sesuai skor terlemah pengguna.</li>
+                        <li><strong>Executive AI Monitor</strong>: Pemantauan konsumsi token API secara real-time di portal admin.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: PENUTUP & TAHAP SELANJUTNYA -->
+        <div class="slide" id="slide-6">
+            <div class="hero-banner" style="text-align: center;">
+                <div class="slide-tag" style="justify-content: center;">🚀 KESIAPAN MELANGKAH KE TAHAP 2</div>
+                <h2 class="slide-title" style="font-size: 2.5rem; margin-bottom: 12px;">Dokumen PRD Selesai & Terverifikasi</h2>
+                <p class="slide-subtitle" style="margin: 0 auto 24px auto;">Seluruh spesifikasi kebutuhan fungsional, non-fungsional, dan arsitektur AI telah terdokumentasi resmi di berkas <code>docs/PRD_SRS_SkinCheck.md</code>.</p>
+
+                <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 24px;">
+                    <div class="meta-item">Langkah Selanjutnya: <strong>Tahap 2 — Pemodelan 4 Diagram UML (SDD) & UI/UX Figma</strong></div>
+                    <div class="meta-item">Target Durasi Video: <strong>5 – 7 Menit</strong></div>
+                </div>
+
+                <h3 style="color: #34d399; font-size: 1.5rem; font-weight: 700;">Terima Kasih Atas Perhatian Bapak Yudhistira Arie Wijaya</h3>
+                <p style="color: var(--text-muted); margin-top: 6px;">Wassalamu’alaikum Warahmatullahi Wabarakatuh</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Controls Bar -->
+    <div class="bottom-bar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="nav-btn" onclick="prevSlide()">❮ Sebelumnya</button>
+            <button class="nav-btn" onclick="nextSlide()">Berikutnya ❯</button>
+            <button class="nav-btn" onclick="toggleFullScreen()">⛶ Layar Penuh (F)</button>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div id="timer" onclick="resetTimer()" title="Klik untuk reset timer">⏱️ 00:00</div>
+            <div class="counter">Slide <span id="current-slide-num">1</span> dari <span id="total-slides-num">6</span></div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 6;
+        const progressBar = document.getElementById('progress-bar');
+        const currentSlideNum = document.getElementById('current-slide-num');
+        const totalSlidesNum = document.getElementById('total-slides-num');
+        const timerDisplay = document.getElementById('timer');
+
+        let secondsElapsed = 0;
+        let timerInterval = null;
+
+        function startTimer() {
+            if (timerInterval) return;
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+                const secs = String(secondsElapsed % 60).padStart(2, '0');
+                timerDisplay.textContent = `⏱️ ${mins}:${secs}`;
+                
+                // Color warn if approaching 3-5 mins target
+                if (secondsElapsed >= 180 && secondsElapsed <= 300) {
+                    timerDisplay.style.color = '#34d399'; // Green (Safe zone 3-5m)
+                    timerDisplay.style.borderColor = '#10b981';
+                } else if (secondsElapsed > 300) {
+                    timerDisplay.style.color = '#f87171'; // Red (Overtime)
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            secondsElapsed = 0;
+            timerDisplay.textContent = '⏱️ 00:00';
+            timerDisplay.style.color = '#facc15';
+        }
+
+        function updateSlide() {
+            startTimer();
+            for (let i = 1; i <= totalSlides; i++) {
+                const s = document.getElementById(`slide-${i}`);
+                if (i === currentSlide) {
+                    s.classList.add('active');
+                    s.classList.remove('prev');
+                } else if (i < currentSlide) {
+                    s.classList.remove('active');
+                    s.classList.add('prev');
+                } else {
+                    s.classList.remove('active', 'prev');
+                }
+            }
+
+            // Update Progress Bar
+            const progress = (currentSlide / totalSlides) * 100;
+            progressBar.style.width = `${progress}%`;
+            currentSlideNum.textContent = currentSlide;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Keyboard Controls
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key.toLowerCase() === 'f') {
+                toggleFullScreen();
+            }
+        });
+
+        // Initialize
+        updateSlide();
+    </script>
+</body>
+</html>

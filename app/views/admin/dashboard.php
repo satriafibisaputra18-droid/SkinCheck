@@ -1,86 +1,95 @@
 <?php require APPROOT . '/views/templates/admin_header.php'; ?>
 
 <!-- Admin Dashboard Workspace -->
-<div class="row g-4 mb-4">
+<div class="row g-3 mb-4">
 
     <!-- Total Customers Card -->
     <div class="col-sm-6 col-xl-3">
-        <div
-            class="card p-3 border-0 shadow-sm bg-white rounded d-flex flex-row align-items-center justify-content-between">
-            <div>
-                <span class="text-muted small d-block mb-1">Customers</span>
-                <h3 class="fw-bold mb-0 text-primary"><?php echo $metrics->total_customers; ?></h3>
+        <div class="card p-3 border-0 shadow-sm bg-white rounded-4 d-flex flex-row align-items-center gap-3">
+            <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:46px;height:46px;">
+                <i class="fa-solid fa-users fs-5"></i>
             </div>
-            <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-circle">
-                <i class="fa-solid fa-users fs-4"></i>
+            <div>
+                <span class="text-muted small d-block">Customers</span>
+                <h3 class="fw-bold mb-0 text-primary"><?php echo $metrics->total_customers; ?></h3>
             </div>
         </div>
     </div>
 
     <!-- Total Scans Card -->
     <div class="col-sm-6 col-xl-3">
-        <div
-            class="card p-3 border-0 shadow-sm bg-white rounded d-flex flex-row align-items-center justify-content-between">
-            <div>
-                <span class="text-muted small d-block mb-1">Analysis Scans</span>
-                <h3 class="fw-bold mb-0 text-success"><?php echo $metrics->total_scans; ?></h3>
+        <div class="card p-3 border-0 shadow-sm bg-white rounded-4 d-flex flex-row align-items-center gap-3">
+            <div class="bg-success bg-opacity-10 text-success rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:46px;height:46px;">
+                <i class="fa-solid fa-camera-retro fs-5"></i>
             </div>
-            <div class="bg-success bg-opacity-10 text-success p-3 rounded-circle">
-                <i class="fa-solid fa-camera-retro fs-4"></i>
+            <div>
+                <span class="text-muted small d-block">Analysis Scans</span>
+                <h3 class="fw-bold mb-0 text-success"><?php echo $metrics->total_scans; ?></h3>
             </div>
         </div>
     </div>
 
     <!-- Total Cosmetics Card -->
     <div class="col-sm-6 col-xl-3">
-        <div
-            class="card p-3 border-0 shadow-sm bg-white rounded d-flex flex-row align-items-center justify-content-between">
-            <div>
-                <span class="text-muted small d-block mb-1">Skincare Catalogue</span>
-                <h3 class="fw-bold mb-0 text-warning"><?php echo $metrics->total_products; ?></h3>
+        <div class="card p-3 border-0 shadow-sm bg-white rounded-4 d-flex flex-row align-items-center gap-3">
+            <div class="bg-warning bg-opacity-10 text-warning rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:46px;height:46px;">
+                <i class="fa-solid fa-prescription-bottle-medical fs-5"></i>
             </div>
-            <div class="bg-warning bg-opacity-10 text-warning p-3 rounded-circle">
-                <i class="fa-solid fa-prescription-bottle-medical fs-4"></i>
+            <div>
+                <span class="text-muted small d-block">Skincare Catalogue</span>
+                <h3 class="fw-bold mb-0 text-warning"><?php echo $metrics->total_products; ?></h3>
             </div>
         </div>
     </div>
 
     <!-- Average Health Index Card -->
     <div class="col-sm-6 col-xl-3">
-        <div
-            class="card p-3 border-0 shadow-sm bg-white rounded d-flex flex-row align-items-between justify-content-between">
-            <div>
-                <span class="text-muted small d-block mb-1">Average Health Score</span>
-                <h3 class="fw-bold mb-0 text-info"><?php echo $metrics->avg_score; ?>/100</h3>
+        <div class="card p-3 border-0 shadow-sm bg-white rounded-4 d-flex flex-row align-items-center gap-3">
+            <div class="bg-info bg-opacity-10 text-info rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:46px;height:46px;">
+                <i class="fa-solid fa-square-poll-vertical fs-5"></i>
             </div>
-            <div class="bg-info bg-opacity-10 text-info p-3 rounded-circle">
-                <i class="fa-solid fa-square-poll-vertical fs-4"></i>
+            <div>
+                <span class="text-muted small d-block">Average Health Score</span>
+                <h3 class="fw-bold mb-0 text-info"><?php echo $metrics->avg_score; ?>/100</h3>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Gemini AI Token & Engine Monitor Widget -->
-<?php $tm = $data['tokenMetrics'] ?? (object)['total_tokens' => 0, 'prompt_tokens' => 0, 'completion_tokens' => 0, 'total_requests' => 0, 'tokens_today' => 0, 'latest_model' => 'gemini-flash-lite-latest', 'tier_status' => 'Free Tier (Normal)']; ?>
-<div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden" style="background: linear-gradient(135deg, #0d2822 0%, #153e35 50%, #0d2822 100%); color: #ffffff; border: 1px solid rgba(223, 198, 139, 0.25) !important;">
+<!-- Gemini / NVIDIA AI Token & Engine Monitor Widget -->
+<?php 
+$tm = $data['tokenMetrics'] ?? (object)['total_tokens' => 0, 'prompt_tokens' => 0, 'completion_tokens' => 0, 'total_requests' => 0, 'tokens_today' => 0, 'latest_model' => 'gemini-flash-lite-latest', 'tier_status' => 'Free Tier (Normal)']; 
+$activeAiProvider = Setting::getVal('ai_provider', 'gemini');
+$isNvidia = ($activeAiProvider === 'nvidia');
+
+$currentNvidiaModel = Setting::getVal('nvidia_model', 'nvidia/nemotron-3.5-bolt-e4b');
+$currentGeminiModel = Setting::getVal('gemini_primary_model', 'gemini-flash-lite-latest');
+$activePrimaryModel = $isNvidia ? $currentNvidiaModel : $currentGeminiModel;
+
+$dashboardEngineTitle = $isNvidia ? 'NVIDIA NIM Token Monitor' : 'Google Gemini Token Monitor';
+$dashboardEngineDesc = $isNvidia 
+    ? 'Pemantauan konsumsi kuota token inferensi NVIDIA NIM Cloud dan kuota aktivitas real-time sistem SkinCheck.'
+    : 'Pemantauan konsumsi kuota token Google Gemini API dan kuota inferensi real-time sistem SkinCheck.';
+?>
+<div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden" style="background: linear-gradient(150deg, rgba(255, 255, 255, 0.84) 0%, rgba(236, 249, 246, 0.72) 100%) !important; backdrop-filter: blur(22px) saturate(185%); -webkit-backdrop-filter: blur(22px) saturate(185%); border: 1px solid rgba(255, 255, 255, 0.92) !important;">
     <div class="card-body p-4">
         <div class="row align-items-center g-4">
             <!-- Left: Engine & Model Status -->
-            <div class="col-lg-4 border-end-lg" style="border-color: rgba(255, 255, 255, 0.1) !important;">
-                <div class="d-flex align-items-center gap-3 mb-2">
-                    <div style="width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, #bfa15f, #dfc68b); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(191, 161, 95, 0.35); flex-shrink: 0;">
-                        <i class="fa-solid fa-microchip text-dark fs-4"></i>
+            <div class="col-lg-4 border-end-lg" style="border-color: #dce8e4 !important;">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #e6f4f1; border: 1px solid #cce6df; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="fa-solid fa-microchip text-primary fs-5"></i>
                     </div>
                     <div>
-                        <div class="d-flex align-items-center gap-2">
-                            <h5 class="mb-0 fw-bold text-white">Gemini AI Token Monitor</h5>
-                            <span class="badge rounded-pill" style="background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); font-size: 0.68rem;">Live Active</span>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <h5 class="mb-0 fw-bold text-dark"><?php echo $dashboardEngineTitle; ?></h5>
+                            <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle" style="font-size: 0.68rem;">Live Active</span>
                         </div>
-                        <small style="color: #c9ded5;">Mesin Aktif: <code style="color: #dfc68b; background: rgba(0,0,0,0.35); padding: 2px 7px; border-radius: 4px;"><?php echo htmlspecialchars($tm->latest_model); ?></code></small>
+                        <small class="text-muted">Mesin Aktif: <code style="color: var(--primary-color); background: #e6f4f1; padding: 2px 7px; border-radius: 4px;"><?php echo htmlspecialchars($activePrimaryModel); ?></code></small>
                     </div>
                 </div>
-                <p class="mb-0 small" style="color: #94a3b8; font-size: 0.82rem; line-height: 1.45;">
-                    Pemantauan konsumsi kuota token Google Gemini API dan kuota inferensi real-time sistem SkinCheck.
+                <p class="mb-0 small text-muted" style="font-size: 0.82rem; line-height: 1.45;">
+                    <?php echo $dashboardEngineDesc; ?>
                 </p>
             </div>
 
@@ -88,28 +97,28 @@
             <div class="col-lg-5">
                 <div class="row g-3 text-center text-sm-start">
                     <div class="col-sm-6">
-                        <span class="small d-block mb-1" style="color: #c9ded5; font-size: 0.8rem;">
-                            <i class="fa-solid fa-coins me-1" style="color: #dfc68b;"></i>Total Token Terpakai
+                        <span class="small d-block mb-1 text-muted" style="font-size: 0.8rem;">
+                            <i class="fa-solid fa-coins me-1 text-primary"></i>Total Token Terpakai
                         </span>
-                        <h2 class="fw-bold mb-0" style="color: #dfc68b; letter-spacing: -0.5px;">
+                        <h2 class="fw-bold mb-0 text-primary" style="letter-spacing: -0.5px;">
                             <?php echo number_format($tm->total_tokens); ?>
-                            <span style="font-size: 0.85rem; font-weight: 500; color: #ffffff;">Tokens</span>
+                            <span class="text-muted" style="font-size: 0.85rem; font-weight: 500;">Tokens</span>
                         </h2>
-                        <small style="color: #94a3b8; font-size: 0.75rem;">Hari ini: <strong class="text-white">+<?php echo number_format($tm->tokens_today); ?></strong></small>
+                        <small class="text-muted" style="font-size: 0.75rem;">Hari ini: <strong class="text-dark">+<?php echo number_format($tm->tokens_today); ?></strong></small>
                     </div>
                     <div class="col-sm-6">
-                        <span class="small d-block mb-1" style="color: #c9ded5; font-size: 0.8rem;">
-                            <i class="fa-solid fa-arrow-right-arrow-left me-1" style="color: #38bdf8;"></i>Rincian Token (In / Out)
+                        <span class="small d-block mb-1 text-muted" style="font-size: 0.8rem;">
+                            <i class="fa-solid fa-arrow-right-arrow-left me-1 text-primary"></i>Rincian Token (In / Out)
                         </span>
                         <div class="d-flex align-items-center gap-3">
                             <div>
-                                <div class="fw-bold text-white small"><?php echo number_format($tm->prompt_tokens); ?></div>
-                                <span style="font-size: 0.72rem; color: #94a3b8;">Input (Prompt)</span>
+                                <div class="fw-bold text-dark small"><?php echo number_format($tm->prompt_tokens); ?></div>
+                                <span class="text-muted" style="font-size: 0.72rem;">Input (Prompt)</span>
                             </div>
-                            <div style="width: 1px; height: 26px; background: rgba(255,255,255,0.15);"></div>
+                            <div style="width: 1px; height: 26px; background: #dce8e4;"></div>
                             <div>
-                                <div class="fw-bold text-white small"><?php echo number_format($tm->completion_tokens); ?></div>
-                                <span style="font-size: 0.72rem; color: #94a3b8;">Output (Response)</span>
+                                <div class="fw-bold text-dark small"><?php echo number_format($tm->completion_tokens); ?></div>
+                                <span class="text-muted" style="font-size: 0.72rem;">Output (Response)</span>
                             </div>
                         </div>
                     </div>
@@ -119,15 +128,15 @@
             <!-- Right: Actions & Tier -->
             <div class="col-lg-3 text-lg-end">
                 <div class="mb-2">
-                    <span class="badge rounded-pill px-3 py-1.5" style="background: rgba(223, 198, 139, 0.15); color: #dfc68b; border: 1px solid rgba(223, 198, 139, 0.35); font-size: 0.75rem;">
+                    <span class="badge rounded-pill px-3 py-1 sc-badge-gold" style="font-size: 0.75rem;">
                         <i class="fa-solid fa-shield-halved me-1"></i>Status: <?php echo htmlspecialchars($tm->tier_status ?? 'Free Tier (Normal)'); ?>
                     </span>
                 </div>
-                <div class="small mb-2" style="color: #94a3b8; font-size: 0.75rem;">
-                    Total Panggilan: <strong class="text-white"><?php echo number_format($tm->total_requests); ?> kali</strong>
+                <div class="small mb-2 text-muted" style="font-size: 0.75rem;">
+                    Total Panggilan: <strong class="text-dark"><?php echo number_format($tm->total_requests); ?> kali</strong>
                 </div>
-                <a href="<?php echo URLROOT; ?>/admin/aiAssistant" class="btn btn-sm rounded-pill px-3 py-1.5 fw-semibold" style="background: linear-gradient(135deg, #bfa15f, #dfc68b); color: #08120e; border: none; font-size: 0.82rem;">
-                    <i class="fa-solid fa-robot me-1.5"></i>Buka AI Console <i class="fa-solid fa-arrow-right ms-1"></i>
+                <a href="<?php echo URLROOT; ?>/admin/aiAssistant" class="btn btn-sm btn-primary rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.82rem;">
+                    <i class="fa-solid fa-robot me-2"></i>Buka AI Console <i class="fa-solid fa-arrow-right ms-1"></i>
                 </a>
             </div>
         </div>
@@ -135,31 +144,36 @@
 </div>
 
 <!-- Tabs for Admin Tasks -->
-<div class="card border-0 shadow-sm bg-white rounded mb-4">
-    <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
-        <ul class="nav nav-tabs border-bottom" id="adminTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active fw-semibold text-primary px-3 pb-3" id="customers-tab"
-                    data-bs-toggle="tab" data-bs-target="#customers-pane" type="button" role="tab"
-                    aria-controls="customers-pane" aria-selected="true">
-                    <i class="fa-solid fa-users me-2"></i>Customer Registry
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link fw-semibold text-primary px-3 pb-3" id="products-tab" data-bs-toggle="tab"
-                    data-bs-target="#products-pane" type="button" role="tab" aria-controls="products-pane"
-                    aria-selected="false">
-                    <i class="fa-solid fa-jar-wheat me-2"></i>Cosmetics Catalog
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link fw-semibold text-primary px-3 pb-3" id="scans-tab" data-bs-toggle="tab"
-                    data-bs-target="#scans-pane" type="button" role="tab" aria-controls="scans-pane"
-                    aria-selected="false">
-                    <i class="fa-solid fa-clock-rotate-left"></i>Scan Audits
-                </button>
-            </li>
-        </ul>
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card-header border-0 pt-4 px-4 pb-2 text-center">
+        <div class="d-flex justify-content-center">
+            <ul class="nav nav-pills sc-admin-nav-capsule border-0 mb-0" id="adminTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active fw-semibold" id="customers-tab"
+                        data-bs-toggle="tab" data-bs-target="#customers-pane" type="button" role="tab"
+                        aria-controls="customers-pane" aria-selected="true">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Customer Registry</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-semibold" id="products-tab" data-bs-toggle="tab"
+                        data-bs-target="#products-pane" type="button" role="tab" aria-controls="products-pane"
+                        aria-selected="false">
+                        <i class="fa-solid fa-prescription-bottle-medical"></i>
+                        <span>Cosmetics Catalog</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-semibold" id="scans-tab" data-bs-toggle="tab"
+                        data-bs-target="#scans-pane" type="button" role="tab" aria-controls="scans-pane"
+                        aria-selected="false">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>Scan Audits</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <div class="card-body p-4">
@@ -315,7 +329,7 @@
                                             class="fw-semibold text-dark"><?php echo htmlspecialchars($scan->user_name); ?></span>
                                     </td>
                                     <td><span
-                                            class="badge bg-success-subtle text-success py-1.5 px-2 rounded fw-bold border border-success border-opacity-10"><?php echo $scan->score; ?>
+                                            class="badge bg-success-subtle text-success py-1 px-2 rounded fw-bold border border-success border-opacity-10"><?php echo $scan->score; ?>
                                             / 100</span></td>
                                     <td>
                                         <?php
@@ -326,7 +340,7 @@
                                             $badgeClass = 'bg-warning-subtle text-warning border-warning';
                                         ?>
                                         <span
-                                            class="badge <?php echo $badgeClass; ?> border border-opacity-10 py-1.5 px-2 rounded-pill small">
+                                            class="badge <?php echo $badgeClass; ?> border border-opacity-10 py-1 px-2 rounded-pill small">
                                             <?php echo htmlspecialchars($scan->sunscreen_status); ?>
                                         </span>
                                     </td>
