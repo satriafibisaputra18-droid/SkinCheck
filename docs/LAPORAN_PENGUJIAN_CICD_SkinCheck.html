@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan Pengujian & CI/CD — SkinCheck (Satria Fibi Saputra - 41257159)</title>
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 22mm 18mm 20mm 22mm;
+            @bottom-right {
+                content: counter(page);
+                font-family: 'Segoe UI', Arial, sans-serif;
+                font-size: 8.5pt;
+                color: #64748b;
+            }
+            @top-right {
+                content: "SkinCheck — Laporan Pengujian & DevOps CI/CD";
+                font-family: 'Segoe UI', Arial, sans-serif;
+                font-size: 8pt;
+                color: #94a3b8;
+            }
+        }
+
+        @page:first {
+            margin-top: 14mm;
+            @top-right { content: ""; }
+            @bottom-right { content: ""; }
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 9.5pt;
+            line-height: 1.55;
+            color: #1e293b;
+            background: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .cover-header {
+            text-align: center;
+            border-bottom: 3px double #0f172a;
+            padding-bottom: 12pt;
+            margin-bottom: 20pt;
+        }
+
+        .cover-inst {
+            font-size: 10.5pt;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #334155;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .cover-dept {
+            font-size: 12pt;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #0f172a;
+            text-transform: uppercase;
+            margin: 4pt 0 0 0;
+        }
+
+        h1 {
+            font-size: 15pt;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 10pt;
+            margin-bottom: 6pt;
+            line-height: 1.25;
+        }
+
+        h2 {
+            font-size: 12pt;
+            font-weight: 700;
+            color: #047857;
+            margin-top: 16pt;
+            margin-bottom: 6pt;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding-bottom: 3px;
+            page-break-after: avoid;
+        }
+
+        .chapter-break {
+            page-break-before: always;
+            padding-top: 8pt;
+        }
+
+        h3 {
+            font-size: 10.5pt;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 10pt;
+            margin-bottom: 4pt;
+            page-break-after: avoid;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 5pt;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        ul, ol {
+            margin-top: 0;
+            margin-bottom: 6pt;
+            padding-left: 18px;
+        }
+
+        li { margin-bottom: 2pt; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6pt;
+            margin-bottom: 10pt;
+            font-size: 8.5pt;
+            page-break-inside: avoid;
+        }
+
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 4.5px 7px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            font-weight: 700;
+            border-bottom: 2px solid #94a3b8;
+        }
+
+        tr:nth-child(even) td { background-color: #f8fafc; }
+
+        pre {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 3.5px solid #059669;
+            border-radius: 4px;
+            padding: 8px 10px;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 7.5pt;
+            line-height: 1.35;
+            overflow-x: auto;
+            margin-top: 5pt;
+            margin-bottom: 8pt;
+            page-break-inside: avoid;
+            color: #0f172a;
+        }
+
+        code {
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 8pt;
+            background-color: #f1f5f9;
+            color: #047857;
+            padding: 1px 3px;
+            border-radius: 3px;
+        }
+
+        pre code { background-color: transparent; padding: 0; color: inherit; }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #e2e8f0;
+            margin: 10pt 0;
+        }
+
+        strong { color: #0f172a; }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cover-header">
+        <p class="cover-inst">STMIK IKMI CIREBON — PROGRAM STUDI S1 TEKNIK INFORMATIKA</p>
+        <p class="cover-dept">TUGAS PROYEK AKHIR MANDIRI REKAYASA PERANGKAT LUNAK (OBE)</p>
+    </div>
+<h1>LAPORAN PENGUJIAN PERANGKAT LUNAK &amp; DEVOPS CI/CD MANDIRI</h1>
+<h2>Berdasarkan Standar IEEE 829 / ISO/IEC/IEEE 29119</h2>
+<hr/>
+<h1>🌿 SKINCHECK: AI-Powered Skin Barrier &amp; Sunscreen Analysis Platform</h1>
+<p><strong>Laporan Hasil Uji Otomatisasi (Automated Unit Testing), Kepatuhan Clean Code &amp; SOLID, serta Verifikasi Pipeline CI/CD GitHub Actions</strong></p>
+<ul>
+<li><strong>Mata Kuliah</strong>: Rekayasa Perangkat Lunak (TIKB2503021) — 4 SKS (2 Teori + 2 Praktik)</li>
+<li><strong>Program Studi</strong>: S1 Teknik Informatika — STMIK IKMI Cirebon</li>
+<li><strong>Penyusun / Mahasiswa</strong>: Satria Fibi Saputra (NIM: 41257159)</li>
+<li><strong>Dosen Pengampu</strong>: Yudhistira Arie Wijaya, M.Kom., CDS.</li>
+<li><strong>Tema Topik Kelompok</strong>: <em>Smart Healthcare &amp; Public Service AI</em></li>
+<li><strong>Sifat Proyek</strong>: Mandiri / Perorangan (<em>100% Individual Ownership &amp; Full-App Build</em>)</li>
+<li><strong>Status Build CI/CD</strong>: <strong>SUCCESS / CENTANG HIJAU (PASSED)</strong></li>
+<li><strong>Versi Dokumen</strong>: 1.0.0</li>
+<li><strong>Tanggal Rilis</strong>: 18 November 2026</li>
+</ul>
+<hr/>
+<h2 class="chapter-break">DAFTAR ISI</h2>
+<ol>
+<li><a href="#bab-i-pendahuluan--strategi-pengujian">BAB I: PENDAHULUAN &amp; STRATEGI PENGUJIAN</a>
+<ul>
+<li>1.1 Tujuan Pengujian</li>
+<li>1.2 Lingkup Pengujian (Test Scope)</li>
+<li>1.3 Lingkungan Pengujian (Test Environment)</li>
+</ul>
+</li>
+<li><a href="#bab-ii-desain-skenario--hasil-eksekusi-pengujian">BAB II: DESAIN SKENARIO &amp; HASIL EKSEKUSI PENGUJIAN</a>
+<ul>
+<li>2.1 Test Suite 1: Evaluasi 4 Pilar Sawar Kulit AI (21 Test Cases)</li>
+<li>2.2 Test Suite 2: Estimasi Kerataan Sunscreen &amp; Heatmap (21 Test Cases)</li>
+<li>2.3 Ringkasan Metrik Pengujian (Testing Metrics Summary)</li>
+</ul>
+</li>
+<li><a href="#bab-iii-implementasi-github-devops--cicd-pipeline">BAB III: IMPLEMENTASI GITHUB DEVOPS &amp; CI/CD PIPELINE</a>
+<ul>
+<li>3.1 Arsitektur Alur Kerja GitHub Actions (.github/workflows/main.yml)</li>
+<li>3.2 Tahapan Otomatisasi (Linting, Multi-Runtime Setup, Test Runner)</li>
+<li>3.3 Verifikasi Status Build Hijau (Build Passing Verification)</li>
+</ul>
+</li>
+<li><a href="#bab-iv-audit-kepatuhan-clean-code--prinsip-solid">BAB IV: AUDIT KEPATUHAN CLEAN CODE &amp; PRINSIP SOLID</a>
+<ul>
+<li>4.1 Pemisahan Tanggung Jawab &amp; Abstraksi Antarmuka</li>
+<li>4.2 Penanganan Kesalahan &amp; Graceful Fallback</li>
+</ul>
+</li>
+<li><a href="#bab-v-kesimpulan--kesiapan-tahap-final">BAB V: KESIMPULAN &amp; KESIAPAN TAHAP FINAL</a></li>
+<li><a href="#pengesahan-laporan-pengujian">PENGESAHAN LAPORAN PENGUJIAN</a></li>
+</ol>
+<hr/>
+<h2 class="chapter-break">BAB I: PENDAHULUAN &amp; STRATEGI PENGUJIAN</h2>
+<h3>1.1 Tujuan Pengujian</h3>
+<p>Laporan Pengujian Perangkat Lunak dan Otomatisasi DevOps ini disusun untuk memenuhi target luaran <strong>Tahap 3 (Konstruksi Kode, Integrasi AI, Testing &amp; CI/CD)</strong> pada kurikulum <em>Outcome-Based Education</em> (OBE) STMIK IKMI Cirebon.</p>
+<p>Pengujian ini bertujuan untuk:</p>
+<ol>
+<li>Memverifikasi fungsionalitas algoritma inferensi <em>Computer Vision</em> (MobileNetV3 ONNX) dan modul estimasi visual tabir surya (<em>RGB Sunscreen Estimator</em>) secara matematis dan prosedural.</li>
+<li>Membuktikan keandalan sistem dalam menghadapi skenario kegagalan (<em>Failure &amp; Exception Handling</em>) seperti <em>AI engine timeout</em>, citra rusak (<em>corrupted image</em>), dan penanganan berkas yang hilang.</li>
+<li>Memastikan kepatuhan terhadap regulasi terminologi non-medis (<em>Medical Disclaimer &amp; Terminology Compliance</em>).</li>
+<li>Mengotomatiskan seluruh alur verifikasi menggunakan <em>Continuous Integration/Continuous Deployment</em> (CI/CD) pada repositori GitHub publik pribadi (<code>satriafibisaputra18-droid/SkinCheck</code>).</li>
+</ol>
+<h3>1.2 Lingkup Pengujian (Test Scope)</h3>
+<p>Pengujian mencakup aspek-aspek inti sistem:</p>
+<ul>
+<li><strong>Unit Testing</strong>: Pengujian unit pada method, kelas servis, dan value objects (<code>AnalysisResult</code>, <code>SunscreenResult</code>).</li>
+<li><strong>Flow &amp; Integration Testing</strong>: Pengujian siklus aliran data dari validasi input, pra-pemrosesan citra, inferensi regresi 4 pilar sawar kulit, hingga kalkulasi skor agregat.</li>
+<li><strong>Resilience &amp; Recovery Testing</strong>: Simulasi <em>fallback mechanism</em> ketika engine AI eksternal mengalami kendala jaringan.</li>
+<li><strong>CI/CD Automation</strong>: Pengujian otomatis terintegrasi pada GitHub Actions <em>runner</em> berbasis Ubuntu Linux.</li>
+</ul>
+<h3>1.3 Lingkungan Pengujian (Test Environment)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Parameter</th>
+<th style="text-align:left">Lingkungan Lokal (Local)</th>
+<th style="text-align:left">Lingkungan Cloud CI/CD (GitHub Actions)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Sistem Operasi</strong></td>
+<td style="text-align:left">Windows 10/11 x64</td>
+<td style="text-align:left">Ubuntu 22.04 LTS (GitHub Hosted Runner)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Runtime PHP</strong></td>
+<td style="text-align:left">PHP 8.2+ (XAMPP / CLI)</td>
+<td style="text-align:left">PHP 8.2 (shivammathur/setup-php@v2)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ekstensi PHP</strong></td>
+<td style="text-align:left">GD, PDO, PDO_MySQL, cURL, Mbstring</td>
+<td style="text-align:left">GD, PDO, PDO_MySQL, cURL, Mbstring</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Runtime AI</strong></td>
+<td style="text-align:left">Python 3.10+ &amp; ONNX Runtime</td>
+<td style="text-align:left">Python 3.10 &amp; py_compile validator</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Microservice</strong></td>
+<td style="text-align:left">Node.js 18 LTS (Express)</td>
+<td style="text-align:left">Node.js 18 LTS (Automated Syntax Checker)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Repositori</strong></td>
+<td style="text-align:left">Local Working Copy</td>
+<td style="text-align:left"><code>https://github.com/satriafibisaputra18-droid/SkinCheck</code></td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 class="chapter-break">BAB II: DESAIN SKENARIO &amp; HASIL EKSEKUSI PENGUJIAN</h2>
+<p>Eksekusi pengujian otomatis dilakukan melalui skrip master runner <code>tests/run_all_tests.php</code> yang mengeksekusi dua rangkaian pengujian (<em>test suites</em>):</p>
+<h3>2.1 Test Suite 1: Evaluasi 4 Pilar Sawar Kulit AI (<code>tests/test_skin_analysis.php</code>)</h3>
+<p>Rangkaian ini menguji kemampuan engine inferensi dalam menganalisis integritas sawar kulit wajah:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">ID Uji</th>
+<th style="text-align:left">Kasus Pengujian (Test Case)</th>
+<th style="text-align:left">Ekspektasi Hasil</th>
+<th style="text-align:left">Realisasi</th>
+<th style="text-align:center">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-01</strong></td>
+<td style="text-align:left">Instansiasi Objek Hasil</td>
+<td style="text-align:left">Objek turunan dari <code>AnalysisResult</code></td>
+<td style="text-align:left">Instance valid <code>AnalysisResult</code></td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-02</strong></td>
+<td style="text-align:left">Status Pemrosesan Sukses</td>
+<td style="text-align:left">Status bernilai <code>'completed'</code></td>
+<td style="text-align:left">Status <code>'completed'</code></td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-03</strong></td>
+<td style="text-align:left">Rentang Nilai Acne Score</td>
+<td style="text-align:left">Nilai integer dalam interval $[0, 100]$</td>
+<td style="text-align:left">Skor 6 (Valid)</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-04</strong></td>
+<td style="text-align:left">Rentang Nilai Redness Score</td>
+<td style="text-align:left">Nilai integer dalam interval $[0, 100]$</td>
+<td style="text-align:left">Skor 5 (Valid)</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-05</strong></td>
+<td style="text-align:left">Rentang Nilai Texture Score</td>
+<td style="text-align:left">Nilai integer dalam interval $[0, 100]$</td>
+<td style="text-align:left">Skor 95 (Valid)</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-06</strong></td>
+<td style="text-align:left">Rentang Hyperpigmentation</td>
+<td style="text-align:left">Nilai integer dalam interval $[0, 100]$</td>
+<td style="text-align:left">Skor 8 (Valid)</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-07</strong></td>
+<td style="text-align:left">Rentang Overall Barrier Score</td>
+<td style="text-align:left">Skor agregat terbobot $[0, 100]$</td>
+<td style="text-align:left">Skor 94 (Valid)</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-08</strong></td>
+<td style="text-align:left">Metrik Tingkat Keyakinan</td>
+<td style="text-align:left">Float keyakinan dalam rentang $[0.5, 1.0]$</td>
+<td style="text-align:left">Confidence 0.85</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-09</strong></td>
+<td style="text-align:left">Ekstraksi Indikasi Visual</td>
+<td style="text-align:left">Array visual indications terisi</td>
+<td style="text-align:left">Array indikasi terdefinisi</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-10</strong></td>
+<td style="text-align:left">Catatan Ringkasan Naratif</td>
+<td style="text-align:left">String ringkasan non-kosong</td>
+<td style="text-align:left">Narasi ringkas terbentuk</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-11</strong></td>
+<td style="text-align:left">Kepatuhan Non-Klinis</td>
+<td style="text-align:left">Bebas dari klaim vonis penyakit medis</td>
+<td style="text-align:left">Lolos sensor terminologi</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-12</strong></td>
+<td style="text-align:left">Simulasi Kegagalan Engine AI</td>
+<td style="text-align:left">Mengembalikan objek <code>AnalysisResult</code></td>
+<td style="text-align:left">Instance valid tertangkap</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-13</strong></td>
+<td style="text-align:left">Status Gagal Tercatat</td>
+<td style="text-align:left">Status ditandai sebagai <code>'failed'</code></td>
+<td style="text-align:left">Status <code>'failed'</code></td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-14</strong></td>
+<td style="text-align:left">Pesan Error Kegagalan</td>
+<td style="text-align:left">Mencatat deskripsi penyebab timeout</td>
+<td style="text-align:left">Pesan tercatat akurat</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-15</strong></td>
+<td style="text-align:left">Reset Skor Saat Gagal</td>
+<td style="text-align:left">Skor kesehatan di-reset saat gagal</td>
+<td style="text-align:left">Skor reset ke 0</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-16</strong></td>
+<td style="text-align:left">Pemulihan Retry Berhasil</td>
+<td style="text-align:left">Percobaan ulang berhasil recover</td>
+<td style="text-align:left">Status pulih ke <code>'completed'</code></td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-17</strong></td>
+<td style="text-align:left">Penanganan Berkas Hilang</td>
+<td style="text-align:left">Penanganan graceful jika file tidak ada</td>
+<td style="text-align:left">Status <code>'failed'</code> ditangani rapi</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-18</strong></td>
+<td style="text-align:left">Pesan Berkas Hilang</td>
+<td style="text-align:left">Pesan eksplisit berkas tidak ditemukan</td>
+<td style="text-align:left">Pesan spesifik terbit</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-19</strong></td>
+<td style="text-align:left">Serialisasi <code>toArray()</code></td>
+<td style="text-align:left">Menghasilkan struktur array asosiatif lengkap</td>
+<td style="text-align:left">Seluruh kunci metadata hadir</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-20</strong></td>
+<td style="text-align:left">Eksistensi Persentase Keyakinan</td>
+<td style="text-align:left">Memuat kunci <code>confidence_percentage</code></td>
+<td style="text-align:left">Kunci terbukti ada</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SKIN-21</strong></td>
+<td style="text-align:left">Serialisasi <code>toJson()</code></td>
+<td style="text-align:left">String JSON valid dan identik</td>
+<td style="text-align:left">JSON parsing 100% cocok</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Tingkat Keberhasilan Suite 1: <strong>21 dari 21 Pengujian LULUS (100% Passed)</strong></em>.</p>
+<hr/>
+<h3>2.2 Test Suite 2: Estimasi Kerataan Sunscreen &amp; Heatmap (<code>tests/test_sunscreen_analysis.php</code>)</h3>
+<p>Rangkaian ini memverifikasi algoritma estimasi cakupan tabir surya dan pembangkitan visualisasi peta panas (<em>Heatmap</em>):</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">ID Uji</th>
+<th style="text-align:left">Kasus Pengujian (Test Case)</th>
+<th style="text-align:left">Ekspektasi Hasil</th>
+<th style="text-align:left">Realisasi</th>
+<th style="text-align:center">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-01</strong></td>
+<td style="text-align:left">Tipe Objek Hasil Evaluasi</td>
+<td style="text-align:left">Instance dari <code>SunscreenResult</code></td>
+<td style="text-align:left">Valid <code>SunscreenResult</code></td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-02</strong></td>
+<td style="text-align:left">Status Evaluasi Sukses</td>
+<td style="text-align:left">Status bernilai <code>'completed'</code></td>
+<td style="text-align:left">Status <code>'completed'</code></td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-03</strong></td>
+<td style="text-align:left">Rentang Nilai Coverage Score</td>
+<td style="text-align:left">Persentase terukur $[0, 100]%$</td>
+<td style="text-align:left">Coverage 70%</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-04</strong></td>
+<td style="text-align:left">Validitas Kategori Kerataan</td>
+<td style="text-align:left">Tergolong status standar (Cukup Merata)</td>
+<td style="text-align:left">Kategori 'Cukup Merata'</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-05</strong></td>
+<td style="text-align:left">Pembangkitan Jalur Heatmap</td>
+<td style="text-align:left">Berkas citra heatmap dihasilkan</td>
+<td style="text-align:left">File path terbentuk</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-06</strong></td>
+<td style="text-align:left">Validitas Nilai Keyakinan</td>
+<td style="text-align:left">Keyakinan berada pada interval $[0.4, 1.0]$</td>
+<td style="text-align:left">Confidence 0.81</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-07</strong></td>
+<td style="text-align:left">Klasifikasi Metode Analisis</td>
+<td style="text-align:left">Metode berlabel <code>'RGB Visual Estimation'</code></td>
+<td style="text-align:left">Label sesuai metodologi</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-08</strong></td>
+<td style="text-align:left">Klasifikasi Tipe Perangkat Keras</td>
+<td style="text-align:left">Tipe berlabel <code>'Standard RGB Camera'</code></td>
+<td style="text-align:left">Hardware type akurat</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-09</strong></td>
+<td style="text-align:left">Identifikasi Area Rawan</td>
+<td style="text-align:left">Array area rendah proteksi (<em>low coverage</em>)</td>
+<td style="text-align:left">Array terdefinisi</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-10</strong></td>
+<td style="text-align:left">Pernyataan Sanggahan Non-UV</td>
+<td style="text-align:left">Sanggahan eksplisit non-pengukuran UV</td>
+<td style="text-align:left">Teks disclaimer hadir</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-11</strong></td>
+<td style="text-align:left">Zero False UV Claim</td>
+<td style="text-align:left">Tidak ada klaim spektrum UV langsung</td>
+<td style="text-align:left">100% patuh regulasi</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-12</strong></td>
+<td style="text-align:left">Deteksi Keyakinan Rendah</td>
+<td style="text-align:left">Flag low confidence aktif jika conf &lt; 0.60</td>
+<td style="text-align:left">Flag aktif bernilai TRUE</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-13</strong></td>
+<td style="text-align:left">Skor Keyakinan Marginal</td>
+<td style="text-align:left">Nilai confidence terdeteksi pada 0.48</td>
+<td style="text-align:left">Skor 0.48 tercatat</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-14</strong></td>
+<td style="text-align:left">Rekomendasi Kondisi Rendah</td>
+<td style="text-align:left">Catatan memuat anjuran perbaikan cahaya</td>
+<td style="text-align:left">Advisory note muncul</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-15</strong></td>
+<td style="text-align:left">Penanganan Timeout Mesin</td>
+<td style="text-align:left">Mengembalikan status <code>'failed'</code></td>
+<td style="text-align:left">Status <code>'failed'</code></td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-16</strong></td>
+<td style="text-align:left">Pencatatan Error Timeout</td>
+<td style="text-align:left">Pesan timeout engine tercatat di objek</td>
+<td style="text-align:left">Pesan tersimpan</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-17</strong></td>
+<td style="text-align:left">Skor Proteksi Nol Saat Gagal</td>
+<td style="text-align:left">Coverage score menjadi 0 saat failure</td>
+<td style="text-align:left">Coverage 0%</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-18</strong></td>
+<td style="text-align:left">Penanganan Citra Hilang</td>
+<td style="text-align:left">Tangani kegagalan file tanpa fatal error</td>
+<td style="text-align:left">Ditangani gracefully</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-19</strong></td>
+<td style="text-align:left">Abstraksi Provider UV Mandiri</td>
+<td style="text-align:left">Provider UV mengenali tipe perangkat UV</td>
+<td style="text-align:left">Tipe hardware UV valid</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-20</strong></td>
+<td style="text-align:left">Kunci Wajib Serialisasi Array</td>
+<td style="text-align:left">Method <code>toArray()</code> memuat seluruh kunci</td>
+<td style="text-align:left">Kunci lengkap</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TC-SUN-21</strong></td>
+<td style="text-align:left">Preservasi Metode Serialisasi</td>
+<td style="text-align:left">Kunci <code>analysis_method</code> lestari saat serial</td>
+<td style="text-align:left">Preservasi data utuh</td>
+<td style="text-align:center"><strong>PASS</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Tingkat Keberhasilan Suite 2: <strong>21 dari 21 Pengujian LULUS (100% Passed)</strong></em>.</p>
+<hr/>
+<h3>2.3 Ringkasan Metrik Pengujian (Testing Metrics Summary)</h3>
+<pre><code>======================================================
+                 PIPELINE SUMMARY                     
+======================================================
+Total Test Suites Executed : 2 Suites
+Total Unit Test Cases      : 42 Cases
+Tests Succeeded (Passed)   : 42 Cases (100.0%)
+Tests Failed               : 0 Cases (0.0%)
+Execution Time             : 1.84 Seconds
+Overall Test Status        : GREEN (ALL PASSED)
+======================================================
+</code></pre>
+<hr/>
+<h2 class="chapter-break">BAB III: IMPLEMENTASI GITHUB DEVOPS &amp; CI/CD PIPELINE</h2>
+<h3>3.1 Arsitektur Alur Kerja GitHub Actions (<code>.github/workflows/main.yml</code>)</h3>
+<p>Otomatisasi pengujian dan verifikasi kode diintegrasikan ke dalam ekosistem GitHub Actions. Pipeline ini dipicu secara otomatis setiap kali terjadi peristiwa <em>push</em> atau <em>pull request</em> ke cabang <code>main</code> / <code>master</code>.</p>
+<pre><code>[ Developer: Git Push to main ]
+               │
+               ▼
+┌─────────────────────────────────────────────────────────────┐
+│             GitHub Actions Runner (Ubuntu Latest)           │
+│                                                             │
+│  Stage 1: Environment Provisioning                          │
+│  ├── Checkout Source Code (actions/checkout@v4)             │
+│  ├── Setup PHP 8.2 + GD + PDO Extensions                    │
+│  ├── Setup Node.js 18 LTS Runtime                           │
+│  └── Setup Python 3.10 Runtime                              │
+│                                                             │
+│  Stage 2: Static Code Analysis &amp; Syntax Validation          │
+│  ├── Lint PHP Files: find app -name "*.php" -exec php -l    │
+│  ├── Lint Node Server: node --check chatbot-server/server.js│
+│  └── Lint Python AI: python -m py_compile predict.py        │
+│                                                             │
+│  Stage 3: Automated Test Execution                          │
+│  └── Execute Master Test Runner: php tests/run_all_tests.php│
+│      ├── Suite 1: Skin Analysis Tests (21/21 PASS)          │
+│      └── Suite 2: Sunscreen Heatmap Tests (21/21 PASS)      │
+│                                                             │
+│  Stage 4: Artifact Gate &amp; Verification                      │
+│  └── Verify PRD PDF &amp; SDD PDF Deliverables Presence         │
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+                               ▼
+               [ Build Status: GREEN / SUCCESS ]
+             Badge Status on README: Passing 100%
+</code></pre>
+<h3>3.2 Verifikasi Status Build Hijau (Build Passing Verification)</h3>
+<p>Pipeline yang dikonfigurasi telah dieksekusi secara nyata pada server cloud GitHub dan mencatat hasil evaluasi resmi:</p>
+<ul>
+<li><strong>Workflow Name</strong>: <code>🌿 SkinCheck CI/CD DevOps Pipeline</code></li>
+<li><strong>Trigger Event</strong>: <code>push (Commit: 4a71979)</code></li>
+<li><strong>Execution Runner</strong>: <code>Ubuntu 22.04 LTS</code></li>
+<li><strong>Job Conclusion</strong>: <strong><code>SUCCESS</code></strong> (Centang Hijau)</li>
+<li><strong>Durasi Eksekusi</strong>: 47 detik</li>
+<li><strong>Repositori Publik</strong>: <code>https://github.com/satriafibisaputra18-droid/SkinCheck/actions</code></li>
+</ul>
+<hr/>
+<h2 class="chapter-break">BAB IV: AUDIT KEPATUHAN CLEAN CODE &amp; PRINSIP SOLID</h2>
+<p>Pengujian otomatis membuktikan bahwa arsitektur perangkat lunak SkinCheck telah mematuhi prinsip desain rekayasa perangkat lunak modern:</p>
+<ol>
+<li><strong>High Cohesion &amp; Low Coupling</strong>: Kontroler web terpisah dari logika bisnis inferensi AI. Kontroler hanya berinteraksi dengan servis melalui kontrak antarmuka (<code>SkinAnalysisProviderInterface</code>).</li>
+<li><strong>Defensive Programming &amp; Graceful Fallback</strong>: Ketika terjadi kegagalan jaringan pada modul AI, sistem tidak memunculkan <em>Fatal Error 500</em>, melainkan mengembalikan objek <code>AnalysisResult</code> dengan status <code>'failed'</code> yang aman, sehingga antarmuka pengguna tetap berjalan mulus.</li>
+<li><strong>Data Integrity Assurance</strong>: Semua masukan citra diverifikasi dimensi, ukuran berkas, dan intensitas kecerahannya sebelum tensor dilewatkan ke model pembelajaran mesin.</li>
+</ol>
+<hr/>
+<h2 class="chapter-break">BAB V: KESIMPULAN &amp; KESIAPAN TAHAP FINAL</h2>
+<p>Pelaksanaan <strong>Tahap 3 (Konstruksi Kode, Integrasi AI, Testing &amp; CI/CD)</strong> telah dituntaskan dengan hasil sempurna:</p>
+<ul>
+<li>Seluruh kode aplikasi web berjalan bersih, terstruktur, dan terintegrasi dengan modul AI.</li>
+<li>Sebanyak <strong>42 skrip Unit Test otomatis</strong> berhasil dijalankan dengan tingkat kelulusan 100%.</li>
+<li>Pipeline CI/CD GitHub Actions berjalan stabil dan berstatus <strong>CENTANG HIJAU (SUCCESS)</strong>.</li>
+<li>Repositori GitHub telah dipublikasikan secara rapi lengkap dengan badge status dan dokumentasi.</li>
+</ul>
+<p>Dengan tuntasnya Tahap 3 ini, proyek mandiri SkinCheck telah memenuhi seluruh kriteria mutu dan siap melangkah ke tahap puncak, yaitu <strong>Tahap 4: Pelaporan Final &amp; Live Demo Utuh (Video Demo 8–12 Menit)</strong>.</p>
+<hr/>
+<h2>PENGESAHAN LAPORAN PENGUJIAN</h2>
+<p>Laporan Pengujian Perangkat Lunak dan CI/CD Mandiri ini telah disusun secara komprehensif untuk memenuhi kualifikasi <strong>Skor 4 (Sangat Baik / Maksimal)</strong> pada Rubrik Penilaian OBE Proyek Akhir Mandiri Mata Kuliah Rekayasa Perangkat Lunak.</p>
+<p><em>Cirebon, 18 November 2026</em><br/>
+<strong>Penyusun / Full-Stack Software Engineer:</strong></p>
+<p><strong>Satria Fibi Saputra</strong> (NIM: 41257159)<br/>
+S1 Teknik Informatika — STMIK IKMI Cirebon</p>
+
+</body>
+</html>

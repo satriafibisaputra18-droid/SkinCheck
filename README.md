@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![🌿 SkinCheck CI/CD DevOps Pipeline](https://github.com/satriafibisaputra18-droid/SkinCheck/actions/workflows/ci.yml/badge.svg)](https://github.com/satriafibisaputra18-droid/SkinCheck/actions/workflows/ci.yml)
+[![🌿 SkinCheck CI/CD DevOps Pipeline](https://github.com/satriafibisaputra18-droid/SkinCheck/actions/workflows/main.yml/badge.svg)](https://github.com/satriafibisaputra18-droid/SkinCheck/actions/workflows/main.yml)
 ![PHP](https://img.shields.io/badge/PHP-8.1+-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![NodeJS](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js&logoColor=white)
@@ -41,10 +41,12 @@ Sesuai pedoman tugas dan rubrik penilaian OBE STMIK IKMI Cirebon:
 ---
 
 ## 📑 Berkas Dokumen Rekayasa Perangkat Lunak
+* 📕 **Berkas Dokumen Lengkap (PDF Tunggal 41 Halaman)**: [`docs/PROYEK_AKHIR_MANDIRI_SKINCHECK_SATRIA_FIBI_SAPUTRA_41257159.pdf`](docs/PROYEK_AKHIR_MANDIRI_SKINCHECK_SATRIA_FIBI_SAPUTRA_41257159.pdf)
 * 📄 **Dokumen PRD / SRS (Standar IEEE 830)**: [`docs/PRD_SRS_SkinCheck.pdf`](docs/PRD_SRS_SkinCheck.pdf)
 * 📄 **Dokumen SDD & Pemodelan UML (Standar IEEE 1016)**: [`docs/SDD_UML_SkinCheck.pdf`](docs/SDD_UML_SkinCheck.pdf)
+* 📄 **Dokumen Laporan Pengujian & CI/CD (Standar IEEE 829)**: [`docs/LAPORAN_PENGUJIAN_CICD_SkinCheck.pdf`](docs/LAPORAN_PENGUJIAN_CICD_SkinCheck.pdf)
 * 🧪 **Master Automated Unit Test Runner**: [`tests/run_all_tests.php`](tests/run_all_tests.php)
-* ⚙️ **GitHub Actions CI/CD Pipeline**: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+* ⚙️ **GitHub Actions CI/CD Pipeline**: [`.github/workflows/main.yml`](.github/workflows/main.yml)
 
 ---
 
